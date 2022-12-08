@@ -3,16 +3,13 @@
 
 #include <AxtEngine.h>
 
-class Sndbx : public axt::App {
+class Sandbox : public axt::App {
 
 public:
-	Sndbx() {};
-	~Sndbx() {};
-
+	Sandbox() {};
+	~Sandbox() {};
 };
 
-int main() {
-	Sndbx* app = new Sndbx;
-	app->Run();
-	delete app;
+axt::App* axt::CreateApp() {
+	return new Sandbox;
 }
