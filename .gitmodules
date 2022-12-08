@@ -1,0 +1,3 @@
+[submodule "AxtEngine/vendor/spdlog"]
+	path = AxtEngine/vendor/spdlog
+	url = https://github.com/gabime/spdlog.git
