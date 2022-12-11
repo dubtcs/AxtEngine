@@ -19,6 +19,9 @@
     <ClInclude Include="src\engine\Log.h">
       <Filter>engine</Filter>
     </ClInclude>
+    <ClInclude Include="src\engine\events\Event.h" />
+    <ClInclude Include="src\engine\events\KeyEvent.h" />
+    <ClInclude Include="src\engine\events\MouseEvent.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\engine\App.cpp">
@@ -27,5 +30,8 @@
     <ClCompile Include="src\engine\Log.cpp">
       <Filter>engine</Filter>
     </ClCompile>
+    <ClCompile Include="src\engine\events\KeyEvent.cpp" />
+    <ClCompile Include="src\engine\events\Event.cpp" />
+    <ClCompile Include="src\engine\events\MouseEvent.cpp" />
   </ItemGroup>
 </Project>

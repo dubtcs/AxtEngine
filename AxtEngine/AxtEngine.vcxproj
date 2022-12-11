@@ -142,10 +142,16 @@
     <ClInclude Include="src\engine\App.h" />
     <ClInclude Include="src\engine\Core.h" />
     <ClInclude Include="src\engine\EntryPoint.h" />
+    <ClInclude Include="src\engine\events\Event.h" />
+    <ClInclude Include="src\engine\events\KeyEvent.h" />
+    <ClInclude Include="src\engine\events\MouseEvent.h" />
     <ClInclude Include="src\engine\Log.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\engine\App.cpp" />
+    <ClCompile Include="src\engine\events\Event.cpp" />
+    <ClCompile Include="src\engine\events\KeyEvent.cpp" />
+    <ClCompile Include="src\engine\events\MouseEvent.cpp" />
     <ClCompile Include="src\engine\Log.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

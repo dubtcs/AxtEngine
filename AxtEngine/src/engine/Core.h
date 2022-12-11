@@ -6,4 +6,7 @@
 #else
 #define AXT_API __declspec(dllimport)
 #endif
+#define AXT namespace axt
 #endif
+
+#include <string>
