@@ -3,8 +3,6 @@
 #include "Core.h"
 #include <spdlog/spdlog.h>
 
-#include <memory.h>
-
 namespace axt {
 
 	class AXT_API Log {

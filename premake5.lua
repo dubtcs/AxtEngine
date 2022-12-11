@@ -19,13 +19,17 @@ project "AxtEngine"
     targetdir ("bin/"..output.."/%{prj.name}")
     objdir ("bin-int/"..output.."/%{prj.name}")
 
+    pchheader "pch.h"
+    pchsource "AxtEngine/src/pch.cpp"
+
     files {
         "%{prj.name}/src/**.h",
         "%{prj.name}/src/**.cpp"
     }
 
     includedirs {
-        "%{prj.name}/vendor/spdlog/include"
+        "%{prj.name}/vendor/spdlog/include",
+        "%{prj.name}/src"
     }
 
     filter "system:windows"

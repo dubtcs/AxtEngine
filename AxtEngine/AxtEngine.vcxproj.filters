@@ -4,6 +4,9 @@
     <Filter Include="engine">
       <UniqueIdentifier>{FBDB78FB-E77D-A3D1-D038-B725BC792A22}</UniqueIdentifier>
     </Filter>
+    <Filter Include="engine\events">
+      <UniqueIdentifier>{9FF33A70-0BB4-B6A6-D4EE-FF23406EFB82}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\AxtEngine.h" />
@@ -19,9 +22,16 @@
     <ClInclude Include="src\engine\Log.h">
       <Filter>engine</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\events\Event.h" />
-    <ClInclude Include="src\engine\events\KeyEvent.h" />
-    <ClInclude Include="src\engine\events\MouseEvent.h" />
+    <ClInclude Include="src\engine\events\Event.h">
+      <Filter>engine\events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\events\KeyEvent.h">
+      <Filter>engine\events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\events\MouseEvent.h">
+      <Filter>engine\events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\pch.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\engine\App.cpp">
@@ -30,8 +40,15 @@
     <ClCompile Include="src\engine\Log.cpp">
       <Filter>engine</Filter>
     </ClCompile>
-    <ClCompile Include="src\engine\events\KeyEvent.cpp" />
-    <ClCompile Include="src\engine\events\Event.cpp" />
-    <ClCompile Include="src\engine\events\MouseEvent.cpp" />
+    <ClCompile Include="src\engine\events\Event.cpp">
+      <Filter>engine\events</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\events\KeyEvent.cpp">
+      <Filter>engine\events</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\events\MouseEvent.cpp">
+      <Filter>engine\events</Filter>
+    </ClCompile>
+    <ClCompile Include="src\pch.cpp" />
   </ItemGroup>
 </Project>
