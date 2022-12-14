@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Core.h"
+#include "Window.h"
 
 namespace axt {
 
@@ -10,6 +11,9 @@ namespace axt {
 		virtual ~App();
 	public:
 		void Run();
+	private:
+		bool running{ true };
+		std::unique_ptr<AxtWindow> window;
 	};
 
 	App* CreateApp();

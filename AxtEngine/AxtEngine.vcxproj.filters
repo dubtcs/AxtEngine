@@ -7,6 +7,12 @@
     <Filter Include="engine\events">
       <UniqueIdentifier>{9FF33A70-0BB4-B6A6-D4EE-FF23406EFB82}</UniqueIdentifier>
     </Filter>
+    <Filter Include="platform">
+      <UniqueIdentifier>{4A63C33C-3630-1E48-5F49-0CF04B7553D6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="platform\windows">
+      <UniqueIdentifier>{A44FC440-9048-E392-B97A-C817A5D2C29E}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\AxtEngine.h" />
@@ -22,6 +28,9 @@
     <ClInclude Include="src\engine\Log.h">
       <Filter>engine</Filter>
     </ClInclude>
+    <ClInclude Include="src\engine\Window.h">
+      <Filter>engine</Filter>
+    </ClInclude>
     <ClInclude Include="src\engine\events\Event.h">
       <Filter>engine\events</Filter>
     </ClInclude>
@@ -32,6 +41,9 @@
       <Filter>engine\events</Filter>
     </ClInclude>
     <ClInclude Include="src\pch.h" />
+    <ClInclude Include="src\platform\windows\WWindow.h">
+      <Filter>platform\windows</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\engine\App.cpp">
@@ -50,5 +62,8 @@
       <Filter>engine\events</Filter>
     </ClCompile>
     <ClCompile Include="src\pch.cpp" />
+    <ClCompile Include="src\platform\windows\WWindow.cpp">
+      <Filter>platform\windows</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

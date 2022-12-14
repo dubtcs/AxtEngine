@@ -8,5 +8,3 @@
 #endif
 #define AXT namespace axt
 #endif
-
-#include <string>

@@ -4,7 +4,7 @@
 namespace axt {
 
 	App::App() {
-
+		window = std::unique_ptr<AxtWindow>{ AxtWindow::Create() };
 	}
 
 	App::~App() {
@@ -12,7 +12,10 @@ namespace axt {
 	}
 
 	void App::Run() {
-		std::cout << 1;
+		while (running) {
+			window->Update();
+
+		}
 	}
 
 }
