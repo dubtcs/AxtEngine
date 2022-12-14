@@ -148,6 +148,7 @@
     <ClInclude Include="src\engine\App.h" />
     <ClInclude Include="src\engine\Core.h" />
     <ClInclude Include="src\engine\EntryPoint.h" />
+    <ClInclude Include="src\engine\events\WindowEvent.h" />
     <ClInclude Include="src\engine\Log.h" />
     <ClInclude Include="src\engine\Window.h" />
     <ClInclude Include="src\engine\events\Event.h" />
@@ -158,6 +159,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\engine\App.cpp" />
+    <ClCompile Include="src\engine\events\WindowEvent.cpp" />
     <ClCompile Include="src\engine\Log.cpp" />
     <ClCompile Include="src\engine\events\Event.cpp" />
     <ClCompile Include="src\engine\events\KeyEvent.cpp" />

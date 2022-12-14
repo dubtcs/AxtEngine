@@ -4,7 +4,7 @@
 
 namespace axt {
 
-	class AXT_API KeyEvent : public Event {
+	class AXT_API KeyEvent : public axt::Event {
 	public:
 		virtual int GetCategoryFlags() const override;
 		inline int GetKeycode() { return keycode; }
@@ -18,7 +18,7 @@ namespace axt {
 		KeyPressedEvent(int keycode, int amount) : KeyEvent(keycode), amountPressed{ amount } {}
 		virtual const char* GetName() const override;
 		virtual EventType GetEventType() const override;
-		static const EventType Type{ EventType::KeyPressed };
+		static const EventType StaticType{ EventType::KeyPressed };
 	private:
 		int amountPressed;
 	};
@@ -28,7 +28,7 @@ namespace axt {
 		KeyReleasedEvent(int keycode) : KeyEvent(keycode) {}
 		virtual const char* GetName() const override;
 		virtual EventType GetEventType() const override;
-		static const EventType Type{ EventType::KeyReleased };
+		static const EventType StaticType{ EventType::KeyReleased };
 	};
 
 }

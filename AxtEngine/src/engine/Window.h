@@ -2,6 +2,7 @@
 
 #include "Core.h"
 #include <pch.h>
+#include "events/Event.h"
 
 namespace axt {
 
@@ -18,6 +19,7 @@ namespace axt {
 	public:
 		virtual void Update() {};
 		virtual void SetVsync(bool toggle) {};
+		virtual void SetEventCallback(std::function<bool(Event&)>) {};
 		virtual bool IsVsync() const { return false; };
 		virtual unsigned int GetWidth() const { return 1; };
 		virtual unsigned int GetHeight() const { return 1; };

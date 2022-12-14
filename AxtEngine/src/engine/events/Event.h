@@ -14,7 +14,7 @@ namespace axt {
 
 	enum EventCategory {
 		None,
-		App, Input, Keyboard, Mouse, MouseButton, MouseScroll
+		Application, Input, Keyboard, Mouse, MouseButton, MouseScroll
 	};
 
 	class AXT_API Event {
@@ -26,7 +26,7 @@ namespace axt {
 		inline bool IsCategory(EventCategory cat) { return (GetCategoryFlags() & cat); }
 	public:
 		friend class EventHandler;
-		static const EventType Type;
+		static const EventType StaticType;
 	protected:
 		Event() {};
 		bool isHandled{ false };
@@ -34,12 +34,19 @@ namespace axt {
 
 	class AXT_API EventHandler {
 	public:
-		EventHandler(Event& newEvent) : currentEvent{ newEvent } {};
+		EventHandler(axt::Event& newEvent) : currentEvent{ newEvent } {};
 		~EventHandler() {};
 	public:
-		void Fire(Event& ev);
+		template <typename T>
+		bool Fire(std::function<bool(T&)> eventFunction) {
+			if (currentEvent.GetEventType() == T::StaticType) {
+				currentEvent.isHandled = eventFunction(*(T*)&currentEvent); // cast to type T  --> Mem address of event into a T pointer, then dereference it
+				return true;
+			}
+			return false;
+		}
 	private:
-		Event& currentEvent;
+		axt::Event& currentEvent;
 	};
 
 }

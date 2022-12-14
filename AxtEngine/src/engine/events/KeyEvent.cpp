@@ -13,7 +13,7 @@ namespace axt {
 		return "KeyPressedEvent";
 	}
 	EventType KeyPressedEvent::GetEventType() const {
-		return Type;
+		return StaticType;
 	}
 
 	// KEY RELEASED
@@ -21,7 +21,7 @@ namespace axt {
 		return "KeyReleasedEvent";
 	}
 	EventType KeyReleasedEvent::GetEventType() const {
-		return Type;
+		return StaticType;
 	}
 
 

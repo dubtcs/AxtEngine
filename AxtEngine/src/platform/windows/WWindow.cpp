@@ -3,6 +3,11 @@
 #include "WWindow.h"
 #include "engine/Log.h"
 
+// Events
+#include "engine/events/WindowEvent.h"
+#include "engine/events/KeyEvent.h"
+#include "engine/events/MouseEvent.h"
+
 #define uint unsigned int
 
 namespace axt {
@@ -21,8 +26,13 @@ namespace axt {
 		Shutdown();
 	}
 
+	void WWindow::GlfwErrorCallback(int er, const char* msg) {
+		AXT_ERROR("glfw error ({0}): {1}", er, msg);
+	}
+
 	void WWindow::Init() {
-		//AXT_CORE_INFO("Creating window {0} ({1}, {2})", data.title, data.width, data.height);
+
+		AXT_CORE_INFO("Creating window {0} ({1}, {2})", data.title, data.width, data.height);
 		if (!axtGlfwInit) {
 			int suc{ glfwInit() };
 			if (suc == 1) {
@@ -34,8 +44,72 @@ namespace axt {
 			glfwMakeContextCurrent(window);
 			glfwSetWindowUserPointer(window, &data);
 			SetVsync(true);
-		}
-			//AXT_CORE_ERROR("Could not create window");
+		} else
+			AXT_CORE_ERROR("Could not create window");
+
+		glfwSetWindowSizeCallback(window,
+			[](GLFWwindow* win, int w, int h) {
+				WindowData& winData = *(WindowData*)glfwGetWindowUserPointer(win);
+				winData.width = w;
+				winData.height = h;
+
+				WindowResizeEvent resizeEvent{ w, h };
+				winData.callback(resizeEvent);
+			}
+		);
+
+		glfwSetWindowCloseCallback(window, [](GLFWwindow* win) {
+			WindowData& winData = *(WindowData*)glfwGetWindowUserPointer(win);
+			WindowCloseEvent close{};
+			winData.callback(close);
+		});
+
+		glfwSetKeyCallback(window, [](GLFWwindow* win, int key, int code, int action, int mods) {
+			WindowData& winData = *(WindowData*)glfwGetWindowUserPointer(win);
+			switch (action) {
+				case GLFW_PRESS: {
+					KeyPressedEvent ev{ key, 0 };
+					winData.callback(ev);
+					break;
+				}
+				case GLFW_RELEASE: {
+					KeyReleasedEvent ev{ key };
+					winData.callback(ev);
+					break;
+				}
+				case GLFW_REPEAT:
+					break;
+			}
+		});
+
+		glfwSetMouseButtonCallback(window, [](GLFWwindow* win, int key, int action, int mods) {
+			WindowData& winData = *(WindowData*)glfwGetWindowUserPointer(win);
+			switch (action) {
+			case GLFW_PRESS: {
+				MouseButtonPressed ev{ key };
+				winData.callback(ev);
+				break;
+			}
+			case GLFW_RELEASE: {
+				MouseButtonReleased ev{ key };
+				winData.callback(ev);
+				break;
+			}
+			}
+		});
+
+		glfwSetScrollCallback(window, [](GLFWwindow* win, double x, double y) {
+			WindowData& winData = *(WindowData*)glfwGetWindowUserPointer(win);
+			MouseScrollEvent ev{ x, y };
+			winData.callback(ev);
+		});
+
+		glfwSetCursorPosCallback(window, [](GLFWwindow* win, double x, double y) {
+			WindowData& winData = *(WindowData*)glfwGetWindowUserPointer(win); \
+			MouseMovedEvent ev{ x, y };
+			winData.callback(ev);
+		});
+
 	}
 
 	void WWindow::Shutdown() {
@@ -45,6 +119,11 @@ namespace axt {
 	void WWindow::Update() {
 		glfwPollEvents();
 		glfwSwapBuffers(window);
+	}
+
+	void WWindow::SetEventCallback(std::function<bool(Event&)> bindFunction) {
+		data.callback = bindFunction;
+		return;
 	}
 
 	void WWindow::SetVsync(bool toggle) {

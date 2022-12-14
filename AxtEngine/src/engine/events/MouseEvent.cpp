@@ -14,7 +14,7 @@ namespace axt {
 	}
 
 	EventType MouseButtonPressed::GetEventType() const {
-		return Type;
+		return StaticType;
 	}
 
 	// RELEASED
@@ -23,7 +23,7 @@ namespace axt {
 	}
 
 	EventType MouseButtonReleased::GetEventType() const {
-		return Type;
+		return StaticType;
 	}
 
 	// MOUSE MOVEMENT
