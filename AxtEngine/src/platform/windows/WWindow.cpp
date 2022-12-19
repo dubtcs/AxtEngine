@@ -1,7 +1,10 @@
 
 #include <pch.h>
+#include <assert.h>
 #include "WWindow.h"
 #include "engine/Log.h"
+
+#include <glad/glad.h>
 
 // Events
 #include "engine/events/WindowEvent.h"
@@ -42,21 +45,21 @@ namespace axt {
 		window = glfwCreateWindow(data.width, data.height, data.title.c_str(), nullptr, nullptr);
 		if (window != nullptr) {
 			glfwMakeContextCurrent(window);
+			int suc2{ gladLoadGLLoader((GLADloadproc)glfwGetProcAddress) };
+			assert(suc2 == 1, "OpenGL Glad failure");
 			glfwSetWindowUserPointer(window, &data);
 			SetVsync(true);
 		} else
 			AXT_CORE_ERROR("Could not create window");
 
-		glfwSetWindowSizeCallback(window,
-			[](GLFWwindow* win, int w, int h) {
+		glfwSetWindowSizeCallback(window, [](GLFWwindow* win, int w, int h) {
 				WindowData& winData = *(WindowData*)glfwGetWindowUserPointer(win);
 				winData.width = w;
 				winData.height = h;
 
 				WindowResizeEvent resizeEvent{ w, h };
 				winData.callback(resizeEvent);
-			}
-		);
+			});
 
 		glfwSetWindowCloseCallback(window, [](GLFWwindow* win) {
 			WindowData& winData = *(WindowData*)glfwGetWindowUserPointer(win);

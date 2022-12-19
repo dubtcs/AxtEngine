@@ -13,10 +13,12 @@ output = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 --include "AxtEngine/vendor/glfw"
 
-includeDirs = {};
-includeDirs["glfw"] = "AxtEngine/vendor/glfw/include"
+_includeDirs = {};
+_includeDirs["glfw"] = "AxtEngine/vendor/glfw/include"
+_includeDirs["glad"] = "AxtEngine/vendor/glad/include"
 
 include "AxtEngine/vendor/glfw"
+include "AxtEngine/vendor/glad"
 
 project "AxtEngine"
     location "AxtEngine"
@@ -37,11 +39,13 @@ project "AxtEngine"
     includedirs {
         "%{prj.name}/src",
         "%{prj.name}/vendor/spdlog/include",
-        "%{includeDirs.glfw}"
+        "%{_includeDirs.glfw}",
+        "%{_includeDirs.glad}"
     }
-
+    
     links {
         "GLFW",
+        "glad",
         "opengl32.lib",
     }
 
@@ -53,6 +57,7 @@ project "AxtEngine"
         defines {
             "AXT_BUILD_DLL";
             "AXT_PLATFORM_WINDOWS";
+            "GLFW_INCLUDE_NONE";
         }
 
         postbuildcommands{
