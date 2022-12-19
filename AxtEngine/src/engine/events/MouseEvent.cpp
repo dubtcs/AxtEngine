@@ -17,6 +17,12 @@ namespace axt {
 		return StaticType;
 	}
 
+	std::string MouseButtonPressed::ToString() const {
+		std::stringstream str;
+		str << "MouseButtonPressed: " << button;
+		return str.str();
+	}
+
 	// RELEASED
 	const char* MouseButtonReleased::GetName() const {
 		return "MouseButtonReleased";
@@ -24,6 +30,11 @@ namespace axt {
 
 	EventType MouseButtonReleased::GetEventType() const {
 		return StaticType;
+	}
+	std::string MouseButtonReleased::ToString() const {
+		std::stringstream str;
+		str << "MouseButtonReleased: " << button;
+		return str.str();
 	}
 
 	// MOUSE MOVEMENT
@@ -39,6 +50,13 @@ namespace axt {
 		return EventType::MouseMoved;
 	}
 
+	std::string MouseMovedEvent::ToString() const {
+		std::stringstream str;
+		str << "MouseMoved: (" << x << ", " << y << ")";
+		return str.str();
+	}
+
+
 	// MOUSE SCROLL
 	int MouseScrollEvent::GetCategoryFlags() const {
 		return (EventCategory::MouseScroll | EventCategory::Input);
@@ -51,5 +69,12 @@ namespace axt {
 	EventType MouseScrollEvent::GetEventType() const {
 		return EventType::MouseScroll;
 	}
+
+	std::string MouseScrollEvent::ToString() const {
+		std::stringstream str;
+		str << "MouseScroll: (" << x << ", " << y << ")";
+		return str.str();
+	}
+
 
 }

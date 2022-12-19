@@ -16,8 +16,10 @@ namespace axt {
 
 	void App::Run() {
 		while (running) {
+			for (Layer* curLayer : layerstack) {
+				curLayer->OnUpdate();
+			}
 			window->Update();
-
 		}
 	}
 
@@ -26,7 +28,24 @@ namespace axt {
 		handler.Fire<WindowCloseEvent>(std::bind(&App::OnWindowClose, this, std::placeholders::_1));
 
 		AXT_TRACE("{0}", bindEvent.ToString());
+
+		// back to front for events
+		for (std::vector<Layer*>::iterator iter{ layerstack.end() }; iter != layerstack.begin();) {
+			(*--iter)->OnEvent(bindEvent);
+			if (bindEvent.Handled()) {
+				break;
+			}
+		}
+
 		return true;
+	}
+
+	void App::PushLayer(Layer* layer) {
+		layerstack.PushLayer(layer);
+	}
+
+	void App::PushOverlay(Layer* overlay) {
+		layerstack.PushOverlay(overlay);
 	}
 
 	bool App::OnWindowClose(WindowCloseEvent& ev) {

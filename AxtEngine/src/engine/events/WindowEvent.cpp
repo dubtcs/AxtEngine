@@ -17,6 +17,13 @@ namespace axt {
 		return (EventCategory::Application);
 	}
 
+	std::string WindowResizeEvent::ToString() const {
+		std::stringstream str;
+		str << "WindowResize: (" << width << ", " << height << ")";
+		return str.str();
+	}
+
+
 	// Close
 	EventType WindowCloseEvent::GetEventType() const {
 		return StaticType;
@@ -29,5 +36,10 @@ namespace axt {
 	int WindowCloseEvent::GetCategoryFlags() const {
 		return (EventCategory::Application);
 	}
+
+	std::string WindowCloseEvent::ToString() const {
+		return "WindowClosing";
+	}
+
 
 }

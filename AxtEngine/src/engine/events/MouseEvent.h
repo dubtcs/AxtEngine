@@ -10,7 +10,7 @@ namespace axt {
 		inline int GetButton() { return button; }
 	protected:
 		MouseButtonEvent(int button) : button{ button } {};
-	private:
+	protected:
 		int button;
 	};
 
@@ -20,6 +20,7 @@ namespace axt {
 		static const EventType StaticType{ EventType::MouseButtonPressed };
 		virtual const char* GetName() const override;
 		virtual EventType GetEventType() const override;
+		std::string ToString() const override;
 	};
 
 	class MouseButtonReleased : public MouseButtonEvent {
@@ -28,6 +29,7 @@ namespace axt {
 		static const EventType StaticType{ EventType::MouseButtonReleased };
 		virtual const char* GetName() const override;
 		virtual EventType GetEventType() const override;
+		std::string ToString() const override;
 	};
 
 	class MouseMovedEvent : public axt::Event {
@@ -37,6 +39,7 @@ namespace axt {
 		static const EventType Type{ EventType::MouseMoved };
 		virtual const char* GetName() const override;
 		virtual EventType GetEventType() const override;
+		std::string ToString() const override;
 	private:
 		double x, y;
 	};
@@ -48,6 +51,7 @@ namespace axt {
 		static const EventType StaticType{ EventType::MouseScroll };
 		virtual const char* GetName() const override;
 		virtual EventType GetEventType() const override;
+		std::string ToString() const override;
 	private:
 		double x, y;
 	};

@@ -59,6 +59,8 @@ project "AxtEngine"
             ("{COPY} %{cfg.buildtarget.relpath} ../bin/"..output.."/Sandbox")
         }
 
+	buildoptions "/MDd"
+
     filter "configurations:Debug"
         defines {"AXT_DEBUG"}
         symbols "On"
@@ -103,6 +105,8 @@ project "Sandbox"
             "AXT_PLATFORM_WINDOWS";
         }
 
+	buildoptions "/MDd"
+    
     filter "configurations:Debug"
         defines "AXT_DEBUG"
         symbols "On"

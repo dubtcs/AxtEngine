@@ -19,6 +19,7 @@ namespace axt {
 		virtual const char* GetName() const override;
 		virtual EventType GetEventType() const override;
 		static const EventType StaticType{ EventType::KeyPressed };
+		std::string ToString() const override;
 	private:
 		int amountPressed;
 	};
@@ -29,6 +30,7 @@ namespace axt {
 		virtual const char* GetName() const override;
 		virtual EventType GetEventType() const override;
 		static const EventType StaticType{ EventType::KeyReleased };
+		std::string ToString() const override;
 	};
 
 }

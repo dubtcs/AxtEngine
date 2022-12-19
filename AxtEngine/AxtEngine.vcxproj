@@ -84,6 +84,7 @@
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <AdditionalOptions>/MDd %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <ExternalWarningLevel>Level3</ExternalWarningLevel>
     </ClCompile>
@@ -107,6 +108,7 @@
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <AdditionalOptions>/MDd %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <ExternalWarningLevel>Level3</ExternalWarningLevel>
     </ClCompile>
@@ -130,6 +132,7 @@
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <AdditionalOptions>/MDd %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <ExternalWarningLevel>Level3</ExternalWarningLevel>
     </ClCompile>
@@ -148,22 +151,26 @@
     <ClInclude Include="src\engine\App.h" />
     <ClInclude Include="src\engine\Core.h" />
     <ClInclude Include="src\engine\EntryPoint.h" />
-    <ClInclude Include="src\engine\events\WindowEvent.h" />
+    <ClInclude Include="src\engine\Layer.h" />
+    <ClInclude Include="src\engine\LayerStack.h" />
     <ClInclude Include="src\engine\Log.h" />
     <ClInclude Include="src\engine\Window.h" />
     <ClInclude Include="src\engine\events\Event.h" />
     <ClInclude Include="src\engine\events\KeyEvent.h" />
     <ClInclude Include="src\engine\events\MouseEvent.h" />
+    <ClInclude Include="src\engine\events\WindowEvent.h" />
     <ClInclude Include="src\pch.h" />
     <ClInclude Include="src\platform\windows\WWindow.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\engine\App.cpp" />
-    <ClCompile Include="src\engine\events\WindowEvent.cpp" />
+    <ClCompile Include="src\engine\Layer.cpp" />
+    <ClCompile Include="src\engine\LayerStack.cpp" />
     <ClCompile Include="src\engine\Log.cpp" />
     <ClCompile Include="src\engine\events\Event.cpp" />
     <ClCompile Include="src\engine\events\KeyEvent.cpp" />
     <ClCompile Include="src\engine\events\MouseEvent.cpp" />
+    <ClCompile Include="src\engine\events\WindowEvent.cpp" />
     <ClCompile Include="src\pch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>

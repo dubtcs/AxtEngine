@@ -13,6 +13,7 @@ namespace axt {
 		static const EventType StaticType{ EventType::WindowResize };
 		int GetWidth() const { return width; }
 		int GetHegith() const { return height; }
+		std::string ToString() const override;
 	protected:
 		int width, height;
 	};
@@ -24,6 +25,7 @@ namespace axt {
 		virtual EventType GetEventType() const override;
 		virtual int GetCategoryFlags() const override;
 		static const EventType StaticType{ EventType::WindowClose };
+		std::string ToString() const override;
 	};
 
 }

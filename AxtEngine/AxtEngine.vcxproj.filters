@@ -25,6 +25,12 @@
     <ClInclude Include="src\engine\EntryPoint.h">
       <Filter>engine</Filter>
     </ClInclude>
+    <ClInclude Include="src\engine\Layer.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\LayerStack.h">
+      <Filter>engine</Filter>
+    </ClInclude>
     <ClInclude Include="src\engine\Log.h">
       <Filter>engine</Filter>
     </ClInclude>
@@ -40,14 +46,22 @@
     <ClInclude Include="src\engine\events\MouseEvent.h">
       <Filter>engine\events</Filter>
     </ClInclude>
+    <ClInclude Include="src\engine\events\WindowEvent.h">
+      <Filter>engine\events</Filter>
+    </ClInclude>
     <ClInclude Include="src\pch.h" />
     <ClInclude Include="src\platform\windows\WWindow.h">
       <Filter>platform\windows</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\events\WindowEvent.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\engine\App.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\Layer.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\LayerStack.cpp">
       <Filter>engine</Filter>
     </ClCompile>
     <ClCompile Include="src\engine\Log.cpp">
@@ -62,10 +76,12 @@
     <ClCompile Include="src\engine\events\MouseEvent.cpp">
       <Filter>engine\events</Filter>
     </ClCompile>
+    <ClCompile Include="src\engine\events\WindowEvent.cpp">
+      <Filter>engine\events</Filter>
+    </ClCompile>
     <ClCompile Include="src\pch.cpp" />
     <ClCompile Include="src\platform\windows\WWindow.cpp">
       <Filter>platform\windows</Filter>
     </ClCompile>
-    <ClCompile Include="src\engine\events\WindowEvent.cpp" />
   </ItemGroup>
 </Project>

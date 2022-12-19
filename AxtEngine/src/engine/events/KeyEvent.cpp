@@ -15,6 +15,12 @@ namespace axt {
 	EventType KeyPressedEvent::GetEventType() const {
 		return StaticType;
 	}
+	std::string KeyPressedEvent::ToString() const {
+		std::stringstream str;
+		str << "KeyPressed: " << keycode;
+		return str.str();
+	}
+
 
 	// KEY RELEASED
 	const char* KeyReleasedEvent::GetName() const {
@@ -23,6 +29,12 @@ namespace axt {
 	EventType KeyReleasedEvent::GetEventType() const {
 		return StaticType;
 	}
+	std::string KeyReleasedEvent::ToString() const {
+		std::stringstream str;
+		str << "KeyReleased: " << keycode;
+		return str.str();
+	}
+
 
 
 }

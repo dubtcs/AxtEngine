@@ -22,8 +22,9 @@ namespace axt {
 		virtual EventType GetEventType() const = 0;
 		virtual const char* GetName() const = 0;
 		virtual int GetCategoryFlags() const = 0;
-		std::string ToString() const { return GetName(); }
+		virtual std::string ToString() const { return GetName(); }
 		inline bool IsCategory(EventCategory cat) { return (GetCategoryFlags() & cat); }
+		bool Handled() { return isHandled; }
 	public:
 		friend class EventHandler;
 		static const EventType StaticType;
