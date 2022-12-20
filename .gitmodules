@@ -4,3 +4,6 @@
 [submodule "AxtEngine/vendor/glfw"]
 	path = AxtEngine/vendor/glfw
 	url = https://github.com/TheCherno/glfw.git
+[submodule "AxtEngine/vendor/imgui"]
+	path = AxtEngine/vendor/imgui
+	url = https://github.com/dubtcs/imgui.git

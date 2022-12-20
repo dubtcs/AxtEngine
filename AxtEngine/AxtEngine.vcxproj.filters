@@ -53,6 +53,7 @@
     <ClInclude Include="src\platform\windows\WWindow.h">
       <Filter>platform\windows</Filter>
     </ClInclude>
+    <ClInclude Include="src\engine\gui\GuiLayer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\engine\App.cpp">
@@ -83,5 +84,6 @@
     <ClCompile Include="src\platform\windows\WWindow.cpp">
       <Filter>platform\windows</Filter>
     </ClCompile>
+    <ClCompile Include="src\engine\gui\GuiLayer.cpp" />
   </ItemGroup>
 </Project>

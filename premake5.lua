@@ -16,9 +16,11 @@ output = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 _includeDirs = {};
 _includeDirs["glfw"] = "AxtEngine/vendor/glfw/include"
 _includeDirs["glad"] = "AxtEngine/vendor/glad/include"
+_includeDirs["imgui"] = "AxtEngine/vendor/imgui/include"
 
 include "AxtEngine/vendor/glfw"
 include "AxtEngine/vendor/glad"
+include "AxtEngine/vendor/imgui"
 
 project "AxtEngine"
     location "AxtEngine"
@@ -40,12 +42,14 @@ project "AxtEngine"
         "%{prj.name}/src",
         "%{prj.name}/vendor/spdlog/include",
         "%{_includeDirs.glfw}",
-        "%{_includeDirs.glad}"
+        "%{_includeDirs.glad}",
+        "%{_includeDirs.imgui}"
     }
     
     links {
         "GLFW",
         "glad",
+        "imgui",
         "opengl32.lib",
     }
 
