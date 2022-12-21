@@ -16,7 +16,7 @@ output = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 _includeDirs = {};
 _includeDirs["glfw"] = "AxtEngine/vendor/glfw/include"
 _includeDirs["glad"] = "AxtEngine/vendor/glad/include"
-_includeDirs["imgui"] = "AxtEngine/vendor/imgui/include"
+_includeDirs["imgui"] = "AxtEngine/vendor/imgui"
 
 include "AxtEngine/vendor/glfw"
 include "AxtEngine/vendor/glad"

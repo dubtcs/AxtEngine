@@ -14,7 +14,7 @@ namespace axt {
 		void OnUpdate() override;
 		void OnEvent(Event& curEvent) override;
 	protected:
-
+		float previousTime;
 	};
 
 }

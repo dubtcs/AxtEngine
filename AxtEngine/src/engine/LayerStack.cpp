@@ -30,7 +30,7 @@ namespace axt {
 
 	void LayerStack::PushOverlay(Layer* overlay) {
 		layers.emplace_back(overlay);
-		layerInsertPoint++;
+		//layerInsertPoint++;
 	}
 
 	void LayerStack::PopOverlay(Layer* overlay) {

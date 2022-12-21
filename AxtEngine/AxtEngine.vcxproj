@@ -80,7 +80,7 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>AXT_BUILD_DLL;AXT_PLATFORM_WINDOWS;GLFW_INCLUDE_NONE;AXT_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\glfw\include;vendor\glad\include;vendor\imgui\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\glfw\include;vendor\glad\include;vendor\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -104,7 +104,7 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>AXT_BUILD_DLL;AXT_PLATFORM_WINDOWS;GLFW_INCLUDE_NONE;AXT_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\glfw\include;vendor\glad\include;vendor\imgui\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\glfw\include;vendor\glad\include;vendor\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -128,7 +128,7 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>AXT_BUILD_DLL;AXT_PLATFORM_WINDOWS;GLFW_INCLUDE_NONE;AXT_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\glfw\include;vendor\glad\include;vendor\imgui\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\glfw\include;vendor\glad\include;vendor\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -151,7 +151,6 @@
     <ClInclude Include="src\engine\App.h" />
     <ClInclude Include="src\engine\Core.h" />
     <ClInclude Include="src\engine\EntryPoint.h" />
-    <ClInclude Include="src\engine\gui\GuiLayer.h" />
     <ClInclude Include="src\engine\Layer.h" />
     <ClInclude Include="src\engine\LayerStack.h" />
     <ClInclude Include="src\engine\Log.h" />
@@ -160,12 +159,13 @@
     <ClInclude Include="src\engine\events\KeyEvent.h" />
     <ClInclude Include="src\engine\events\MouseEvent.h" />
     <ClInclude Include="src\engine\events\WindowEvent.h" />
+    <ClInclude Include="src\engine\gui\GuiLayer.h" />
     <ClInclude Include="src\pch.h" />
+    <ClInclude Include="src\platform\OpenGL\IGOGLRender.h" />
     <ClInclude Include="src\platform\windows\WWindow.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\engine\App.cpp" />
-    <ClCompile Include="src\engine\gui\GuiLayer.cpp" />
     <ClCompile Include="src\engine\Layer.cpp" />
     <ClCompile Include="src\engine\LayerStack.cpp" />
     <ClCompile Include="src\engine\Log.cpp" />
@@ -173,9 +173,11 @@
     <ClCompile Include="src\engine\events\KeyEvent.cpp" />
     <ClCompile Include="src\engine\events\MouseEvent.cpp" />
     <ClCompile Include="src\engine\events\WindowEvent.cpp" />
+    <ClCompile Include="src\engine\gui\GuiLayer.cpp" />
     <ClCompile Include="src\pch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="src\platform\OpenGL\IGOGLRender.cpp" />
     <ClCompile Include="src\platform\windows\WWindow.cpp" />
   </ItemGroup>
   <ItemGroup>

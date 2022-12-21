@@ -7,7 +7,11 @@
 
 namespace axt {
 
+	App* App::instance{ nullptr };
+
 	App::App() {
+		assert(instance == nullptr, "App instance already exists");
+		instance = this;
 		window = std::unique_ptr<AxtWindow>{ AxtWindow::Create() };
 		window->SetEventCallback(std::bind(&App::OnEvent, this, std::placeholders::_1));
 	}
@@ -46,10 +50,12 @@ namespace axt {
 
 	void App::PushLayer(Layer* layer) {
 		layerstack.PushLayer(layer);
+		layer->OnAttach();
 	}
 
 	void App::PushOverlay(Layer* overlay) {
 		layerstack.PushOverlay(overlay);
+		overlay->OnAttach();
 	}
 
 	bool App::OnWindowClose(WindowCloseEvent& ev) {

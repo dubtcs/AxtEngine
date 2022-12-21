@@ -22,11 +22,14 @@ namespace axt {
 		bool OnEvent(Event& bindEvent);
 		void PushLayer(Layer* layer);
 		void PushOverlay(Layer* overlay);
+		static App& GetApp() { return *instance; }
+		AxtWindow& GetWindow() { return *window; }
 	private:
 		bool running{ true };
 		bool OnWindowClose(WindowCloseEvent& ev);
 		std::unique_ptr<AxtWindow> window;
 		LayerStack layerstack;
+		static App* instance;
 	};
 
 	App* CreateApp();

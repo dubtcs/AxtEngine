@@ -12,7 +12,7 @@ public:
 
 class Sandbox : public axt::App {
 public:
-	Sandbox() { PushLayer(new ELayer{}); };
+	Sandbox() { PushLayer(new ELayer{}); PushOverlay(new axt::GuiLayer{}); };
 	~Sandbox() {};
 };
 
