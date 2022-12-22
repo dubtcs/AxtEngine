@@ -32,19 +32,21 @@ namespace axt {
 		std::string ToString() const override;
 	};
 
-	class MouseMovedEvent : public axt::Event {
+	class MouseMovedEvent : public Event {
 	public:
 		virtual int GetCategoryFlags() const override;
 		MouseMovedEvent(double x, double y) : x{ x }, y{ y } {};
-		static const EventType Type{ EventType::MouseMoved };
+		static const EventType StaticType{ EventType::MouseMoved };
 		virtual const char* GetName() const override;
 		virtual EventType GetEventType() const override;
 		std::string ToString() const override;
+		double GetX();
+		double GetY();
 	private:
 		double x, y;
 	};
 
-	class MouseScrollEvent : public axt::Event {
+	class MouseScrollEvent : public Event {
 	public:
 		virtual int GetCategoryFlags() const override;
 		MouseScrollEvent(double x, double y) : x{ x }, y{ y } {};
@@ -52,6 +54,8 @@ namespace axt {
 		virtual const char* GetName() const override;
 		virtual EventType GetEventType() const override;
 		std::string ToString() const override;
+		double GetX();
+		double GetY();
 	private:
 		double x, y;
 	};

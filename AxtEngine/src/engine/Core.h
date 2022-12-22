@@ -8,3 +8,5 @@
 #endif
 #define AXT namespace axt
 #endif
+
+#define AXT_BIND_EVENT(f) std::bind(f, this, std::placeholders::_1)

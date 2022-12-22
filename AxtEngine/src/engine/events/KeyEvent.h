@@ -33,4 +33,13 @@ namespace axt {
 		std::string ToString() const override;
 	};
 
+	class AXT_API KeyTypedEvent : public KeyEvent {
+	public:
+		KeyTypedEvent(int keycode) : KeyEvent(keycode) {}
+		virtual const char* GetName() const override;
+		virtual EventType GetEventType() const override;
+		static const EventType StaticType{ EventType::KeyTyped };
+		std::string ToString() const override;
+	};
+
 }

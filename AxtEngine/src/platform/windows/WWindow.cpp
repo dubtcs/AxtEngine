@@ -85,6 +85,12 @@ namespace axt {
 			}
 		});
 
+		glfwSetCharCallback(window, [](GLFWwindow* win, uint keycode) {
+			WindowData& winData = *(WindowData*)glfwGetWindowUserPointer(win);
+			KeyTypedEvent ev{ (int)keycode };
+			winData.callback(ev);
+		});
+
 		glfwSetMouseButtonCallback(window, [](GLFWwindow* win, int key, int action, int mods) {
 			WindowData& winData = *(WindowData*)glfwGetWindowUserPointer(win);
 			switch (action) {

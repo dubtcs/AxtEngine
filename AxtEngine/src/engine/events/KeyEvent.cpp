@@ -35,6 +35,16 @@ namespace axt {
 		return str.str();
 	}
 
-
+	const char* KeyTypedEvent::GetName() const {
+		return "KeyTypedEvent";
+	}
+	EventType KeyTypedEvent::GetEventType() const {
+		return StaticType;
+	}
+	std::string KeyTypedEvent::ToString() const {
+		std::stringstream str;
+		str << "KeyTyped: " << keycode;
+		return str.str();
+	}
 
 }

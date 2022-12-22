@@ -56,6 +56,13 @@ namespace axt {
 		return str.str();
 	}
 
+	double MouseMovedEvent::GetX() {
+		return x;
+	}
+	double MouseMovedEvent::GetY() {
+		return y;
+	}
+
 
 	// MOUSE SCROLL
 	int MouseScrollEvent::GetCategoryFlags() const {
@@ -76,5 +83,11 @@ namespace axt {
 		return str.str();
 	}
 
+	double MouseScrollEvent::GetX() {
+		return x;
+	}
+	double MouseScrollEvent::GetY() {
+		return y;
+	}
 
 }

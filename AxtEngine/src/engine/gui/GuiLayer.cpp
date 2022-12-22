@@ -47,7 +47,15 @@ namespace axt {
 	}
 
 	void GuiLayer::OnEvent(Event& newEvent) {
-
+		EventHandler handler{ newEvent };
+		handler.Fire<MouseButtonPressed>(AXT_BIND_EVENT(&GuiLayer::OnMouseButtonPressed));
+		handler.Fire<MouseButtonReleased>(AXT_BIND_EVENT(&GuiLayer::OnMouseButtonRelease));
+		handler.Fire<WindowResizeEvent>(AXT_BIND_EVENT(&GuiLayer::OnWindowResize));
+		handler.Fire<MouseScrollEvent>(AXT_BIND_EVENT(&GuiLayer::OnMouseScroll));
+		handler.Fire<MouseMovedEvent>(AXT_BIND_EVENT(&GuiLayer::OnMouseMoved));
+		handler.Fire<KeyPressedEvent>(AXT_BIND_EVENT(&GuiLayer::OnKeyPressed));
+		handler.Fire<KeyReleasedEvent>(AXT_BIND_EVENT(&GuiLayer::OnKeyReleased));
+		handler.Fire<KeyTypedEvent>(AXT_BIND_EVENT(&GuiLayer::OnKeyTyped));
 	}
 
 	void GuiLayer::OnUpdate() {
@@ -68,6 +76,57 @@ namespace axt {
 
 		ImGui::Render();
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+		AXT_INFO("GuiLayer Update");
+	}
+
+	bool GuiLayer::OnMouseButtonPressed(MouseButtonPressed& ev) {
+		ImGuiIO& io{ ImGui::GetIO() };
+		io.MouseDown[ev.GetButton()] = true;
+		return false;
+	}
+	bool GuiLayer::OnMouseButtonRelease(MouseButtonReleased& ev) {
+		ImGuiIO& io{ ImGui::GetIO() };
+		io.MouseDown[ev.GetButton()] = false;
+		return false;
+	}
+
+	bool GuiLayer::OnMouseMoved(MouseMovedEvent& ev) {
+		ImGuiIO& io{ ImGui::GetIO() };
+		io.MousePos = ImVec2{ (float)ev.GetX(), (float)ev.GetY() };
+		return false;
+	}
+
+	bool GuiLayer::OnMouseScroll(MouseScrollEvent& ev) {
+		ImGuiIO& io{ ImGui::GetIO() };
+		io.MouseWheel += ev.GetY();
+		io.MouseWheelH += ev.GetX();
+		return false;
+	}
+
+	bool GuiLayer::OnWindowResize(WindowResizeEvent& ev) {
+		ImGuiIO& io{ ImGui::GetIO() };
+		io.DisplaySize = ImVec2{ (float)ev.GetWidth(), (float)ev.GetHegith() };
+		io.DisplayFramebufferScale = ImVec2{ 1.f,1.f };
+		return false;
+	}
+
+	bool GuiLayer::OnKeyPressed(KeyPressedEvent& ev) {
+		ImGuiIO& io{ ImGui::GetIO() };
+		io.KeysDown[ev.GetKeycode()] = true;
+		io.KeyCtrl = io.KeysDown[GLFW_KEY_RIGHT_CONTROL] || io.KeysDown[GLFW_KEY_LEFT_CONTROL];
+		io.KeyShift = io.KeysDown[GLFW_KEY_RIGHT_SHIFT] || io.KeysDown[GLFW_KEY_LEFT_SHIFT];
+		io.KeyAlt = io.KeysDown[GLFW_KEY_RIGHT_ALT] || io.KeysDown[GLFW_KEY_LEFT_ALT];
+		io.KeySuper = io.KeysDown[GLFW_KEY_RIGHT_SUPER] || io.KeysDown[GLFW_KEY_LEFT_SUPER];
+		return false;
+	}
+
+	bool GuiLayer::OnKeyTyped(KeyTypedEvent& ev) {
+		ImGuiIO& io{ ImGui::GetIO() };
+		int ch{ ev.GetKeycode() };
+		if (ch > 0 && ch < 0x10000)
+			io.AddInputCharacter((unsigned short)ch);
+		return false;
 	}
 
 }

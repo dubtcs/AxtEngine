@@ -8,7 +8,7 @@ namespace axt {
 		NONE = 0,
 		WindowClose, WindowResize, WindowFocusGain, WindowFocusLost, WindowMoved,
 		AppTick, AppUpdate, AppRender,
-		KeyPressed, KeyReleased,
+		KeyPressed, KeyReleased, KeyTyped,
 		MouseButtonPressed, MouseButtonReleased, MouseMoved, MouseScroll
 	};
 
