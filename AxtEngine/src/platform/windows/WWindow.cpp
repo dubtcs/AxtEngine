@@ -2,14 +2,14 @@
 #include <pch.h>
 #include <assert.h>
 #include "WWindow.h"
-#include "engine/Log.h"
+#include "axt/Log.h"
 
 #include <glad/glad.h>
 
 // Events
-#include "engine/events/WindowEvent.h"
-#include "engine/events/KeyEvent.h"
-#include "engine/events/MouseEvent.h"
+#include "axt/events/WindowEvent.h"
+#include "axt/events/KeyEvent.h"
+#include "axt/events/MouseEvent.h"
 
 #define uint unsigned int
 

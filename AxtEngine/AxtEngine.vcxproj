@@ -148,32 +148,32 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\AxtEngine.h" />
-    <ClInclude Include="src\engine\App.h" />
-    <ClInclude Include="src\engine\Core.h" />
-    <ClInclude Include="src\engine\EntryPoint.h" />
-    <ClInclude Include="src\engine\Layer.h" />
-    <ClInclude Include="src\engine\LayerStack.h" />
-    <ClInclude Include="src\engine\Log.h" />
-    <ClInclude Include="src\engine\Window.h" />
-    <ClInclude Include="src\engine\events\Event.h" />
-    <ClInclude Include="src\engine\events\KeyEvent.h" />
-    <ClInclude Include="src\engine\events\MouseEvent.h" />
-    <ClInclude Include="src\engine\events\WindowEvent.h" />
-    <ClInclude Include="src\engine\gui\GuiLayer.h" />
+    <ClInclude Include="src\axt\App.h" />
+    <ClInclude Include="src\axt\Core.h" />
+    <ClInclude Include="src\axt\EntryPoint.h" />
+    <ClInclude Include="src\axt\Layer.h" />
+    <ClInclude Include="src\axt\LayerStack.h" />
+    <ClInclude Include="src\axt\Log.h" />
+    <ClInclude Include="src\axt\Window.h" />
+    <ClInclude Include="src\axt\events\Event.h" />
+    <ClInclude Include="src\axt\events\KeyEvent.h" />
+    <ClInclude Include="src\axt\events\MouseEvent.h" />
+    <ClInclude Include="src\axt\events\WindowEvent.h" />
+    <ClInclude Include="src\axt\gui\GuiLayer.h" />
     <ClInclude Include="src\pch.h" />
     <ClInclude Include="src\platform\OpenGL\IGOGLRender.h" />
     <ClInclude Include="src\platform\windows\WWindow.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\engine\App.cpp" />
-    <ClCompile Include="src\engine\Layer.cpp" />
-    <ClCompile Include="src\engine\LayerStack.cpp" />
-    <ClCompile Include="src\engine\Log.cpp" />
-    <ClCompile Include="src\engine\events\Event.cpp" />
-    <ClCompile Include="src\engine\events\KeyEvent.cpp" />
-    <ClCompile Include="src\engine\events\MouseEvent.cpp" />
-    <ClCompile Include="src\engine\events\WindowEvent.cpp" />
-    <ClCompile Include="src\engine\gui\GuiLayer.cpp" />
+    <ClCompile Include="src\axt\App.cpp" />
+    <ClCompile Include="src\axt\Layer.cpp" />
+    <ClCompile Include="src\axt\LayerStack.cpp" />
+    <ClCompile Include="src\axt\Log.cpp" />
+    <ClCompile Include="src\axt\events\Event.cpp" />
+    <ClCompile Include="src\axt\events\KeyEvent.cpp" />
+    <ClCompile Include="src\axt\events\MouseEvent.cpp" />
+    <ClCompile Include="src\axt\events\WindowEvent.cpp" />
+    <ClCompile Include="src\axt\gui\GuiLayer.cpp" />
     <ClCompile Include="src\pch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>

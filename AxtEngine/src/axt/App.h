@@ -8,8 +8,8 @@
 #include "events/KeyEvent.h"
 #include "events/MouseEvent.h"
 
-#include "engine/Layer.h"
-#include "engine/LayerStack.h"
+#include "axt/Layer.h"
+#include "axt/LayerStack.h"
 
 namespace axt {
 

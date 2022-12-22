@@ -1,7 +1,7 @@
 #pragma once
 
-#include "engine/Window.h"
-#include "engine/events/Event.h"
+#include "axt/Window.h"
+#include "axt/events/Event.h"
 
 #include <GLFW/glfw3.h>
 

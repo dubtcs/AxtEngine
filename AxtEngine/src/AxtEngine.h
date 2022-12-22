@@ -1,12 +1,12 @@
 #pragma once
 
-#include "engine/Core.h"
+#include "axt/Core.h"
 
-#include "engine/App.h"
-#include "engine/Log.h"
-#include "engine/Layer.h"
+#include "axt/App.h"
+#include "axt/Log.h"
+#include "axt/Layer.h"
 
 // temp
-#include "engine/gui/GuiLayer.h"
+#include "axt/gui/GuiLayer.h"
 
-#include "engine/EntryPoint.h"
+#include "axt/EntryPoint.h"
