@@ -7,3 +7,6 @@
 [submodule "AxtEngine/vendor/imgui"]
 	path = AxtEngine/vendor/imgui
 	url = https://github.com/dubtcs/imgui.git
+[submodule "AxtEngine/vendor/glm"]
+	path = AxtEngine/vendor/glm
+	url = https://github.com/g-truc/glm.git
