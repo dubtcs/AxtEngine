@@ -30,7 +30,7 @@ namespace axt {
 		bool running{ true };
 		bool OnWindowClose(WindowCloseEvent& ev);
 		std::unique_ptr<AxtWindow> window;
-		std::unique_ptr<GuiLayer> guilayer;
+		GuiLayer* guilayer;
 		LayerStack layerstack;
 		static App* instance;
 	};

@@ -5,7 +5,7 @@
 namespace axt {
 
 	LayerStack::LayerStack() {
-		layerInsertPoint = layers.begin();
+
 	}
 
 	LayerStack::~LayerStack() {
@@ -16,7 +16,8 @@ namespace axt {
 
 	void LayerStack::PushLayer(Layer* layer) {
 		AXT_WARN("Push layer");
-		layerInsertPoint = layers.emplace(layerInsertPoint, layer);
+		layers.emplace(layers.begin() + layerInsertIndex, layer);
+		layerInsertIndex++;
 	}
 
 	void LayerStack::PopLayer(Layer* layer) {
@@ -24,13 +25,12 @@ namespace axt {
 		std::vector<Layer*>::iterator iter{ std::find(layers.begin(), layers.end(), layer) };
 		if (iter != layers.end()) {
 			layers.erase(iter);
-			layerInsertPoint--;
+			layerInsertIndex--;
 		}
 	}
 
 	void LayerStack::PushOverlay(Layer* overlay) {
 		layers.emplace_back(overlay);
-		//layerInsertPoint++;
 	}
 
 	void LayerStack::PopOverlay(Layer* overlay) {

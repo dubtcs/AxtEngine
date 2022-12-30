@@ -17,7 +17,8 @@ namespace axt {
 		instance = this;
 		window = std::unique_ptr<AxtWindow>{ AxtWindow::Create() };
 		window->SetEventCallback(std::bind(&App::OnEvent, this, std::placeholders::_1));
-		guilayer = std::make_unique<GuiLayer>();
+		guilayer = new GuiLayer{};
+		PushOverlay(guilayer);
 	}
 
 	App::~App() {
@@ -49,7 +50,7 @@ namespace axt {
 
 		// back to front for events
 		for (std::vector<Layer*>::iterator iter{ layerstack.end() }; iter != layerstack.begin();) {
-			//(*--iter)->OnEvent(bindEvent);
+			(*--iter)->OnEvent(bindEvent);
 			if (bindEvent.Handled()) {
 				break;
 			}

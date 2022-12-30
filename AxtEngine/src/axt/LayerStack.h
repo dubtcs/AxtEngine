@@ -18,7 +18,7 @@ namespace axt {
 		std::vector<Layer*>::iterator end() { return layers.end(); }
 	protected:
 		std::vector<Layer*> layers{};
-		std::vector<Layer*>::iterator layerInsertPoint{};
+		unsigned int layerInsertIndex{ 0 };
 	};
 
 }

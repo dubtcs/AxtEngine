@@ -1284,4 +1284,9 @@
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\AxtEngine\vendor\imgui">
+      <Filter>AxtEngine\vendor</Filter>
+    </None>
+  </ItemGroup>
 </Project>

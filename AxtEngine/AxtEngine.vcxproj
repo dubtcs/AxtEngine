@@ -590,6 +590,7 @@
     <ClCompile Include="src\axt\events\MouseEvent.cpp" />
     <ClCompile Include="src\axt\events\WindowEvent.cpp" />
     <ClCompile Include="src\axt\gui\GuiLayer.cpp" />
+    <ClCompile Include="src\axt\gui\ImGuiBuilder.cpp" />
     <ClCompile Include="src\pch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>

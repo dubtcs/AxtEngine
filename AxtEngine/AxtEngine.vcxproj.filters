@@ -16,9 +16,6 @@
     <Filter Include="src\platform">
       <UniqueIdentifier>{41663D6D-2DC9-CC11-D64E-05C8C2909894}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\platform\OpenGL">
-      <UniqueIdentifier>{555C82A0-C1BD-5FAE-4A2B-A660B68B966D}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src\platform\windows">
       <UniqueIdentifier>{9B5931A8-87E8-BA71-3007-CF6C1C75CB17}</UniqueIdentifier>
     </Filter>
@@ -1377,6 +1374,9 @@
       <Filter>src\axt\events</Filter>
     </ClCompile>
     <ClCompile Include="src\axt\gui\GuiLayer.cpp">
+      <Filter>src\axt\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\axt\gui\ImGuiBuilder.cpp">
       <Filter>src\axt\gui</Filter>
     </ClCompile>
     <ClCompile Include="src\pch.cpp">

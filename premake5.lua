@@ -104,7 +104,8 @@ project "Sandbox"
         "%{prj.name}/src/**.h",
         "%{prj.name}/src/**.cpp",
         "AxtEngine/vendor/glm/glm/**.hpp",
-        "AxtEngine/vendor/glm/glm/**.inl"
+        "AxtEngine/vendor/glm/glm/**.inl",
+        "%{_includeDirs.imgui}",
 
     }
 
@@ -112,6 +113,7 @@ project "Sandbox"
         "AxtEngine/vendor/spdlog/include",
         "AxtEngine/src",
         "%{_includeDirs.glm}",
+        "%{_includeDirs.imgui}",
 
     }
 

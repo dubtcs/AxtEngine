@@ -3,13 +3,14 @@
 #include "GuiLayer.h"
 
 #include <imgui.h>
-#include "axt/App.h"
-
-#define IMGUI_IMPL_API
 #include <backends/imgui_impl_opengl3.h>
 #include <backends/imgui_impl_glfw.h>
 
+#include "axt/App.h"
+
+// temp
 #include <GLFW/glfw3.h>
+#include <glad/glad.h>
 
 namespace axt {
 
@@ -26,21 +27,23 @@ namespace axt {
 		IMGUI_CHECKVERSION();
 
 		ImGui::CreateContext();
-		ImGui::StyleColorsDark();
 		ImGuiIO& io{ ImGui::GetIO() };
-		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 		io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 		io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 
-		ImGuiStyle& style{ ImGui::GetStyle() };
+		ImGui::StyleColorsDark();
+		ImGuiStyle& style = ImGui::GetStyle();
 		if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
-			style.WindowRounding = 0.f;
-			style.Colors[ImGuiCol_WindowBg].w = 1.f;
+			style.WindowRounding = 0.0f;
+			style.Colors[ImGuiCol_WindowBg].w = 1.0f;
 		}
 
 		App& App{ App::GetApp() };
 		GLFWwindow* window{ static_cast<GLFWwindow*>(App.GetWindow().GetNativeWindow()) };
 
+		ImGui_ImplGlfw_InitForOpenGL(window, true);
+		ImGui_ImplOpenGL3_Init("#version 410");
 	}
 
 	void GuiLayer::OnDetach() {
