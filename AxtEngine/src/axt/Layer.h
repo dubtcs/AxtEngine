@@ -13,7 +13,8 @@ namespace axt {
 		virtual void OnAttach() {};
 		virtual void OnDetach() {};
 		virtual void OnUpdate() {};
-		virtual void OnEvent(Event& event) {};
+		//virtual void OnEvent(Event& event) {};
+		virtual void OnImGuiRender() {};
 		const std::string& GetName() const { return name; }
 	protected:
 		std::string name;

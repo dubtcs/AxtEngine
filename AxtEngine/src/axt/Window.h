@@ -17,12 +17,13 @@ namespace axt {
 		// Platform agnostic window creation
 		static AxtWindow* Create(const AxtWindowConfig& config = AxtWindowConfig{});
 	public:
-		virtual void Update() {};
-		virtual void SetVsync(bool toggle) {};
+		virtual void Update() = 0;
+		virtual void SetVsync(bool toggle) = 0;
 		virtual void SetEventCallback(std::function<bool(Event&)>) {};
 		virtual bool IsVsync() const { return false; };
 		virtual unsigned int GetWidth() const { return 1; };
 		virtual unsigned int GetHeight() const { return 1; };
+		virtual void* GetNativeWindow() const = 0;
 	protected:
 		AxtWindow() {};
 	};

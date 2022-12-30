@@ -11,6 +11,8 @@
 #include "axt/Layer.h"
 #include "axt/LayerStack.h"
 
+#include "axt/gui/GuiLayer.h"
+
 namespace axt {
 
 	class AXT_API App {
@@ -28,6 +30,7 @@ namespace axt {
 		bool running{ true };
 		bool OnWindowClose(WindowCloseEvent& ev);
 		std::unique_ptr<AxtWindow> window;
+		std::unique_ptr<GuiLayer> guilayer;
 		LayerStack layerstack;
 		static App* instance;
 	};

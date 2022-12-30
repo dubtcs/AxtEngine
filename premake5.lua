@@ -17,15 +17,19 @@ _includeDirs = {};
 _includeDirs["glfw"] = "AxtEngine/vendor/glfw/include"
 _includeDirs["glad"] = "AxtEngine/vendor/glad/include"
 _includeDirs["imgui"] = "AxtEngine/vendor/imgui"
+_includeDirs["glm"] = "AxtEngine/vendor/glm"
 
-include "AxtEngine/vendor/glfw"
-include "AxtEngine/vendor/glad"
-include "AxtEngine/vendor/imgui"
+group "Vendors"
+    include "AxtEngine/vendor/glfw"
+    include "AxtEngine/vendor/glad"
+    include "AxtEngine/vendor/imgui"
+group ""
 
 project "AxtEngine"
     location "AxtEngine"
     kind "SharedLib"
     language "C++"
+    staticruntime "Off"
 
     targetdir ("bin/"..output.."/%{prj.name}")
     objdir ("bin-int/"..output.."/%{prj.name}")
@@ -35,7 +39,9 @@ project "AxtEngine"
 
     files {
         "%{prj.name}/src/**.h",
-        "%{prj.name}/src/**.cpp"
+        "%{prj.name}/src/**.cpp",
+        "%{prj.name}/vendor/glm/glm/**.hpp",
+        "%{prj.name}/vendor/glm/glm/**.inl",
     }
 
     includedirs {
@@ -43,7 +49,9 @@ project "AxtEngine"
         "%{prj.name}/vendor/spdlog/include",
         "%{_includeDirs.glfw}",
         "%{_includeDirs.glad}",
-        "%{_includeDirs.imgui}"
+        "%{_includeDirs.imgui}",
+        "%{_includeDirs.glm}",
+
     }
     
     links {
@@ -55,7 +63,6 @@ project "AxtEngine"
 
     filter "system:windows"
         cppdialect "C++20"
-        staticruntime "On"
         systemversion "latest"
 
         defines {
@@ -68,18 +75,19 @@ project "AxtEngine"
             ("{COPY} %{cfg.buildtarget.relpath} ../bin/"..output.."/Sandbox")
         }
 
-	buildoptions "/MDd"
-
     filter "configurations:Debug"
         defines {"AXT_DEBUG"}
+        runtime "Debug"
         symbols "On"
 
     filter "configurations:Release"
         defines {"AXT_RELEASE"}
+        runtime "Release"
         symbols "On"
 
     filter "configurations:Dist"
         defines {"AXT_DIST"}
+        runtime "Release"
         symbols "On"
 
 -- SANDBOX
@@ -87,18 +95,24 @@ project "Sandbox"
     location "Sandbox"
     kind "ConsoleApp"
     language "C++"
+    staticruntime "Off"
 
     targetdir ("bin/"..output.."/%{prj.name}")
     objdir ("bin-int/"..output.."/%{prj.name}")
 
     files {
         "%{prj.name}/src/**.h",
-        "%{prj.name}/src/**.cpp"
+        "%{prj.name}/src/**.cpp",
+        "AxtEngine/vendor/glm/glm/**.hpp",
+        "AxtEngine/vendor/glm/glm/**.inl"
+
     }
 
     includedirs {
         "AxtEngine/vendor/spdlog/include",
-        "AxtEngine/src"
+        "AxtEngine/src",
+        "%{_includeDirs.glm}",
+
     }
 
     links {
@@ -107,7 +121,6 @@ project "Sandbox"
 
     filter "system:windows"
         cppdialect "C++20"
-        staticruntime "On"
         systemversion "10.0.19041.0"
 
         defines {
@@ -118,12 +131,15 @@ project "Sandbox"
     
     filter "configurations:Debug"
         defines "AXT_DEBUG"
+        runtime "Debug"
         symbols "On"
 
     filter "configurations:Release"
         defines "AXT_RELEASE"
+        runtime "Release"
         symbols "On"
 
     filter "configurations:Dist"
         defines "AXT_DIST"
+        runtime "Release"
         symbols "On"

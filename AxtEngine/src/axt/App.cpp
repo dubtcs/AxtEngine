@@ -5,6 +5,9 @@
 
 #include <glad/glad.h>
 
+//temp
+#include "axt/Input.h"
+
 namespace axt {
 
 	App* App::instance{ nullptr };
@@ -14,6 +17,7 @@ namespace axt {
 		instance = this;
 		window = std::unique_ptr<AxtWindow>{ AxtWindow::Create() };
 		window->SetEventCallback(std::bind(&App::OnEvent, this, std::placeholders::_1));
+		guilayer = std::make_unique<GuiLayer>();
 	}
 
 	App::~App() {
@@ -24,9 +28,17 @@ namespace axt {
 		while (running) {
 			glClearColor(0.25f, 0.25f, 0.25f, 1.f);
 			glClear(GL_COLOR_BUFFER_BIT);
+			
 			for (Layer* curLayer : layerstack) {
 				curLayer->OnUpdate();
 			}
+
+			guilayer->Begin();
+			for (Layer* curLayer : layerstack) {
+				curLayer->OnImGuiRender();
+			}
+			guilayer->End();
+
 			window->Update();
 		}
 	}
@@ -35,11 +47,9 @@ namespace axt {
 		EventHandler handler{ bindEvent };
 		handler.Fire<WindowCloseEvent>(std::bind(&App::OnWindowClose, this, std::placeholders::_1));
 
-		AXT_TRACE("{0}", bindEvent.ToString());
-
 		// back to front for events
 		for (std::vector<Layer*>::iterator iter{ layerstack.end() }; iter != layerstack.begin();) {
-			(*--iter)->OnEvent(bindEvent);
+			//(*--iter)->OnEvent(bindEvent);
 			if (bindEvent.Handled()) {
 				break;
 			}

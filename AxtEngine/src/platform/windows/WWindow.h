@@ -19,6 +19,7 @@ namespace axt {
 		unsigned int GetWidth() const override;
 		unsigned int GetHeight() const override;
 		static void GlfwErrorCallback(int er, const char* desc);
+		virtual void* GetNativeWindow() const override { return window; };
 	private:
 		void Init();
 		void Shutdown();
