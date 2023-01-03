@@ -37,5 +37,5 @@ public:
 };
 
 axt::App* axt::CreateApp() {
-	return new Sandbox;
+	return new Sandbox{};
 }

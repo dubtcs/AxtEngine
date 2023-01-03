@@ -1,0 +1,15 @@
+
+Flow:
+
+Sandbox app creates an AxtApp instance.
+AxtApp creates a window that is platform specific.
+	Platform window is defined in preprocessor
+	Each platform window file has a definition of AxtWindow::Create()
+
+Layers are pushed onto a layerstack and called in order.
+	Overlays are always after standard layers.
+	Events are called top to bottom, (back to front of the vector)
+
+
+
+	foing

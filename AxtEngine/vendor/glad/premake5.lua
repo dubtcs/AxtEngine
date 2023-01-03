@@ -2,7 +2,7 @@
 project "glad"
 	kind "StaticLib"
 	language "C"
-	staticruntime "off"
+	staticruntime "on"
 
 	targetdir ("bin/" .. output .. "/%{prj.name}")
 	objdir ("bin-int/" .. output .. "/%{prj.name}")
@@ -25,7 +25,7 @@ project "glad"
 	filter "system:windows"
 		systemversion "latest"
 
-		buildoptions "/MT"
+		-- buildoptions "/MT"
 
 	filter "configurations:Debug"
 		runtime "Debug"

@@ -25,7 +25,7 @@ namespace axt {
 		const auto window = static_cast<GLFWwindow*>(App::GetApp().GetWindow().GetNativeWindow());
 		double x, y;
 		glfwGetCursorPos(window, &x, &y);
-		return { x, y };
+		return { (float)x, (float)y };
 	}
 
 	float WinInput::GetMouseXI() {

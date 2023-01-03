@@ -46,7 +46,7 @@ namespace axt {
 		if (window != nullptr) {
 			glfwMakeContextCurrent(window);
 			int suc2{ gladLoadGLLoader((GLADloadproc)glfwGetProcAddress) };
-			assert(suc2 == 1, "OpenGL Glad failure");
+			assert(suc2 == 1);
 			glfwSetWindowUserPointer(window, &data);
 			SetVsync(true);
 		} else

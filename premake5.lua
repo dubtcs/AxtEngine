@@ -27,9 +27,10 @@ group ""
 
 project "AxtEngine"
     location "AxtEngine"
-    kind "SharedLib"
+    kind "StaticLib"
     language "C++"
-    staticruntime "Off"
+    cppdialect "C++20"
+    staticruntime "On"
 
     targetdir ("bin/"..output.."/%{prj.name}")
     objdir ("bin-int/"..output.."/%{prj.name}")
@@ -42,6 +43,14 @@ project "AxtEngine"
         "%{prj.name}/src/**.cpp",
         "%{prj.name}/vendor/glm/glm/**.hpp",
         "%{prj.name}/vendor/glm/glm/**.inl",
+    }
+
+    defines {
+        "_CRT_SECURE_NO_WARNINGS",
+    }
+
+    excludes {
+        "AxtEngine/src/axt/gui/ImGuiBuilder.cpp",
     }
 
     includedirs {
@@ -62,7 +71,6 @@ project "AxtEngine"
     }
 
     filter "system:windows"
-        cppdialect "C++20"
         systemversion "latest"
 
         defines {
@@ -71,9 +79,9 @@ project "AxtEngine"
             "GLFW_INCLUDE_NONE";
         }
 
-        postbuildcommands{
-            ("{COPY} %{cfg.buildtarget.relpath} ../bin/"..output.."/Sandbox")
-        }
+        -- postbuildcommands{
+        --     ("{COPY} %{cfg.buildtarget.relpath} ../bin/"..output.."/Sandbox")
+        -- }
 
     filter "configurations:Debug"
         defines {"AXT_DEBUG"}
@@ -83,19 +91,20 @@ project "AxtEngine"
     filter "configurations:Release"
         defines {"AXT_RELEASE"}
         runtime "Release"
-        symbols "On"
+        optimize "On"
 
     filter "configurations:Dist"
         defines {"AXT_DIST"}
         runtime "Release"
-        symbols "On"
+        optimize "On"
 
 -- SANDBOX
 project "Sandbox"
     location "Sandbox"
     kind "ConsoleApp"
     language "C++"
-    staticruntime "Off"
+    cppdialect "C++20"
+    staticruntime "on"
 
     targetdir ("bin/"..output.."/%{prj.name}")
     objdir ("bin-int/"..output.."/%{prj.name}")
@@ -105,7 +114,7 @@ project "Sandbox"
         "%{prj.name}/src/**.cpp",
         "AxtEngine/vendor/glm/glm/**.hpp",
         "AxtEngine/vendor/glm/glm/**.inl",
-        "%{_includeDirs.imgui}",
+        --"%{_includeDirs.imgui}",
 
     }
 
@@ -113,7 +122,7 @@ project "Sandbox"
         "AxtEngine/vendor/spdlog/include",
         "AxtEngine/src",
         "%{_includeDirs.glm}",
-        "%{_includeDirs.imgui}",
+        --"%{_includeDirs.imgui}",
 
     }
 
@@ -122,14 +131,13 @@ project "Sandbox"
     }
 
     filter "system:windows"
-        cppdialect "C++20"
-        systemversion "10.0.19041.0"
+        systemversion "latest"
 
         defines {
             "AXT_PLATFORM_WINDOWS";
         }
 
-	buildoptions "/MDd"
+	-- buildoptions "/MT"
     
     filter "configurations:Debug"
         defines "AXT_DEBUG"
@@ -139,9 +147,9 @@ project "Sandbox"
     filter "configurations:Release"
         defines "AXT_RELEASE"
         runtime "Release"
-        symbols "On"
+        optimize "On"
 
     filter "configurations:Dist"
         defines "AXT_DIST"
         runtime "Release"
-        symbols "On"
+        optimize "On"

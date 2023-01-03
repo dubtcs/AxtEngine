@@ -1376,9 +1376,6 @@
     <ClCompile Include="src\axt\gui\GuiLayer.cpp">
       <Filter>src\axt\gui</Filter>
     </ClCompile>
-    <ClCompile Include="src\axt\gui\ImGuiBuilder.cpp">
-      <Filter>src\axt\gui</Filter>
-    </ClCompile>
     <ClCompile Include="src\pch.cpp">
       <Filter>src</Filter>
     </ClCompile>

@@ -13,9 +13,10 @@ namespace axt {
 	App* App::instance{ nullptr };
 
 	App::App() {
-		assert(instance == nullptr, "App instance already exists");
+		assert(instance == nullptr);
 		instance = this;
 		window = std::unique_ptr<AxtWindow>{ AxtWindow::Create() };
+		window->SetVsync(true);
 		window->SetEventCallback(std::bind(&App::OnEvent, this, std::placeholders::_1));
 		guilayer = new GuiLayer{};
 		PushOverlay(guilayer);
