@@ -2,7 +2,8 @@
 #include <pch.h>
 #include <assert.h>
 #include "WWindow.h"
-#include "axt/Log.h"
+#include "axt/core/Log.h"
+#include "axt/platform/OpenGL/OpenGLContext.h"
 
 #include <glad/glad.h>
 
@@ -44,9 +45,10 @@ namespace axt {
 		}
 		window = glfwCreateWindow(data.width, data.height, data.title.c_str(), nullptr, nullptr);
 		if (window != nullptr) {
-			glfwMakeContextCurrent(window);
-			int suc2{ gladLoadGLLoader((GLADloadproc)glfwGetProcAddress) };
-			assert(suc2 == 1);
+
+			context = new OpenGLContext{ window };
+			context->Init();
+
 			glfwSetWindowUserPointer(window, &data);
 			SetVsync(true);
 		} else
@@ -127,7 +129,8 @@ namespace axt {
 
 	void WWindow::Update() {
 		glfwPollEvents();
-		glfwSwapBuffers(window);
+		//glfwSwapBuffers(window);
+		context->SwapBuffers();
 	}
 
 	void WWindow::SetEventCallback(std::function<bool(Event&)> bindFunction) {

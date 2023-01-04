@@ -3,7 +3,7 @@
 #include "WinInput.h"
 
 #include <GLFW/glfw3.h>
-#include "axt/App.h"
+#include "axt/core/App.h"
 
 namespace axt {
 

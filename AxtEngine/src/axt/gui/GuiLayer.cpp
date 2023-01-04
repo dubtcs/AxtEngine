@@ -7,7 +7,7 @@
 //#include <backends/imgui_impl_glfw.h>
 #include "ImGuiBuilder.cpp"
 
-#include "axt/App.h"
+#include "axt/core/App.h"
 
 // temp
 //#include <GLFW/glfw3.h>

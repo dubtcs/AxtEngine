@@ -1,8 +1,9 @@
 #pragma once
 
 #include <pch.h>
-#include "Core.h"
-#include "events/Event.h"
+
+#include "axt/Core.h"
+#include "axt/events/Event.h"
 
 namespace axt {
 

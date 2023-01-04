@@ -6,7 +6,7 @@
 #include <glad/glad.h>
 
 //temp
-#include "axt/Input.h"
+#include "axt/core/Input.h"
 
 namespace axt {
 

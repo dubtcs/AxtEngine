@@ -1,8 +1,8 @@
 #pragma once
 
 #include <pch.h>
-#include "Core.h"
-#include "Layer.h"
+#include "axt/Core.h"
+#include "axt/core/Layer.h"
 
 namespace axt {
 

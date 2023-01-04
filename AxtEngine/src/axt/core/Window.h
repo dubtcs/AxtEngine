@@ -1,8 +1,10 @@
 #pragma once
 
-#include "Core.h"
+#include "axt/Core.h"
 #include <pch.h>
-#include "events/Event.h"
+#include "axt/events/Event.h"
+
+#include "axt/render/RenderContext.h"
 
 namespace axt {
 
@@ -25,6 +27,7 @@ namespace axt {
 		virtual unsigned int GetHeight() const { return 1; };
 		virtual void* GetNativeWindow() const = 0;
 	protected:
+		RenderContext* context{ nullptr };
 		AxtWindow() {};
 	};
 

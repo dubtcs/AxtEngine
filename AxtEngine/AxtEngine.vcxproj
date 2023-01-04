@@ -144,24 +144,26 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\AxtEngine.h" />
-    <ClInclude Include="src\axt\App.h" />
+    <ClInclude Include="src\axt\core\App.h" />
     <ClInclude Include="src\axt\Core.h" />
     <ClInclude Include="src\axt\EntryPoint.h" />
-    <ClInclude Include="src\axt\Input.h" />
-    <ClInclude Include="src\axt\Keycodes.h" />
-    <ClInclude Include="src\axt\Layer.h" />
-    <ClInclude Include="src\axt\LayerStack.h" />
-    <ClInclude Include="src\axt\Log.h" />
-    <ClInclude Include="src\axt\MousebuttonCodes.h" />
-    <ClInclude Include="src\axt\Window.h" />
+    <ClInclude Include="src\axt\core\Input.h" />
+    <ClInclude Include="src\axt\core\Keycodes.h" />
+    <ClInclude Include="src\axt\core\Layer.h" />
+    <ClInclude Include="src\axt\core\LayerStack.h" />
+    <ClInclude Include="src\axt\core\Log.h" />
+    <ClInclude Include="src\axt\core\MousebuttonCodes.h" />
+    <ClInclude Include="src\axt\platform\OpenGL\OpenGLContext.h" />
+    <ClInclude Include="src\axt\render\RenderContext.h" />
+    <ClInclude Include="src\axt\core\Window.h" />
     <ClInclude Include="src\axt\events\Event.h" />
     <ClInclude Include="src\axt\events\KeyEvent.h" />
     <ClInclude Include="src\axt\events\MouseEvent.h" />
     <ClInclude Include="src\axt\events\WindowEvent.h" />
     <ClInclude Include="src\axt\gui\GuiLayer.h" />
     <ClInclude Include="src\pch.h" />
-    <ClInclude Include="src\platform\windows\WWindow.h" />
-    <ClInclude Include="src\platform\windows\WinInput.h" />
+    <ClInclude Include="src\axt\platform\windows\WWindow.h" />
+    <ClInclude Include="src\axt\platform\windows\WinInput.h" />
     <ClInclude Include="vendor\glm\glm\common.hpp" />
     <ClInclude Include="vendor\glm\glm\detail\_features.hpp" />
     <ClInclude Include="vendor\glm\glm\detail\_fixes.hpp" />
@@ -580,20 +582,21 @@
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\axt\App.cpp" />
-    <ClCompile Include="src\axt\Layer.cpp" />
-    <ClCompile Include="src\axt\LayerStack.cpp" />
-    <ClCompile Include="src\axt\Log.cpp" />
+    <ClCompile Include="src\axt\core\App.cpp" />
+    <ClCompile Include="src\axt\core\Layer.cpp" />
+    <ClCompile Include="src\axt\core\LayerStack.cpp" />
+    <ClCompile Include="src\axt\core\Log.cpp" />
     <ClCompile Include="src\axt\events\Event.cpp" />
     <ClCompile Include="src\axt\events\KeyEvent.cpp" />
     <ClCompile Include="src\axt\events\MouseEvent.cpp" />
     <ClCompile Include="src\axt\events\WindowEvent.cpp" />
     <ClCompile Include="src\axt\gui\GuiLayer.cpp" />
+    <ClCompile Include="src\axt\platform\OpenGL\OpenGLContext.cpp" />
     <ClCompile Include="src\pch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="src\platform\windows\WWindow.cpp" />
-    <ClCompile Include="src\platform\windows\WinInput.cpp" />
+    <ClCompile Include="src\axt\platform\windows\WWindow.cpp" />
+    <ClCompile Include="src\axt\platform\windows\WinInput.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="vendor\glfw\GLFW.vcxproj">

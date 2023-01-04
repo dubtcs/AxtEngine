@@ -45,7 +45,7 @@
     <ClInclude Include="src\AxtEngine.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\axt\App.h">
+    <ClInclude Include="src\axt\core\App.h">
       <Filter>src\axt</Filter>
     </ClInclude>
     <ClInclude Include="src\axt\Core.h">
@@ -54,25 +54,25 @@
     <ClInclude Include="src\axt\EntryPoint.h">
       <Filter>src\axt</Filter>
     </ClInclude>
-    <ClInclude Include="src\axt\Input.h">
+    <ClInclude Include="src\axt\core\Input.h">
       <Filter>src\axt</Filter>
     </ClInclude>
-    <ClInclude Include="src\axt\Keycodes.h">
+    <ClInclude Include="src\axt\core\Keycodes.h">
       <Filter>src\axt</Filter>
     </ClInclude>
-    <ClInclude Include="src\axt\Layer.h">
+    <ClInclude Include="src\axt\core\Layer.h">
       <Filter>src\axt</Filter>
     </ClInclude>
-    <ClInclude Include="src\axt\LayerStack.h">
+    <ClInclude Include="src\axt\core\LayerStack.h">
       <Filter>src\axt</Filter>
     </ClInclude>
-    <ClInclude Include="src\axt\Log.h">
+    <ClInclude Include="src\axt\core\Log.h">
       <Filter>src\axt</Filter>
     </ClInclude>
-    <ClInclude Include="src\axt\MousebuttonCodes.h">
+    <ClInclude Include="src\axt\core\MousebuttonCodes.h">
       <Filter>src\axt</Filter>
     </ClInclude>
-    <ClInclude Include="src\axt\Window.h">
+    <ClInclude Include="src\axt\core\Window.h">
       <Filter>src\axt</Filter>
     </ClInclude>
     <ClInclude Include="src\axt\events\Event.h">
@@ -93,10 +93,10 @@
     <ClInclude Include="src\pch.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\platform\windows\WWindow.h">
+    <ClInclude Include="src\axt\platform\windows\WWindow.h">
       <Filter>src\platform\windows</Filter>
     </ClInclude>
-    <ClInclude Include="src\platform\windows\WinInput.h">
+    <ClInclude Include="src\axt\platform\windows\WinInput.h">
       <Filter>src\platform\windows</Filter>
     </ClInclude>
     <ClInclude Include="vendor\glm\glm\common.hpp">
@@ -1347,18 +1347,20 @@
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp">
       <Filter>vendor\glm\glm</Filter>
     </ClInclude>
+    <ClInclude Include="src\axt\render\RenderContext.h" />
+    <ClInclude Include="src\axt\platform\OpenGL\OpenGLContext.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\axt\App.cpp">
+    <ClCompile Include="src\axt\core\App.cpp">
       <Filter>src\axt</Filter>
     </ClCompile>
-    <ClCompile Include="src\axt\Layer.cpp">
+    <ClCompile Include="src\axt\core\Layer.cpp">
       <Filter>src\axt</Filter>
     </ClCompile>
-    <ClCompile Include="src\axt\LayerStack.cpp">
+    <ClCompile Include="src\axt\core\LayerStack.cpp">
       <Filter>src\axt</Filter>
     </ClCompile>
-    <ClCompile Include="src\axt\Log.cpp">
+    <ClCompile Include="src\axt\core\Log.cpp">
       <Filter>src\axt</Filter>
     </ClCompile>
     <ClCompile Include="src\axt\events\Event.cpp">
@@ -1379,11 +1381,12 @@
     <ClCompile Include="src\pch.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\platform\windows\WWindow.cpp">
+    <ClCompile Include="src\axt\platform\windows\WWindow.cpp">
       <Filter>src\platform\windows</Filter>
     </ClCompile>
-    <ClCompile Include="src\platform\windows\WinInput.cpp">
+    <ClCompile Include="src\axt\platform\windows\WinInput.cpp">
       <Filter>src\platform\windows</Filter>
     </ClCompile>
+    <ClCompile Include="src\axt\platform\OpenGL\OpenGLContext.cpp" />
   </ItemGroup>
 </Project>
