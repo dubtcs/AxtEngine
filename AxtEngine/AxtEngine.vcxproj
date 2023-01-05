@@ -153,7 +153,9 @@
     <ClInclude Include="src\axt\core\LayerStack.h" />
     <ClInclude Include="src\axt\core\Log.h" />
     <ClInclude Include="src\axt\core\MousebuttonCodes.h" />
+    <ClInclude Include="src\axt\platform\OpenGL\OpenGLBuffer.h" />
     <ClInclude Include="src\axt\platform\OpenGL\OpenGLContext.h" />
+    <ClInclude Include="src\axt\render\Buffers.h" />
     <ClInclude Include="src\axt\render\RenderContext.h" />
     <ClInclude Include="src\axt\core\Window.h" />
     <ClInclude Include="src\axt\events\Event.h" />
@@ -161,6 +163,7 @@
     <ClInclude Include="src\axt\events\MouseEvent.h" />
     <ClInclude Include="src\axt\events\WindowEvent.h" />
     <ClInclude Include="src\axt\gui\GuiLayer.h" />
+    <ClInclude Include="src\axt\render\Renderer.h" />
     <ClInclude Include="src\axt\render\Shader.h" />
     <ClInclude Include="src\pch.h" />
     <ClInclude Include="src\axt\platform\windows\WWindow.h" />
@@ -592,7 +595,10 @@
     <ClCompile Include="src\axt\events\MouseEvent.cpp" />
     <ClCompile Include="src\axt\events\WindowEvent.cpp" />
     <ClCompile Include="src\axt\gui\GuiLayer.cpp" />
+    <ClCompile Include="src\axt\platform\OpenGL\OpenGLBuffer.cpp" />
     <ClCompile Include="src\axt\platform\OpenGL\OpenGLContext.cpp" />
+    <ClCompile Include="src\axt\render\Buffers.cpp" />
+    <ClCompile Include="src\axt\render\Renderer.cpp" />
     <ClCompile Include="src\axt\render\Shader.cpp" />
     <ClCompile Include="src\pch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>

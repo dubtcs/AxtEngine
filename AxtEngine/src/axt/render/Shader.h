@@ -12,6 +12,7 @@ namespace axt {
 		~Shader();
 	public:
 		void Bind() const;
+
 		static void Unbind();
 	private:
 		unsigned int ID;

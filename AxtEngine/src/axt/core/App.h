@@ -13,10 +13,7 @@
 
 #include "axt/gui/GuiLayer.h"
 
-
-
-
-
+#include "axt/render/Buffers.h"
 // temp
 #include "axt/render/Shader.h"
 
@@ -36,15 +33,18 @@ namespace axt {
 	private:
 		bool running{ true };
 		bool OnWindowClose(WindowCloseEvent& ev);
-		std::unique_ptr<AxtWindow> window;
+
 		GuiLayer* guilayer;
 		LayerStack layerstack;
+
+		std::unique_ptr<AxtWindow> window;
+		std::unique_ptr<VertexBuffer> vBuffer;
+		std::unique_ptr<IndexBuffer> iBuffer;
+
 		static App* instance;
 
-
-
 		//temp
-		unsigned int vArray, vBuffer, iBuffer;
+		unsigned int vArray;
 		std::unique_ptr<Shader> shader;
 	};
 
