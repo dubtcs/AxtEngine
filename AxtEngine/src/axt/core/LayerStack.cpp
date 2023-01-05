@@ -15,13 +15,13 @@ namespace axt {
 	}
 
 	void LayerStack::PushLayer(Layer* layer) {
-		AXT_WARN("Push layer");
+		//AXT_WARN("Push layer");
 		layers.emplace(layers.begin() + layerInsertIndex, layer);
 		layerInsertIndex++;
 	}
 
 	void LayerStack::PopLayer(Layer* layer) {
-		AXT_WARN("Pooping out layer");
+		//AXT_WARN("Pooping out layer");
 		std::vector<Layer*>::iterator iter{ std::find(layers.begin(), layers.end(), layer) };
 		if (iter != layers.end()) {
 			layers.erase(iter);

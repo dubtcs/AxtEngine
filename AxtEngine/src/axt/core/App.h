@@ -13,6 +13,13 @@
 
 #include "axt/gui/GuiLayer.h"
 
+
+
+
+
+// temp
+#include "axt/render/Shader.h"
+
 namespace axt {
 
 	class AXT_API App {
@@ -33,6 +40,12 @@ namespace axt {
 		GuiLayer* guilayer;
 		LayerStack layerstack;
 		static App* instance;
+
+
+
+		//temp
+		unsigned int vArray, vBuffer, iBuffer;
+		std::unique_ptr<Shader> shader;
 	};
 
 	App* CreateApp();

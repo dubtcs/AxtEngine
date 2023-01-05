@@ -1349,6 +1349,7 @@
     </ClInclude>
     <ClInclude Include="src\axt\render\RenderContext.h" />
     <ClInclude Include="src\axt\platform\OpenGL\OpenGLContext.h" />
+    <ClInclude Include="src\axt\render\Shader.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\axt\core\App.cpp">
@@ -1388,5 +1389,6 @@
       <Filter>src\platform\windows</Filter>
     </ClCompile>
     <ClCompile Include="src\axt\platform\OpenGL\OpenGLContext.cpp" />
+    <ClCompile Include="src\axt\render\Shader.cpp" />
   </ItemGroup>
 </Project>

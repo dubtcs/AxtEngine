@@ -161,6 +161,7 @@
     <ClInclude Include="src\axt\events\MouseEvent.h" />
     <ClInclude Include="src\axt\events\WindowEvent.h" />
     <ClInclude Include="src\axt\gui\GuiLayer.h" />
+    <ClInclude Include="src\axt\render\Shader.h" />
     <ClInclude Include="src\pch.h" />
     <ClInclude Include="src\axt\platform\windows\WWindow.h" />
     <ClInclude Include="src\axt\platform\windows\WinInput.h" />
@@ -592,6 +593,7 @@
     <ClCompile Include="src\axt\events\WindowEvent.cpp" />
     <ClCompile Include="src\axt\gui\GuiLayer.cpp" />
     <ClCompile Include="src\axt\platform\OpenGL\OpenGLContext.cpp" />
+    <ClCompile Include="src\axt\render\Shader.cpp" />
     <ClCompile Include="src\pch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
