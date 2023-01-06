@@ -1284,4 +1284,8 @@
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="shaders\f.frag" />
+    <None Include="shaders\v.vert" />
+  </ItemGroup>
 </Project>

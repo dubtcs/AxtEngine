@@ -43,30 +43,10 @@ namespace axt {
 		uint32_t ind[3]{ 1, 2, 3 };
 		iBuffer.reset(IndexBuffer::Create(ind, 3));
 
-		std::string vSrc{ R"(
-			#version 330 core
+		std::string vertexPath{ "../AxtEngine/shaders/v.vert" };
+		std::string pixelPath{ "../AxtEngine/shaders/f.frag" };
 
-			layout (location = 0) in vec3 inPos;
-			out vec3 fPosition;
-
-			void main(){
-				gl_Position = vec4(inPos, 1.0);
-				fPosition = inPos;
-			}
-		)" };
-
-		std::string fSrc{ R"(
-			#version 330 core
-
-			out vec4 outColor;
-			in vec3 fPosition;
-
-			void main(){
-				outColor = vec4(fPosition + 0.5, 1.0);
-			}
-		)" };
-
-		shader.reset(Shader::Create(OpenShader("../AxtEngine/shaders/v.vert"), OpenShader("../AxtEngine/shaders/f.frag")));
+		shader.reset(Shader::Create(vertexPath, pixelPath));
 
 	}
 

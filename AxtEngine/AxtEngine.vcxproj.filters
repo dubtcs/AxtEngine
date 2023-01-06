@@ -1354,7 +1354,7 @@
     <ClInclude Include="src\axt\render\Renderer.h" />
     <ClInclude Include="src\axt\render\Shader.h" />
     <ClInclude Include="src\axt\platform\OpenGL\GLShader.h" />
-    <ClInclude Include="src\axt\core\ReadFile.h" />
+    <ClInclude Include="src\axt\core\OpenShader.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\axt\core\App.cpp">
@@ -1399,6 +1399,6 @@
     <ClCompile Include="src\axt\render\Renderer.cpp" />
     <ClCompile Include="src\axt\render\Shader.cpp" />
     <ClCompile Include="src\axt\platform\OpenGL\GLShader.cpp" />
-    <ClCompile Include="src\axt\core\ReadFile.cpp" />
+    <ClCompile Include="src\axt\core\OpenShader.cpp" />
   </ItemGroup>
 </Project>
