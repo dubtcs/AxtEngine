@@ -47,7 +47,6 @@ namespace axt {
 		std::string pixelPath{ "shaders/f.frag" };
 
 		shader.reset(Shader::Create(OpenShader(vertexPath), OpenShader(pixelPath)));
-
 	}
 
 	App::~App() {
