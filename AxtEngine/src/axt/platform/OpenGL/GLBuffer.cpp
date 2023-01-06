@@ -1,6 +1,6 @@
 #include <pch.h>
 
-#include "OpenGlBuffer.h"
+#include "GLBuffer.h"
 
 #include <glad/glad.h>
 

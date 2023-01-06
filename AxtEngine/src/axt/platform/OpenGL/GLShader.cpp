@@ -7,6 +7,7 @@
 namespace axt {
 
 	GLShader::GLShader(const std::string vSource, const std::string fSource) {
+		char info[512];
 		// Vertex Shader
 		unsigned int vid{ glCreateShader(GL_VERTEX_SHADER) };
 		const char* src{ vSource.c_str() };
@@ -15,8 +16,9 @@ namespace axt {
 		int pass{ 0 };
 		glGetShaderiv(vid, GL_COMPILE_STATUS, &pass);
 		if (pass == GL_FALSE) {
+			glGetShaderInfoLog(vid, 512, nullptr, info);
 			glDeleteShader(vid);
-			AXT_CORE_ERROR("Vertex shader error");
+			AXT_CORE_ERROR("Vertex shader error: {0}", info);
 			return;
 		}
 
@@ -27,9 +29,10 @@ namespace axt {
 		glCompileShader(fid);
 		glGetShaderiv(fid, GL_COMPILE_STATUS, &pass);
 		if (pass == GL_FALSE) {
+			glGetShaderInfoLog(fid, 512, nullptr, info);
 			glDeleteShader(vid);
 			glDeleteShader(fid);
-			AXT_CORE_ERROR("Fragment shader error");
+			AXT_CORE_ERROR("Fragment shader error: {0}", info);
 			return;
 		}
 
@@ -40,10 +43,11 @@ namespace axt {
 		glLinkProgram(id);
 		glGetProgramiv(id, GL_LINK_STATUS, (int*)&pass);
 		if (pass == GL_FALSE) {
+			glGetProgramInfoLog(id, 512, nullptr, info);
 			glDeleteShader(vid);
 			glDeleteShader(fid);
 			glDeleteProgram(id);
-			AXT_CORE_ERROR("Shader program linking error");
+			AXT_CORE_ERROR("Shader program linking error: {0}", info);
 			return;
 		}
 

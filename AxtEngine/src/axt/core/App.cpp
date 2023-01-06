@@ -43,10 +43,10 @@ namespace axt {
 		uint32_t ind[3]{ 1, 2, 3 };
 		iBuffer.reset(IndexBuffer::Create(ind, 3));
 
-		std::string vertexPath{ "../AxtEngine/shaders/v.vert" };
-		std::string pixelPath{ "../AxtEngine/shaders/f.frag" };
+		std::string vertexPath{ "shaders/v.vert" };
+		std::string pixelPath{ "shaders/f.frag" };
 
-		shader.reset(Shader::Create(vertexPath, pixelPath));
+		shader.reset(Shader::Create(OpenShader(vertexPath), OpenShader(pixelPath)));
 
 	}
 

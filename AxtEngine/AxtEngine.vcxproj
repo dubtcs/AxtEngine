@@ -155,8 +155,8 @@
     <ClInclude Include="src\axt\core\Log.h" />
     <ClInclude Include="src\axt\core\MousebuttonCodes.h" />
     <ClInclude Include="src\axt\platform\OpenGL\GLShader.h" />
-    <ClInclude Include="src\axt\platform\OpenGL\OpenGLBuffer.h" />
-    <ClInclude Include="src\axt\platform\OpenGL\OpenGLContext.h" />
+    <ClInclude Include="src\axt\platform\OpenGL\GLBuffer.h" />
+    <ClInclude Include="src\axt\platform\OpenGL\GLContext.h" />
     <ClInclude Include="src\axt\render\Buffers.h" />
     <ClInclude Include="src\axt\render\RenderContext.h" />
     <ClInclude Include="src\axt\core\Window.h" />
@@ -599,8 +599,8 @@
     <ClCompile Include="src\axt\events\WindowEvent.cpp" />
     <ClCompile Include="src\axt\gui\GuiLayer.cpp" />
     <ClCompile Include="src\axt\platform\OpenGL\GLShader.cpp" />
-    <ClCompile Include="src\axt\platform\OpenGL\OpenGLBuffer.cpp" />
-    <ClCompile Include="src\axt\platform\OpenGL\OpenGLContext.cpp" />
+    <ClCompile Include="src\axt\platform\OpenGL\GLBuffer.cpp" />
+    <ClCompile Include="src\axt\platform\OpenGL\GLContext.cpp" />
     <ClCompile Include="src\axt\render\Buffers.cpp" />
     <ClCompile Include="src\axt\render\Renderer.cpp" />
     <ClCompile Include="src\axt\render\Shader.cpp" />
@@ -620,6 +620,10 @@
     <ProjectReference Include="vendor\imgui\imgui.vcxproj">
       <Project>{0098A80F-6CAC-D0C0-352E-7420A101CDF1}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="shaders\f.frag" />
+    <None Include="shaders\v.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

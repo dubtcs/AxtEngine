@@ -3,7 +3,7 @@
 #include <assert.h>
 #include "WWindow.h"
 #include "axt/core/Log.h"
-#include "axt/platform/OpenGL/OpenGLContext.h"
+#include "axt/platform/OpenGL/GLContext.h"
 
 #include <glad/glad.h>
 

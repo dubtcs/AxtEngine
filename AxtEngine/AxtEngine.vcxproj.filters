@@ -1348,9 +1348,9 @@
       <Filter>vendor\glm\glm</Filter>
     </ClInclude>
     <ClInclude Include="src\axt\render\RenderContext.h" />
-    <ClInclude Include="src\axt\platform\OpenGL\OpenGLContext.h" />
+    <ClInclude Include="src\axt\platform\OpenGL\GLContext.h" />
     <ClInclude Include="src\axt\render\Buffers.h" />
-    <ClInclude Include="src\axt\platform\OpenGL\OpenGLBuffer.h" />
+    <ClInclude Include="src\axt\platform\OpenGL\GLBuffer.h" />
     <ClInclude Include="src\axt\render\Renderer.h" />
     <ClInclude Include="src\axt\render\Shader.h" />
     <ClInclude Include="src\axt\platform\OpenGL\GLShader.h" />
@@ -1393,12 +1393,16 @@
     <ClCompile Include="src\axt\platform\windows\WinInput.cpp">
       <Filter>src\platform\windows</Filter>
     </ClCompile>
-    <ClCompile Include="src\axt\platform\OpenGL\OpenGLContext.cpp" />
+    <ClCompile Include="src\axt\platform\OpenGL\GLContext.cpp" />
     <ClCompile Include="src\axt\render\Buffers.cpp" />
-    <ClCompile Include="src\axt\platform\OpenGL\OpenGLBuffer.cpp" />
+    <ClCompile Include="src\axt\platform\OpenGL\GLBuffer.cpp" />
     <ClCompile Include="src\axt\render\Renderer.cpp" />
     <ClCompile Include="src\axt\render\Shader.cpp" />
     <ClCompile Include="src\axt\platform\OpenGL\GLShader.cpp" />
     <ClCompile Include="src\axt\core\OpenShader.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="shaders\f.frag" />
+    <None Include="shaders\v.vert" />
   </ItemGroup>
 </Project>

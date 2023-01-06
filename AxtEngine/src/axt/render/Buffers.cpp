@@ -3,7 +3,7 @@
 #include "Buffers.h"
 
 #include "axt/render/Renderer.h"
-#include "axt/platform/OpenGL/OpenGLBuffer.h"
+#include "axt/platform/OpenGL/GLBuffer.h"
 
 namespace axt {
 
