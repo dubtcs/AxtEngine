@@ -8,7 +8,7 @@
 
 namespace axt {
 
-	class GLShader : public Shader {
+	class AXT_API GLShader : public Shader {
 	public:
 		GLShader(const std::string vertexSource, const std::string fragmentSource);
 		virtual ~GLShader() override;

@@ -146,6 +146,7 @@
     <ClInclude Include="src\AxtEngine.h" />
     <ClInclude Include="src\axt\core\App.h" />
     <ClInclude Include="src\axt\Core.h" />
+    <ClInclude Include="src\axt\core\ReadFile.h" />
     <ClInclude Include="src\axt\EntryPoint.h" />
     <ClInclude Include="src\axt\core\Input.h" />
     <ClInclude Include="src\axt\core\Keycodes.h" />
@@ -591,6 +592,7 @@
     <ClCompile Include="src\axt\core\Layer.cpp" />
     <ClCompile Include="src\axt\core\LayerStack.cpp" />
     <ClCompile Include="src\axt\core\Log.cpp" />
+    <ClCompile Include="src\axt\core\ReadFile.cpp" />
     <ClCompile Include="src\axt\events\Event.cpp" />
     <ClCompile Include="src\axt\events\KeyEvent.cpp" />
     <ClCompile Include="src\axt\events\MouseEvent.cpp" />

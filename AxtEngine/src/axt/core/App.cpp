@@ -7,6 +7,7 @@
 #include <glad/glad.h>
 
 //temp
+#include "axt/core/OpenShader.h"
 #include "axt/core/Input.h"
 
 namespace axt {
@@ -65,7 +66,7 @@ namespace axt {
 			}
 		)" };
 
-		shader.reset(Shader::Create(vSrc, fSrc));
+		shader.reset(Shader::Create(OpenShader("../AxtEngine/shaders/v.vert"), OpenShader("../AxtEngine/shaders/f.frag")));
 
 	}
 
