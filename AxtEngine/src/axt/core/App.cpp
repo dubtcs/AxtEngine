@@ -65,7 +65,7 @@ namespace axt {
 			}
 		)" };
 
-		shader.reset(new Shader{vSrc, fSrc});
+		shader.reset(Shader::Create(vSrc, fSrc));
 
 	}
 

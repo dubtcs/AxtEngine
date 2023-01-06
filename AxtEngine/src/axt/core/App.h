@@ -14,7 +14,6 @@
 #include "axt/gui/GuiLayer.h"
 
 #include "axt/render/Buffers.h"
-// temp
 #include "axt/render/Shader.h"
 
 namespace axt {
@@ -40,12 +39,12 @@ namespace axt {
 		std::unique_ptr<AxtWindow> window;
 		std::unique_ptr<VertexBuffer> vBuffer;
 		std::unique_ptr<IndexBuffer> iBuffer;
+		std::unique_ptr<Shader> shader;
 
 		static App* instance;
 
 		//temp
 		unsigned int vArray;
-		std::unique_ptr<Shader> shader;
 	};
 
 	App* CreateApp();

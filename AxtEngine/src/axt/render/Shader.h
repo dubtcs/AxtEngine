@@ -1,21 +1,17 @@
 #pragma once
 
-#include <string>
-
 #include "axt/Core.h"
+#include <string>
 
 namespace axt {
 
 	class AXT_API Shader {
 	public:
-		Shader(const std::string& vertexSrc, const std::string& fragmentSrc);
-		~Shader();
+		virtual ~Shader() {}
+		static Shader* Create(const std::string vertexSource, const std::string pixelSource);
 	public:
-		void Bind() const;
-
-		static void Unbind();
-	private:
-		unsigned int ID;
+		virtual void Bind() const = 0;
+		virtual void Unbind() const = 0;
 	};
 
 }
