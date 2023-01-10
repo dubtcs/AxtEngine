@@ -25,15 +25,18 @@ namespace axt {
 #define AXT_CORE_WARN(...) axt::Log::GetCoreLog()->warn(__VA_ARGS__)
 #define AXT_CORE_INFO(...) axt::Log::GetCoreLog()->info(__VA_ARGS__)
 #define AXT_CORE_TRACE(...) axt::Log::GetCoreLog()->trace(__VA_ARGS__)
+#define AXT_CORE_ASSERT(condition, msg) if(!condition) { AXT_CORE_ERROR("Condition failed: {0}", msg); std::terminate(); }
 #else
 #define AXT_CORE_FATAL(...)
 #define AXT_CORE_ERROR(...)
 #define AXT_CORE_WARN(...)
 #define AXT_CORE_INFO(...)
 #define AXT_CORE_TRACE(...)
+#define AXT_CORE_ASSERT(condition, msg)
 #endif // AXT_BUILD_DLL
 
 #define AXT_ERROR(...) axt::Log::GetClientLog()->error(__VA_ARGS__)
 #define AXT_WARN(...) axt::Log::GetClientLog()->warn(__VA_ARGS__)
 #define AXT_INFO(...) axt::Log::GetClientLog()->info(__VA_ARGS__)
 #define AXT_TRACE(...) axt::Log::GetClientLog()->trace(__VA_ARGS__)
+#define AXT_ASSERT(condition, msg) if(!condition) { AXT_ERROR("Condition failed: {0}", msg); std::terminate(); }

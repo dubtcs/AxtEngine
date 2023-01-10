@@ -13,7 +13,7 @@ namespace axt {
 		case(RenderAPI::OpenGL): return (new GLShader{vertexSource, pixelSource});
 		}
 
-		assert(false); // no api found
+		AXT_CORE_ASSERT(false, "No render api found");
 		return nullptr;
 	}
 

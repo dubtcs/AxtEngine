@@ -10,7 +10,7 @@ namespace axt {
 	/* VERTEX BUFFER */
 	/*****************/
 
-	OGLVertexBuffer::OGLVertexBuffer(float* vertices, size_t size) {
+	OGLVertexBuffer::OGLVertexBuffer(float* vertices, uint32_t size) {
 		glCreateBuffers(1, &id);
 		Bind();
 		glBufferData(GL_ARRAY_BUFFER, size, vertices, GL_STATIC_DRAW);

@@ -14,8 +14,31 @@ namespace axt {
 
 	App* App::instance{ nullptr };
 
+	// TEMP
+	static GLenum ShaderTypeToGLType(ShaderDataType type) {
+		switch (type) {
+		case (ShaderDataType::Float): return GL_FLOAT;
+		case(ShaderDataType::Float2): return GL_FLOAT;
+		case(ShaderDataType::Float3): return GL_FLOAT;
+		case(ShaderDataType::Float4): return GL_FLOAT;
+
+		case(ShaderDataType::Mat3): return GL_FLOAT;
+		case(ShaderDataType::Mat4): return GL_FLOAT;
+
+		case(ShaderDataType::Int): return GL_INT;
+		case(ShaderDataType::Int2): return GL_INT;
+		case(ShaderDataType::Int3): return GL_INT;
+
+		case(ShaderDataType::Bool): return GL_BOOL;
+		}
+		AXT_CORE_ASSERT(false, "No ShaderDataType for GLenum");
+		return GL_FALSE;
+	}
+	// TEMP
+
 	App::App() {
-		assert(instance == nullptr);
+		AXT_CORE_INFO("Engine Start");
+		AXT_ASSERT((instance == nullptr), "Application was not nullptr");
 		instance = this;
 		window = std::unique_ptr<AxtWindow>{ AxtWindow::Create() };
 		window->SetVsync(true);
@@ -27,20 +50,38 @@ namespace axt {
 		glGenVertexArrays(1, &vArray);
 		glBindVertexArray(vArray);
 
-		float verts[3 * 3]{
+		/*float vertsold[3 * 3]{
 			0.f, 0.5f, 0.0f,
 			-0.5f, -0.5f, 0.0f,
 			0.5f, -0.5f, 0.0f
+		};*/
+
+		float verts[7 * 3]{
+			0.0f, .5f, 0.0f,   0.8f, 0.5f, 0.1f, 1.f,
+			-0.5f, -0.5f, 0.0f, 1.f, 0.0f, 0.35f, 1.f,
+			0.5f, -0.5f, 0.0f, 0.8f, 0.25f, 0.6f, 1.f
 		};
 
 		vBuffer.reset(VertexBuffer::Create(verts, sizeof(verts)));
 
-		glBufferData(GL_ARRAY_BUFFER, sizeof(verts), verts, GL_STATIC_DRAW);
+		{
+			BufferLayout vLayout{
+				{ShaderDataType::Float3, "inPos"},
+				{ShaderDataType::Float4, "inColor"},
+			};
 
-		glEnableVertexAttribArray(0);
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
+			vBuffer->SetLayout(vLayout);
+		}
 
-		uint32_t ind[3]{ 1, 2, 3 };
+		uint32_t index{ 0 };
+		const BufferLayout& layout{ vBuffer->GetLayout() };
+		for (const BufferItem& item : layout) {
+			glEnableVertexAttribArray(index);
+			glVertexAttribPointer(index, item.GetItemCount(), ShaderTypeToGLType(item.type), item.normalized ? GL_TRUE : GL_FALSE, layout.GetStride(), (const void*)item.offset); // make sure this is void*, mem address wont work
+			index++;
+		}
+
+		uint32_t ind[3]{ 0, 1, 2 }; // had this set to 1,2,3 ffs
 		iBuffer.reset(IndexBuffer::Create(ind, 3));
 
 		std::string vertexPath{ "shaders/v.vert" };

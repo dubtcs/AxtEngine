@@ -6,12 +6,15 @@ namespace axt{
 
 	class AXT_API OGLVertexBuffer : public VertexBuffer {
 	public:
-		OGLVertexBuffer(float* vertices, size_t size);
+		OGLVertexBuffer(float* vertices, uint32_t size);
 		virtual ~OGLVertexBuffer() override;
 		virtual void Bind() const override;
 		virtual void Unbind() const override;
+		virtual void SetLayout(const BufferLayout& newLayout) override { layout = newLayout; }
+		virtual const BufferLayout& GetLayout() const override { return layout; };
 	private:
 		unsigned int id;
+		BufferLayout layout{};
 	};
 
 	class AXT_API OGLIndexBuffer : public IndexBuffer {
