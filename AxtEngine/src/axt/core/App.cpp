@@ -4,40 +4,17 @@
 #include "App.h"
 #include "Log.h"
 
-#include <glad/glad.h>
-
 //temp
 #include "axt/core/OpenShader.h"
 #include "axt/core/Input.h"
+#include "axt/render/Renderer.h"
 
 namespace axt {
 
 	App* App::instance{ nullptr };
 
-	// TEMP
-	static GLenum ShaderTypeToGLType(ShaderDataType type) {
-		switch (type) {
-		case (ShaderDataType::Float): return GL_FLOAT;
-		case(ShaderDataType::Float2): return GL_FLOAT;
-		case(ShaderDataType::Float3): return GL_FLOAT;
-		case(ShaderDataType::Float4): return GL_FLOAT;
-
-		case(ShaderDataType::Mat3): return GL_FLOAT;
-		case(ShaderDataType::Mat4): return GL_FLOAT;
-
-		case(ShaderDataType::Int): return GL_INT;
-		case(ShaderDataType::Int2): return GL_INT;
-		case(ShaderDataType::Int3): return GL_INT;
-
-		case(ShaderDataType::Bool): return GL_BOOL;
-		}
-		AXT_CORE_ASSERT(false, "No ShaderDataType for GLenum");
-		return GL_FALSE;
-	}
-	// TEMP
-
 	App::App() {
-		AXT_CORE_INFO("Engine Start");
+		AXT_CORE_INFO("AxtEngine starting.");
 		AXT_ASSERT((instance == nullptr), "Application was not nullptr");
 		instance = this;
 		window = std::unique_ptr<AxtWindow>{ AxtWindow::Create() };
@@ -54,8 +31,8 @@ namespace axt {
 			0.5f, -0.5f, 0.0f, 0.8f, 0.25f, 0.6f, 1.f
 		};
 
+		std::shared_ptr<VertexBuffer> vBuffer;
 		vBuffer.reset(VertexBuffer::Create(verts, sizeof(verts)));
-
 		{
 			BufferLayout vLayout{
 				{ShaderDataType::Float3, "inPos"},
@@ -64,10 +41,10 @@ namespace axt {
 
 			vBuffer->SetLayout(vLayout);
 		}
-
 		vArray->AddVertexBuffer(vBuffer);
 
 		uint32_t ind[3]{ 0, 1, 2 }; // had this set to 1,2,3 ffs
+		std::shared_ptr<IndexBuffer> iBuffer;
 		iBuffer.reset(IndexBuffer::Create(ind, 3));
 		vArray->AddIndexBuffer(iBuffer);
 
@@ -111,18 +88,19 @@ namespace axt {
 	}
 
 	void App::Run() {
+
+		glm::vec4 clearColor{ 0.15f, 0.15f, 0.15f, 1.0f };
+
 		while (running) {
-			glClearColor(0.15f, 0.15f, 0.15f, 1.f);
-			glClear(GL_COLOR_BUFFER_BIT);
+			RenderCommand::SetClearColor(clearColor);
+			RenderCommand::Clear();
 
-			// temp
+			Renderer::SceneStart();
 			squareShader->Bind();
-			squareArray->Bind();
-			glDrawElements(GL_TRIANGLES, squareArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
-
+			Renderer::Submit(squareArray);
 			shader->Bind();
-			vArray->Bind();
-			glDrawElements(GL_TRIANGLES, iBuffer->GetCount(), GL_UNSIGNED_INT, nullptr);
+			Renderer::Submit(vArray);
+			Renderer::SceneEnd();
 
 			for (Layer* curLayer : layerstack) {
 				curLayer->OnUpdate();

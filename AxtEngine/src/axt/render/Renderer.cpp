@@ -2,12 +2,21 @@
 
 #include "Renderer.h"
 
+#include "RenderCommand.h"
+
 namespace axt {
 
-	RenderAPI Renderer::api{ RenderAPI::OpenGL };
+	void Renderer::SceneStart() {
 
-	RenderAPI Renderer::GetApi() {
-		return api;
+	}
+
+	void Renderer::SceneEnd() {
+
+	}
+
+	void Renderer::Submit(const std::shared_ptr<VertexArray>& vertexArray) {
+		vertexArray->Bind();
+		RenderCommand::DrawIndexed(vertexArray);
 	}
 
 }

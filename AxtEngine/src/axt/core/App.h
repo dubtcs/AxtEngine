@@ -39,10 +39,11 @@ namespace axt {
 
 		std::shared_ptr<AxtWindow> window;
 		std::shared_ptr<VertexArray> vArray;
-		std::shared_ptr<VertexBuffer> vBuffer;
-		std::shared_ptr<IndexBuffer> iBuffer;
+		//std::shared_ptr<VertexBuffer> vBuffer;
+		//std::shared_ptr<IndexBuffer> iBuffer;
 		std::shared_ptr<Shader> shader;
 
+		// temp
 		std::shared_ptr<Shader> squareShader;
 		std::shared_ptr<VertexArray> squareArray;
 

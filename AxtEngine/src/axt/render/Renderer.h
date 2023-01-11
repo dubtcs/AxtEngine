@@ -2,16 +2,16 @@
 
 #include "axt/Core.h"
 
-namespace axt {
+#include "RenderCommand.h"
 
-	enum class RenderAPI {
-		None = 0, OpenGL, //DirectX, Vulkan
-	};
+namespace axt {
 
 	class AXT_API Renderer {
 	public:
-		static RenderAPI GetApi();
-		static RenderAPI api;
+		static void SceneStart();
+		static void Submit(const std::shared_ptr<VertexArray>& vertexArray);
+		static void SceneEnd();
+		static RenderAPI::API GetApi() { return RenderAPI::GetAPI(); };
 	};
 
 }
