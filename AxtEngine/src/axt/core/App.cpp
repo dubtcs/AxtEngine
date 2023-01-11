@@ -46,15 +46,7 @@ namespace axt {
 		guilayer = new GuiLayer{};
 		PushOverlay(guilayer);
 
-		//temp
-		glGenVertexArrays(1, &vArray);
-		glBindVertexArray(vArray);
-
-		/*float vertsold[3 * 3]{
-			0.f, 0.5f, 0.0f,
-			-0.5f, -0.5f, 0.0f,
-			0.5f, -0.5f, 0.0f
-		};*/
+		vArray.reset(VertexArray::Create());
 
 		float verts[7 * 3]{
 			0.0f, .5f, 0.0f,   0.8f, 0.5f, 0.1f, 1.f,
@@ -73,21 +65,45 @@ namespace axt {
 			vBuffer->SetLayout(vLayout);
 		}
 
-		uint32_t index{ 0 };
-		const BufferLayout& layout{ vBuffer->GetLayout() };
-		for (const BufferItem& item : layout) {
-			glEnableVertexAttribArray(index);
-			glVertexAttribPointer(index, item.GetItemCount(), ShaderTypeToGLType(item.type), item.normalized ? GL_TRUE : GL_FALSE, layout.GetStride(), (const void*)item.offset); // make sure this is void*, mem address wont work
-			index++;
-		}
+		vArray->AddVertexBuffer(vBuffer);
 
 		uint32_t ind[3]{ 0, 1, 2 }; // had this set to 1,2,3 ffs
 		iBuffer.reset(IndexBuffer::Create(ind, 3));
+		vArray->AddIndexBuffer(iBuffer);
 
+		float squareVertices[3 * 4]{
+			0.5f, 0.5f, 0.f,
+			0.5f, -0.5f, 0.f,
+			-0.5f, -0.5f, 0.f,
+			-0.5f, 0.5f, 0.f
+		};
+
+		squareArray.reset(VertexArray::Create());
+		std::shared_ptr<VertexBuffer> squareVB;
+		squareVB.reset(VertexBuffer::Create(squareVertices, sizeof(squareVertices)));
+
+		{
+			BufferLayout squareLayout{
+				{ShaderDataType::Float3, "inPos"}
+			};
+			squareVB->SetLayout(squareLayout);
+		}
+		squareArray->AddVertexBuffer(squareVB);
+
+		uint32_t squareIndices[]{ 0,1,2,0,2,3 };
+		std::shared_ptr<IndexBuffer> squareIB;
+		squareIB.reset(IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t)));
+		squareArray->AddIndexBuffer(squareIB);
+
+		// Shaders
 		std::string vertexPath{ "shaders/v.vert" };
 		std::string pixelPath{ "shaders/f.frag" };
 
 		shader.reset(Shader::Create(OpenShader(vertexPath), OpenShader(pixelPath)));
+
+		vertexPath = "shaders/square.vert";
+
+		squareShader.reset(Shader::Create(OpenShader(vertexPath), OpenShader(pixelPath)));
 	}
 
 	App::~App() {
@@ -100,8 +116,12 @@ namespace axt {
 			glClear(GL_COLOR_BUFFER_BIT);
 
 			// temp
+			squareShader->Bind();
+			squareArray->Bind();
+			glDrawElements(GL_TRIANGLES, squareArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
+
 			shader->Bind();
-			glBindVertexArray(vArray);
+			vArray->Bind();
 			glDrawElements(GL_TRIANGLES, iBuffer->GetCount(), GL_UNSIGNED_INT, nullptr);
 
 			for (Layer* curLayer : layerstack) {

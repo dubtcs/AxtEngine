@@ -15,6 +15,7 @@
 
 #include "axt/render/Buffers.h"
 #include "axt/render/Shader.h"
+#include "axt/render/VertexArray.h"
 
 namespace axt {
 
@@ -36,15 +37,16 @@ namespace axt {
 		GuiLayer* guilayer;
 		LayerStack layerstack;
 
-		std::unique_ptr<AxtWindow> window;
-		std::unique_ptr<VertexBuffer> vBuffer;
-		std::unique_ptr<IndexBuffer> iBuffer;
-		std::unique_ptr<Shader> shader;
+		std::shared_ptr<AxtWindow> window;
+		std::shared_ptr<VertexArray> vArray;
+		std::shared_ptr<VertexBuffer> vBuffer;
+		std::shared_ptr<IndexBuffer> iBuffer;
+		std::shared_ptr<Shader> shader;
+
+		std::shared_ptr<Shader> squareShader;
+		std::shared_ptr<VertexArray> squareArray;
 
 		static App* instance;
-
-		//temp
-		unsigned int vArray;
 	};
 
 	App* CreateApp();
