@@ -30,7 +30,7 @@ namespace axt {
 		void PushOverlay(Layer* overlay);
 		static App& GetApp() { return *instance; }
 		AxtWindow& GetWindow() { return *window; }
-	private:
+	protected:
 		bool running{ true };
 		bool OnWindowClose(WindowCloseEvent& ev);
 
@@ -39,13 +39,15 @@ namespace axt {
 
 		std::shared_ptr<AxtWindow> window;
 		std::shared_ptr<VertexArray> vArray;
-		//std::shared_ptr<VertexBuffer> vBuffer;
-		//std::shared_ptr<IndexBuffer> iBuffer;
 		std::shared_ptr<Shader> shader;
 
 		// temp
 		std::shared_ptr<Shader> squareShader;
 		std::shared_ptr<VertexArray> squareArray;
+
+		// for multiple renders
+		std::vector<std::shared_ptr<VertexArray>> vertexArrays;
+		std::vector<std::shared_ptr<Shader>> shaders;
 
 		static App* instance;
 	};
