@@ -24,6 +24,8 @@ namespace axt {
 		window = std::unique_ptr<AxtWindow>{ AxtWindow::Create() };
 		window->SetVsync(true);
 		window->SetEventCallback(std::bind(&App::OnEvent, this, std::placeholders::_1));
+
+		// temp
 		guilayer = new GuiLayer{};
 		PushOverlay(guilayer);
 	}
@@ -33,24 +35,7 @@ namespace axt {
 	}
 
 	void App::Run() {
-
-		glm::vec4 clearColor{ 0.15f, 0.15f, 0.15f, 1.0f };
-
 		while (running) {
-			RenderCommand::SetClearColor(clearColor);
-			RenderCommand::Clear();
-
-			std::string viewProjectionUniformName{ "uViewProjection" };
-
-			const glm::mat4& viewProjection{ myCamera.GetViewProjection() };
-
-			Renderer::SceneStart(myCamera);
-
-			Renderer::Submit(squareArray, squareShader);
-			Renderer::Submit(vArray, shader);
-
-			Renderer::SceneEnd();
-
 			for (Layer* curLayer : layerstack) {
 				curLayer->OnUpdate();
 			}

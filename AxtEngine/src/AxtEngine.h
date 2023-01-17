@@ -10,7 +10,15 @@
 #include "axt/core/Keycodes.h"
 #include "axt/core/MousebuttonCodes.h"
 
+#include "axt/render/Camera.h"
+#include "axt/render/Renderer.h"
+#include "axt/render/RenderCommand.h"
+#include "axt/render/VertexArray.h"
+#include "axt/render/Buffers.h"
+#include "axt/render/Shader.h"
+#include "axt/render/RenderContext.h"
+
 // temp
-#include "axt/gui/GuiLayer.h"
+//#include "axt/gui/GuiLayer.h"
 
 #include "axt/EntryPoint.h"

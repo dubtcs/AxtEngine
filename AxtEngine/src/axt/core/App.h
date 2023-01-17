@@ -39,18 +39,12 @@ namespace axt {
 		LayerStack layerstack;
 
 		std::shared_ptr<AxtWindow> window;
-		std::shared_ptr<VertexArray> vArray;
-		std::shared_ptr<Shader> shader;
-
-		// temp
-		std::shared_ptr<Shader> squareShader;
-		std::shared_ptr<VertexArray> squareArray;
-
-		OrthoCamera myCamera;
 
 		// for multiple renders
 		std::vector<std::shared_ptr<VertexArray>> vertexArrays;
 		std::vector<std::shared_ptr<Shader>> shaders;
+
+		OrthoCamera myCamera;
 
 		static App* instance;
 	};

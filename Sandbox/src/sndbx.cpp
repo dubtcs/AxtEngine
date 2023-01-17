@@ -3,8 +3,8 @@
 
 #include "sndbx.h"
 
-#include "axt/core/OpenShader.h"
-#include "axt/render/Camera.h"
+#include <axt/core/OpenShader.h>
+#include <axt/render/Camera.h>
 
 // TEMP
 
@@ -32,13 +32,16 @@ axt::App* axt::CreateApp() {
 	return new Sandbox{};
 }
 
-// LAYER
-
 // APP
 Sandbox::Sandbox() {
+	PushLayer(new SandRenderLayer{});
+}
+
+// LAYERS
+SandRenderLayer::SandRenderLayer(const std::string& name) : axt::Layer(), myCamera{ -1.f, 1.f, -1.f, 1.f }, myClearColor{ 0.25f, 0.25f, 0.25f, 1.f } {
 	using namespace axt;
 
-	vArray.reset(VertexArray::Create());
+	myVertexArray.reset(VertexArray::Create());
 
 	float verts[7 * 3]{
 		0.0f, .5f, 0.0f,   0.8f, 0.5f, 0.1f, 1.f,
@@ -56,12 +59,12 @@ Sandbox::Sandbox() {
 
 		vBuffer->SetLayout(vLayout);
 	}
-	vArray->AddVertexBuffer(vBuffer);
+	myVertexArray->AddVertexBuffer(vBuffer);
 
 	uint32_t ind[3]{ 0, 1, 2 }; // had this set to 1,2,3 ffs
 	std::shared_ptr<IndexBuffer> iBuffer;
 	iBuffer.reset(IndexBuffer::Create(ind, 3));
-	vArray->AddIndexBuffer(iBuffer);
+	myVertexArray->AddIndexBuffer(iBuffer);
 
 	//myCamera.SetPosition({ 0.25f, 0.5f, 0.f });
 	myCamera.SetRotation(.5f);
@@ -73,7 +76,7 @@ Sandbox::Sandbox() {
 		-0.5f, 0.5f, 0.f
 	};
 
-	squareArray.reset(VertexArray::Create());
+	mySquareVertexArray.reset(VertexArray::Create());
 	std::shared_ptr<VertexBuffer> squareVB;
 	squareVB.reset(VertexBuffer::Create(squareVertices, sizeof(squareVertices)));
 
@@ -83,20 +86,37 @@ Sandbox::Sandbox() {
 		};
 		squareVB->SetLayout(squareLayout);
 	}
-	squareArray->AddVertexBuffer(squareVB);
+	mySquareVertexArray->AddVertexBuffer(squareVB);
 
 	uint32_t squareIndices[]{ 0,1,2,0,2,3 };
 	std::shared_ptr<IndexBuffer> squareIB;
 	squareIB.reset(IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t)));
-	squareArray->AddIndexBuffer(squareIB);
+	mySquareVertexArray->AddIndexBuffer(squareIB);
 
 	// Shaders
 	std::string vertexPath{ "shaders/v.vert" };
 	std::string pixelPath{ "shaders/f.frag" };
 
-	shader.reset(Shader::Create(OpenShader(vertexPath), OpenShader(pixelPath)));
+	myShader.reset(Shader::Create(OpenShader(vertexPath), OpenShader(pixelPath)));
 
 	vertexPath = "shaders/square.vert";
 
-	squareShader.reset(Shader::Create(OpenShader(vertexPath), OpenShader(pixelPath)));
+	mySquareShader.reset(Shader::Create(OpenShader(vertexPath), OpenShader(pixelPath)));
 }
+
+void SandRenderLayer::OnUpdate() {
+	axt::RenderCommand::SetClearColor(myClearColor);
+	axt::RenderCommand::Clear();
+
+	std::string viewProjectionUniformName{ "uViewProjection" };
+
+	const glm::mat4& viewProjection{ myCamera.GetViewProjection() };
+
+	axt::Renderer::SceneStart(myCamera);
+
+	axt::Renderer::Submit(mySquareVertexArray, mySquareShader);
+	axt::Renderer::Submit(myVertexArray, myShader);
+
+	axt::Renderer::SceneEnd();
+}
+
