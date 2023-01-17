@@ -16,6 +16,7 @@
 #include "axt/render/Buffers.h"
 #include "axt/render/Shader.h"
 #include "axt/render/VertexArray.h"
+#include "axt/render/Camera.h"
 
 namespace axt {
 
@@ -44,6 +45,8 @@ namespace axt {
 		// temp
 		std::shared_ptr<Shader> squareShader;
 		std::shared_ptr<VertexArray> squareArray;
+
+		OrthoCamera myCamera;
 
 		// for multiple renders
 		std::vector<std::shared_ptr<VertexArray>> vertexArrays;

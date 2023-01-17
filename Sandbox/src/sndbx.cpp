@@ -4,6 +4,7 @@
 #include "sndbx.h"
 
 #include "axt/core/OpenShader.h"
+#include "axt/render/Camera.h"
 
 // TEMP
 
@@ -26,10 +27,14 @@ glm::mat4 camera(float Translate, glm::vec2 const& Rotate)
 
 // END TEMP
 
+// ENTRY POINT
 axt::App* axt::CreateApp() {
 	return new Sandbox{};
 }
 
+// LAYER
+
+// APP
 Sandbox::Sandbox() {
 	using namespace axt;
 
@@ -57,6 +62,9 @@ Sandbox::Sandbox() {
 	std::shared_ptr<IndexBuffer> iBuffer;
 	iBuffer.reset(IndexBuffer::Create(ind, 3));
 	vArray->AddIndexBuffer(iBuffer);
+
+	//myCamera.SetPosition({ 0.25f, 0.5f, 0.f });
+	myCamera.SetRotation(.5f);
 
 	float squareVertices[3 * 4]{
 		0.5f, 0.5f, 0.f,

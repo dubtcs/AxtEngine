@@ -15,6 +15,7 @@ namespace axt {
 	public:
 		virtual void Bind() const override;
 		virtual void Unbind() const override;
+		virtual void SetUniform(const std::string& name, const glm::mat4& uniform) const override;
 	private:
 		uint32_t id;
 	};

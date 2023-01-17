@@ -9,11 +9,15 @@
 #include "axt/core/Input.h"
 #include "axt/render/Renderer.h"
 
+#include "axt/render/Camera.h"
+
+#include <glm/gtx/string_cast.hpp>
+
 namespace axt {
 
 	App* App::instance{ nullptr };
 
-	App::App() {
+	App::App() : myCamera{-1.f, 1.f, -1.f, 1.f} {
 		AXT_CORE_INFO("AxtEngine starting.");
 		AXT_ASSERT((instance == nullptr), "Application was not nullptr");
 		instance = this;
@@ -36,11 +40,15 @@ namespace axt {
 			RenderCommand::SetClearColor(clearColor);
 			RenderCommand::Clear();
 
-			Renderer::SceneStart();
-			squareShader->Bind();
-			Renderer::Submit(squareArray);
-			shader->Bind();
-			Renderer::Submit(vArray);
+			std::string viewProjectionUniformName{ "uViewProjection" };
+
+			const glm::mat4& viewProjection{ myCamera.GetViewProjection() };
+
+			Renderer::SceneStart(myCamera);
+
+			Renderer::Submit(squareArray, squareShader);
+			Renderer::Submit(vArray, shader);
+
 			Renderer::SceneEnd();
 
 			for (Layer* curLayer : layerstack) {
