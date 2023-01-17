@@ -1,5 +1,5 @@
 
-// client
+// CLIENT
 
 #include "sndbx.h"
 
@@ -38,10 +38,13 @@ Sandbox::Sandbox() {
 }
 
 // LAYERS
-SandRenderLayer::SandRenderLayer(const std::string& name) : axt::Layer(), myCamera{ -1.f, 1.f, -1.f, 1.f }, myClearColor{ 0.25f, 0.25f, 0.25f, 1.f } {
-	using namespace axt;
+SandRenderLayer::SandRenderLayer(const std::string& name) : axt::Layer(), 
+	myCamera{ -1.f, 1.f, -1.f, 1.f }, 
+	myClearColor{ 0.25f, 0.25f, 0.25f, 1.f },
+	myCameraPosition{ 0.f,0.f,0.f },
+	myCameraSpeed{ 0.1f } {
 
-	myVertexArray.reset(VertexArray::Create());
+	myVertexArray.reset(axt::VertexArray::Create());
 
 	float verts[7 * 3]{
 		0.0f, .5f, 0.0f,   0.8f, 0.5f, 0.1f, 1.f,
@@ -49,12 +52,12 @@ SandRenderLayer::SandRenderLayer(const std::string& name) : axt::Layer(), myCame
 		0.5f, -0.5f, 0.0f, 0.8f, 0.25f, 0.6f, 1.f
 	};
 
-	std::shared_ptr<VertexBuffer> vBuffer;
-	vBuffer.reset(VertexBuffer::Create(verts, sizeof(verts)));
+	std::shared_ptr<axt::VertexBuffer> vBuffer;
+	vBuffer.reset(axt::VertexBuffer::Create(verts, sizeof(verts)));
 	{
-		BufferLayout vLayout{
-			{ShaderDataType::Float3, "inPos"},
-			{ShaderDataType::Float4, "inColor"},
+		axt::BufferLayout vLayout{
+			{axt::ShaderDataType::Float3, "inPos"},
+			{axt::ShaderDataType::Float4, "inColor"},
 		};
 
 		vBuffer->SetLayout(vLayout);
@@ -62,8 +65,8 @@ SandRenderLayer::SandRenderLayer(const std::string& name) : axt::Layer(), myCame
 	myVertexArray->AddVertexBuffer(vBuffer);
 
 	uint32_t ind[3]{ 0, 1, 2 }; // had this set to 1,2,3 ffs
-	std::shared_ptr<IndexBuffer> iBuffer;
-	iBuffer.reset(IndexBuffer::Create(ind, 3));
+	std::shared_ptr<axt::IndexBuffer> iBuffer;
+	iBuffer.reset(axt::IndexBuffer::Create(ind, 3));
 	myVertexArray->AddIndexBuffer(iBuffer);
 
 	//myCamera.SetPosition({ 0.25f, 0.5f, 0.f });
@@ -76,41 +79,54 @@ SandRenderLayer::SandRenderLayer(const std::string& name) : axt::Layer(), myCame
 		-0.5f, 0.5f, 0.f
 	};
 
-	mySquareVertexArray.reset(VertexArray::Create());
-	std::shared_ptr<VertexBuffer> squareVB;
-	squareVB.reset(VertexBuffer::Create(squareVertices, sizeof(squareVertices)));
+	mySquareVertexArray.reset(axt::VertexArray::Create());
+	std::shared_ptr<axt::VertexBuffer> squareVB;
+	squareVB.reset(axt::VertexBuffer::Create(squareVertices, sizeof(squareVertices)));
 
 	{
-		BufferLayout squareLayout{
-			{ShaderDataType::Float3, "inPos"}
+		axt::BufferLayout squareLayout{
+			{axt::ShaderDataType::Float3, "inPos"}
 		};
 		squareVB->SetLayout(squareLayout);
 	}
 	mySquareVertexArray->AddVertexBuffer(squareVB);
 
 	uint32_t squareIndices[]{ 0,1,2,0,2,3 };
-	std::shared_ptr<IndexBuffer> squareIB;
-	squareIB.reset(IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t)));
+	std::shared_ptr<axt::IndexBuffer> squareIB;
+	squareIB.reset(axt::IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t)));
 	mySquareVertexArray->AddIndexBuffer(squareIB);
 
 	// Shaders
 	std::string vertexPath{ "shaders/v.vert" };
 	std::string pixelPath{ "shaders/f.frag" };
 
-	myShader.reset(Shader::Create(OpenShader(vertexPath), OpenShader(pixelPath)));
+	myShader.reset(axt::Shader::Create(axt::OpenShader(vertexPath), axt::OpenShader(pixelPath)));
 
 	vertexPath = "shaders/square.vert";
 
-	mySquareShader.reset(Shader::Create(OpenShader(vertexPath), OpenShader(pixelPath)));
+	mySquareShader.reset(axt::Shader::Create(axt::OpenShader(vertexPath), axt::OpenShader(pixelPath)));
 }
 
 void SandRenderLayer::OnUpdate() {
+
+	if (axt::AxtInput::IsKeyPressed(AXT_KEY_A)) {
+		myCameraPosition.x -= myCameraSpeed;
+	} else if (axt::AxtInput::IsKeyPressed(AXT_KEY_D)) {
+		myCameraPosition.x += myCameraSpeed;
+	}
+	if (axt::AxtInput::IsKeyPressed(AXT_KEY_W)) {
+		myCameraPosition.y += myCameraSpeed;
+	} else if (axt::AxtInput::IsKeyPressed(AXT_KEY_S)) {
+		myCameraPosition.y -= myCameraSpeed;
+	}
+
 	axt::RenderCommand::SetClearColor(myClearColor);
 	axt::RenderCommand::Clear();
 
 	std::string viewProjectionUniformName{ "uViewProjection" };
 
 	const glm::mat4& viewProjection{ myCamera.GetViewProjection() };
+	myCamera.SetPosition(myCameraPosition);
 
 	axt::Renderer::SceneStart(myCamera);
 
@@ -120,3 +136,12 @@ void SandRenderLayer::OnUpdate() {
 	axt::Renderer::SceneEnd();
 }
 
+void SandRenderLayer::OnEvent(axt::Event& event) {
+	axt::EventHandler handler{ event };
+	handler.Fire<axt::KeyPressedEvent>(AXT_BIND_EVENT(SandRenderLayer::OnKeyPressedEvent));
+}
+
+bool SandRenderLayer::OnKeyPressedEvent(axt::KeyPressedEvent& event) {
+
+	return true;
+}

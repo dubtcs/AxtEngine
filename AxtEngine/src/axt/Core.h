@@ -14,4 +14,4 @@
 
 #endif
 
-#define AXT_BIND_EVENT(f) std::bind(f, this, std::placeholders::_1)
+#define AXT_BIND_EVENT(f) std::bind(&f, this, std::placeholders::_1)

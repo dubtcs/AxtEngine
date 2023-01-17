@@ -11,7 +11,10 @@ public:
 class SandRenderLayer : public axt::Layer {
 public:
 	SandRenderLayer(const std::string& name = "RenderLayer");
-	void OnUpdate() override;
+	virtual void OnUpdate() override;
+	virtual void OnEvent(axt::Event& event) override;
+private:
+	bool OnKeyPressedEvent(axt::KeyPressedEvent& event);
 private:
 	std::shared_ptr<axt::VertexArray> myVertexArray;
 	std::shared_ptr<axt::Shader> myShader;
@@ -20,6 +23,8 @@ private:
 	std::shared_ptr<axt::VertexArray> mySquareVertexArray;
 
 	axt::OrthoCamera myCamera;
+	glm::vec3 myCameraPosition;
+	float myCameraSpeed;
 
 	glm::vec4 myClearColor;
 };
