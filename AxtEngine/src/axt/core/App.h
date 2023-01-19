@@ -35,6 +35,8 @@ namespace axt {
 		bool running{ true };
 		bool OnWindowClose(WindowCloseEvent& ev);
 
+		float lastFrameTime{ 0.f };
+
 		GuiLayer* guilayer;
 		LayerStack layerstack;
 

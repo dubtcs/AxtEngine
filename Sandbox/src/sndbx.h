@@ -11,7 +11,7 @@ public:
 class SandRenderLayer : public axt::Layer {
 public:
 	SandRenderLayer(const std::string& name = "RenderLayer");
-	virtual void OnUpdate() override;
+	virtual void OnUpdate(float dt) override;
 	virtual void OnEvent(axt::Event& event) override;
 private:
 	bool OnKeyPressedEvent(axt::KeyPressedEvent& event);

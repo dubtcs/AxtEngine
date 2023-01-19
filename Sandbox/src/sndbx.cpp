@@ -69,9 +69,6 @@ SandRenderLayer::SandRenderLayer(const std::string& name) : axt::Layer(),
 	iBuffer.reset(axt::IndexBuffer::Create(ind, 3));
 	myVertexArray->AddIndexBuffer(iBuffer);
 
-	//myCamera.SetPosition({ 0.25f, 0.5f, 0.f });
-	myCamera.SetRotation(.5f);
-
 	float squareVertices[3 * 4]{
 		0.5f, 0.5f, 0.f,
 		0.5f, -0.5f, 0.f,
@@ -107,17 +104,17 @@ SandRenderLayer::SandRenderLayer(const std::string& name) : axt::Layer(),
 	mySquareShader.reset(axt::Shader::Create(axt::OpenShader(vertexPath), axt::OpenShader(pixelPath)));
 }
 
-void SandRenderLayer::OnUpdate() {
+void SandRenderLayer::OnUpdate(float dt) {
 
 	if (axt::AxtInput::IsKeyPressed(AXT_KEY_A)) {
-		myCameraPosition.x -= myCameraSpeed;
+		myCameraPosition.x -= myCameraSpeed * dt;
 	} else if (axt::AxtInput::IsKeyPressed(AXT_KEY_D)) {
-		myCameraPosition.x += myCameraSpeed;
+		myCameraPosition.x += myCameraSpeed * dt;
 	}
 	if (axt::AxtInput::IsKeyPressed(AXT_KEY_W)) {
-		myCameraPosition.y += myCameraSpeed;
+		myCameraPosition.y += myCameraSpeed * dt;
 	} else if (axt::AxtInput::IsKeyPressed(AXT_KEY_S)) {
-		myCameraPosition.y -= myCameraSpeed;
+		myCameraPosition.y -= myCameraSpeed * dt;
 	}
 
 	axt::RenderCommand::SetClearColor(myClearColor);

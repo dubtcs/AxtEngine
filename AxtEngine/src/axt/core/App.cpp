@@ -11,6 +11,10 @@
 
 #include "axt/render/Camera.h"
 
+// TEMP
+#include <GLFW/glfw3.h>
+// ONLY FOR DELTA TIME
+
 #include <glm/gtx/string_cast.hpp>
 
 namespace axt {
@@ -36,8 +40,13 @@ namespace axt {
 
 	void App::Run() {
 		while (running) {
+
+			float currentTime{ static_cast<float>(glfwGetTime()) };
+			float frameDelta{ currentTime - lastFrameTime };
+			lastFrameTime = currentTime;
+
 			for (Layer* curLayer : layerstack) {
-				curLayer->OnUpdate();
+				curLayer->OnUpdate(frameDelta);
 			}
 
 			guilayer->Begin();

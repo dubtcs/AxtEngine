@@ -18,7 +18,4 @@
 #include "axt/render/Shader.h"
 #include "axt/render/RenderContext.h"
 
-// temp
-//#include "axt/gui/GuiLayer.h"
-
 #include "axt/EntryPoint.h"
