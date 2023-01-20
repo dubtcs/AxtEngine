@@ -16,9 +16,10 @@ namespace axt {
 
 	}
 
-	void Renderer::Submit(const std::shared_ptr<VertexArray>& vertexArray, const std::shared_ptr<Shader>& shader) {
+	void Renderer::Submit(const std::shared_ptr<VertexArray>& vertexArray, const std::shared_ptr<Shader>& shader, const glm::mat4& modelTransform) {
 		shader->Bind();
 		shader->SetUniform("uViewProjection", scene->viewProjection);
+		shader->SetUniform("uModelTransform", modelTransform);
 		vertexArray->Bind();
 		RenderCommand::DrawIndexed(vertexArray);
 	}

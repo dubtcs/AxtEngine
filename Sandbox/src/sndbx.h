@@ -26,5 +26,7 @@ private:
 	glm::vec3 myCameraPosition;
 	float myCameraSpeed;
 
+	glm::vec3 mySquarePosition; // temp
+
 	glm::vec4 myClearColor;
 };

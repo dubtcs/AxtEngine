@@ -42,7 +42,8 @@ SandRenderLayer::SandRenderLayer(const std::string& name) : axt::Layer(),
 	myCamera{ -1.f, 1.f, -1.f, 1.f }, 
 	myClearColor{ 0.25f, 0.25f, 0.25f, 1.f },
 	myCameraPosition{ 0.f,0.f,0.f },
-	myCameraSpeed{ 0.1f } {
+	myCameraSpeed{ 1.f },
+	mySquarePosition{ 0.f, 0.f, 0.f } {
 
 	myVertexArray.reset(axt::VertexArray::Create());
 
@@ -117,6 +118,20 @@ void SandRenderLayer::OnUpdate(float dt) {
 		myCameraPosition.y -= myCameraSpeed * dt;
 	}
 
+	// square movement
+	if (axt::AxtInput::IsKeyPressed(AXT_KEY_UP)) {
+		mySquarePosition.y += myCameraSpeed * dt;
+	}
+	else if (axt::AxtInput::IsKeyPressed(AXT_KEY_DOWN)) {
+		mySquarePosition.y -= myCameraSpeed * dt;
+	}
+	if (axt::AxtInput::IsKeyPressed(AXT_KEY_RIGHT)) {
+		mySquarePosition.x += myCameraSpeed * dt;
+	}
+	else if (axt::AxtInput::IsKeyPressed(AXT_KEY_LEFT)) {
+		mySquarePosition.x -= myCameraSpeed * dt;
+	}
+
 	axt::RenderCommand::SetClearColor(myClearColor);
 	axt::RenderCommand::Clear();
 
@@ -127,7 +142,8 @@ void SandRenderLayer::OnUpdate(float dt) {
 
 	axt::Renderer::SceneStart(myCamera);
 
-	axt::Renderer::Submit(mySquareVertexArray, mySquareShader);
+	glm::mat4 squareTransform{ glm::translate(glm::mat4{1.f}, mySquarePosition) };
+	axt::Renderer::Submit(mySquareVertexArray, mySquareShader, squareTransform);//glm::translate(glm::mat4{ 1.f }, mySquarePosition));
 	axt::Renderer::Submit(myVertexArray, myShader);
 
 	axt::Renderer::SceneEnd();
