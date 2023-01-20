@@ -6,12 +6,15 @@
 
 #include "axt/render/RenderContext.h"
 
+constexpr unsigned int WIDTH{ 1920 };
+constexpr unsigned int HEIGHT{ 1080 };
+
 namespace axt {
 
 	struct AXT_API AxtWindowConfig {
 		unsigned int width, height;
 		std::string title;
-		AxtWindowConfig(std::string title = "AxtWindow", unsigned int w = 1920, unsigned int h = 1080) : title{title}, width{w}, height{h} {};
+		AxtWindowConfig(std::string title = "AxtWindow", unsigned int w = WIDTH, unsigned int h = HEIGHT) : title{title}, width{w}, height{h} {};
 	};
 
 	class AXT_API AxtWindow {

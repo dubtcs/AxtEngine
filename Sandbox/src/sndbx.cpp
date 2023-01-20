@@ -7,6 +7,8 @@
 #include <axt/render/Camera.h>
 
 // TEMP
+#include <imgui.h>
+#include <axt/platform/OpenGL/GLShader.h>
 
 #include <glm/glm.hpp> // glm::vec3
 #include <glm/vec4.hpp> // glm::vec4
@@ -14,6 +16,7 @@
 #include <glm/ext/matrix_transform.hpp> // glm::translate, glm::rotate, glm::scale
 #include <glm/ext/matrix_clip_space.hpp> // glm::perspective
 #include <glm/ext/scalar_constants.hpp> // glm::pi
+#include <glm/gtc/type_ptr.hpp>
 
 glm::mat4 camera(float Translate, glm::vec2 const& Rotate)
 {
@@ -96,7 +99,7 @@ SandRenderLayer::SandRenderLayer(const std::string& name) : axt::Layer(),
 
 	// Shaders
 	std::string vertexPath{ "shaders/v.vert" };
-	std::string pixelPath{ "shaders/f.frag" };
+	std::string pixelPath{ "shaders/flatColor.frag" };
 
 	myShader.reset(axt::Shader::Create(axt::OpenShader(vertexPath), axt::OpenShader(pixelPath)));
 
@@ -143,7 +146,13 @@ void SandRenderLayer::OnUpdate(float dt) {
 	axt::Renderer::SceneStart(myCamera);
 
 	glm::mat4 squareTransform{ glm::translate(glm::mat4{1.f}, mySquarePosition) };
+
+	mySquareShader->Bind();
+	std::dynamic_pointer_cast<axt::GLShader>(mySquareShader)->SetValue("uColor", mySquareColor);
 	axt::Renderer::Submit(mySquareVertexArray, mySquareShader, squareTransform);//glm::translate(glm::mat4{ 1.f }, mySquarePosition));
+
+	myShader->Bind();
+	std::dynamic_pointer_cast<axt::GLShader>(myShader)->SetValue("uColor", { 0.1f, 0.6f, 0.8f, 1.f });
 	axt::Renderer::Submit(myVertexArray, myShader);
 
 	axt::Renderer::SceneEnd();
@@ -152,6 +161,12 @@ void SandRenderLayer::OnUpdate(float dt) {
 void SandRenderLayer::OnEvent(axt::Event& event) {
 	axt::EventHandler handler{ event };
 	handler.Fire<axt::KeyPressedEvent>(AXT_BIND_EVENT(SandRenderLayer::OnKeyPressedEvent));
+}
+
+void SandRenderLayer::OnImGuiRender() {
+	ImGui::Begin("Color Settings");
+	ImGui::ColorEdit4("Square Color", glm::value_ptr(mySquareColor));
+	ImGui::End();
 }
 
 bool SandRenderLayer::OnKeyPressedEvent(axt::KeyPressedEvent& event) {

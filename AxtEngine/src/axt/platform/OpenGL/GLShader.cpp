@@ -59,12 +59,6 @@ namespace axt {
 	GLShader::~GLShader() {
 
 	}
-
-	void GLShader::SetUniform(const std::string& name, const glm::mat4& uniform) const {
-		GLint loc{ glGetUniformLocation(id, name.c_str()) };
-		glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(uniform));
-	}
-
 	void GLShader::Bind() const {
 		glUseProgram(id);
 	}
@@ -73,4 +67,29 @@ namespace axt {
 		glUseProgram(0);
 	}
 
+	/*void GLShader::SetUniform(const std::string& name, const glm::mat4& uniform) const {
+		GLint loc{ glGetUniformLocation(id, name.c_str()) };
+		glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(uniform));
+	}*/
+
+	void GLShader::SetValue(const std::string& name, const glm::mat4& mat4) const {
+		GLint loc{ glGetUniformLocation(id, name.c_str()) };
+		glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(mat4));
+	}
+	void GLShader::SetValue(const std::string& name, const glm::mat3& mat3) const {
+		GLint loc{ glGetUniformLocation(id, name.c_str()) };
+		glUniformMatrix3fv(loc, 1, GL_FALSE, glm::value_ptr(mat3));
+	}
+	void GLShader::SetValue(const std::string& name, const glm::vec4& vec4) const {
+		GLint loc{ glGetUniformLocation(id, name.c_str()) };
+		glUniform4f(loc, vec4.x, vec4.y, vec4.z, vec4.w);
+	}
+	void GLShader::SetValue(const std::string& name, const glm::vec3& vec3) const {
+		GLint loc{ glGetUniformLocation(id, name.c_str()) };
+		glUniform3f(loc, vec3.x, vec3.y, vec3.z);
+	}
+	void GLShader::SetValue(const std::string& name, const glm::vec2& vec2) const {
+		GLint loc{ glGetUniformLocation(id, name.c_str()) };
+		glUniform2f(loc, vec2.x, vec2.y);
+	}
 }

@@ -14,10 +14,10 @@ output = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 --include "AxtEngine/vendor/glfw"
 
 _includeDirs = {};
-_includeDirs["glfw"] = "AxtEngine/vendor/glfw/include"
-_includeDirs["glad"] = "AxtEngine/vendor/glad/include"
-_includeDirs["imgui"] = "AxtEngine/vendor/imgui"
-_includeDirs["glm"] = "AxtEngine/vendor/glm"
+_includeDirs.glfw = "AxtEngine/vendor/glfw/include"
+_includeDirs.glad = "AxtEngine/vendor/glad/include"
+_includeDirs.imgui = "AxtEngine/vendor/imgui"
+_includeDirs.glm = "AxtEngine/vendor/glm"
 
 group "Vendors"
     include "AxtEngine/vendor/glfw"
@@ -112,8 +112,8 @@ project "Sandbox"
     files {
         "%{prj.name}/src/**.h",
         "%{prj.name}/src/**.cpp",
-        "AxtEngine/vendor/glm/glm/**.hpp",
-        "AxtEngine/vendor/glm/glm/**.inl",
+        -- "AxtEngine/vendor/glm/glm/**.hpp",
+        -- "AxtEngine/vendor/glm/glm/**.inl",
         --"%{_includeDirs.imgui}",
 
     }
@@ -122,7 +122,7 @@ project "Sandbox"
         "AxtEngine/vendor/spdlog/include",
         "AxtEngine/src",
         "%{_includeDirs.glm}",
-        --"%{_includeDirs.imgui}",
+        "%{_includeDirs.imgui}",
 
     }
 
