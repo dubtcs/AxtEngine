@@ -14,7 +14,7 @@ namespace axt {
 		glClearColor(newColor.x, newColor.y, newColor.z, newColor.a);
 	}
 
-	void GLRenderAPI::DrawIndexed(const std::shared_ptr<VertexArray>& vertexArray) const {
+	void GLRenderAPI::DrawIndexed(const Ref<VertexArray>& vertexArray) const {
 		glDrawElements(GL_TRIANGLES, vertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
 	}
 

@@ -17,7 +17,7 @@ namespace axt {
 	public:
 		virtual void Clear() const = 0;
 		virtual void SetClearColor(const glm::vec4& newColor) const = 0;
-		virtual void DrawIndexed(const std::shared_ptr<VertexArray>& vertexArray) const = 0;
+		virtual void DrawIndexed(const Ref<VertexArray>& vertexArray) const = 0;
 		static API GetAPI() { return api; }
 	private:
 		static API api;

@@ -17,11 +17,11 @@ public:
 private:
 	bool OnKeyPressedEvent(axt::KeyPressedEvent& event);
 private:
-	std::shared_ptr<axt::VertexArray> myVertexArray;
-	std::shared_ptr<axt::Shader> myShader;
-
-	std::shared_ptr<axt::Shader> mySquareShader;
-	std::shared_ptr<axt::VertexArray> mySquareVertexArray;
+	axt::Ref<axt::VertexArray> myVertexArray;
+	axt::Ref<axt::Shader> myShader;
+	
+	axt::Ref<axt::Shader> mySquareShader;
+	axt::Ref<axt::VertexArray> mySquareVertexArray;
 
 	axt::OrthoCamera myCamera;
 	glm::vec3 myCameraPosition;

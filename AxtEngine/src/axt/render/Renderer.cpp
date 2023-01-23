@@ -22,8 +22,9 @@ namespace axt {
 
 	}
 
-	void Renderer::Submit(const std::shared_ptr<VertexArray>& vertexArray, const std::shared_ptr<Shader>& shader, const glm::mat4& modelTransform) {
+	void Renderer::Submit(const Ref<VertexArray>& vertexArray, const Ref<Shader>& shader, const glm::mat4& modelTransform) {
 		shader->Bind();
+
 		// temp
 		std::dynamic_pointer_cast<GLShader>(shader)->SetValue("uViewProjection", scene->viewProjection);
 		std::dynamic_pointer_cast<GLShader>(shader)->SetValue("uModelTransform", modelTransform);

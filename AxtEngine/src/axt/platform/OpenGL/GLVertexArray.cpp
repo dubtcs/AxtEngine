@@ -44,7 +44,7 @@ namespace axt {
 		glBindVertexArray(0);
 	}
 
-	void GLVertexArray::AddVertexBuffer(const std::shared_ptr<VertexBuffer>& vertexBuffer) {
+	void GLVertexArray::AddVertexBuffer(const Ref<VertexBuffer>& vertexBuffer) {
 		glBindVertexArray(id);
 		vertexBuffer->Bind();
 		uint32_t index{ 0 };
@@ -57,7 +57,7 @@ namespace axt {
 		this->vertexBuffers.push_back(vertexBuffer);
 	}
 
-	void GLVertexArray::AddIndexBuffer(const std::shared_ptr<IndexBuffer>& indexBuffer) {
+	void GLVertexArray::AddIndexBuffer(const Ref<IndexBuffer>& indexBuffer) {
 		glBindVertexArray(id);
 		indexBuffer->Bind();
 		this->indexBuffer = indexBuffer;

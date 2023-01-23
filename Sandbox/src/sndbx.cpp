@@ -56,7 +56,7 @@ SandRenderLayer::SandRenderLayer(const std::string& name) : axt::Layer(),
 		0.5f, -0.5f, 0.0f, 0.8f, 0.25f, 0.6f, 1.f
 	};
 
-	std::shared_ptr<axt::VertexBuffer> vBuffer;
+	axt::Ref<axt::VertexBuffer> vBuffer;
 	vBuffer.reset(axt::VertexBuffer::Create(verts, sizeof(verts)));
 	{
 		axt::BufferLayout vLayout{
@@ -69,7 +69,7 @@ SandRenderLayer::SandRenderLayer(const std::string& name) : axt::Layer(),
 	myVertexArray->AddVertexBuffer(vBuffer);
 
 	uint32_t ind[3]{ 0, 1, 2 }; // had this set to 1,2,3 ffs
-	std::shared_ptr<axt::IndexBuffer> iBuffer;
+	axt::Ref<axt::IndexBuffer> iBuffer;
 	iBuffer.reset(axt::IndexBuffer::Create(ind, 3));
 	myVertexArray->AddIndexBuffer(iBuffer);
 
@@ -81,7 +81,7 @@ SandRenderLayer::SandRenderLayer(const std::string& name) : axt::Layer(),
 	};
 
 	mySquareVertexArray.reset(axt::VertexArray::Create());
-	std::shared_ptr<axt::VertexBuffer> squareVB;
+	axt::Ref<axt::VertexBuffer> squareVB;
 	squareVB.reset(axt::VertexBuffer::Create(squareVertices, sizeof(squareVertices)));
 
 	{
@@ -93,7 +93,7 @@ SandRenderLayer::SandRenderLayer(const std::string& name) : axt::Layer(),
 	mySquareVertexArray->AddVertexBuffer(squareVB);
 
 	uint32_t squareIndices[]{ 0,1,2,0,2,3 };
-	std::shared_ptr<axt::IndexBuffer> squareIB;
+	axt::Ref<axt::IndexBuffer> squareIB;
 	squareIB.reset(axt::IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t)));
 	mySquareVertexArray->AddIndexBuffer(squareIB);
 

@@ -40,11 +40,11 @@ namespace axt {
 		GuiLayer* guilayer;
 		LayerStack layerstack;
 
-		std::shared_ptr<AxtWindow> window;
+		Ref<AxtWindow> window; // may need witch back to shared ptr
 
 		// for multiple renders
-		std::vector<std::shared_ptr<VertexArray>> vertexArrays;
-		std::vector<std::shared_ptr<Shader>> shaders;
+		std::vector<Ref<VertexArray>> vertexArrays;
+		std::vector<Ref<Shader>> shaders;
 
 		OrthoCamera myCamera;
 

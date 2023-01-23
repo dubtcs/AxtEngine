@@ -10,7 +10,7 @@ namespace axt {
 	public:
 		static void Clear() { renderApi->Clear(); }
 		static void SetClearColor(glm::vec4& newColor) { renderApi->SetClearColor(newColor); }
-		static void DrawIndexed(const std::shared_ptr<VertexArray>& vertexArray) { renderApi->DrawIndexed(vertexArray); }
+		static void DrawIndexed(const Ref<VertexArray>& vertexArray) { renderApi->DrawIndexed(vertexArray); }
 	private:
 		static RenderAPI* renderApi;
 	};
