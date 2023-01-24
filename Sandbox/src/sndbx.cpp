@@ -9,6 +9,7 @@
 // TEMP
 #include <imgui.h>
 #include <axt/platform/OpenGL/GLShader.h>
+#include <axt/platform/OpenGL/GLTexture.h>
 
 #include <glm/glm.hpp> // glm::vec3
 #include <glm/vec4.hpp> // glm::vec4
@@ -73,11 +74,11 @@ SandRenderLayer::SandRenderLayer(const std::string& name) : axt::Layer(),
 	iBuffer.reset(axt::IndexBuffer::Create(ind, 3));
 	myVertexArray->AddIndexBuffer(iBuffer);
 
-	float squareVertices[3 * 4]{
-		0.5f, 0.5f, 0.f,
-		0.5f, -0.5f, 0.f,
-		-0.5f, -0.5f, 0.f,
-		-0.5f, 0.5f, 0.f
+	float squareVertices[5 * 4]{
+		0.5f, 0.5f, 0.f, 1.f, 1.f,
+		0.5f, -0.5f, 0.f, 1.f, 0.f,
+		-0.5f, -0.5f, 0.f, 0.f, 0.f,
+		-0.5f, 0.5f, 0.f, 0.f, 1.f
 	};
 
 	mySquareVertexArray.reset(axt::VertexArray::Create());
@@ -86,7 +87,8 @@ SandRenderLayer::SandRenderLayer(const std::string& name) : axt::Layer(),
 
 	{
 		axt::BufferLayout squareLayout{
-			{axt::ShaderDataType::Float3, "inPos"}
+			{axt::ShaderDataType::Float3, "inPos"},
+			{axt::ShaderDataType::Float2, "inTexPos"}
 		};
 		squareVB->SetLayout(squareLayout);
 	}
@@ -106,6 +108,16 @@ SandRenderLayer::SandRenderLayer(const std::string& name) : axt::Layer(),
 	vertexPath = "shaders/square.vert";
 
 	mySquareShader.reset(axt::Shader::Create(axt::OpenShader(vertexPath), axt::OpenShader(pixelPath)));
+
+	pixelPath = "shaders/tPos.frag";
+	vertexPath = "shaders/tPos.vert";
+
+	myTextureShader.reset(axt::Shader::Create(axt::OpenShader(vertexPath), axt::OpenShader(pixelPath)));
+
+	myTexture2D = axt::Texture2D::Create("textures/bruh.png");
+
+	myTexture2D->Bind();
+	std::dynamic_pointer_cast<axt::GLShader>(myTextureShader)->SetValue("uTexture", 0);
 }
 
 void SandRenderLayer::OnUpdate(float dt) {
@@ -154,6 +166,9 @@ void SandRenderLayer::OnUpdate(float dt) {
 	myShader->Bind();
 	std::dynamic_pointer_cast<axt::GLShader>(myShader)->SetValue("uColor", { 0.1f, 0.6f, 0.8f, 1.f });
 	axt::Renderer::Submit(myVertexArray, myShader);
+
+	myTextureShader->Bind();
+	axt::Renderer::Submit(mySquareVertexArray, myTextureShader);
 
 	axt::Renderer::SceneEnd();
 }

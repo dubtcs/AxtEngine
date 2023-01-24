@@ -17,5 +17,6 @@
 #include "axt/render/Buffers.h"
 #include "axt/render/Shader.h"
 #include "axt/render/RenderContext.h"
+#include "axt/render/Texture.h"
 
 #include "axt/EntryPoint.h"

@@ -18,11 +18,14 @@ namespace axt {
 		virtual void Unbind() const override;
 	public:
 		//void SetUniform(const std::string& name, const glm::mat4& uniform) const;
-		void SetValue(const std::string& name, const glm::vec4& vec4) const;
-		void SetValue(const std::string& name, const glm::vec3& vec3) const;
 		void SetValue(const std::string& name, const glm::vec2& vec2) const;
+		void SetValue(const std::string& name, const glm::vec3& vec3) const;
+		void SetValue(const std::string& name, const glm::vec4& vec4) const;
+
 		void SetValue(const std::string& name, const glm::mat3& mat3) const;
 		void SetValue(const std::string& name, const glm::mat4& mat4) const;
+
+		void SetValue(const std::string& name, const int& val) const;
 	private:
 		uint32_t id;
 	};

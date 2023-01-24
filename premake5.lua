@@ -18,6 +18,7 @@ _includeDirs.glfw = "AxtEngine/vendor/glfw/include"
 _includeDirs.glad = "AxtEngine/vendor/glad/include"
 _includeDirs.imgui = "AxtEngine/vendor/imgui"
 _includeDirs.glm = "AxtEngine/vendor/glm"
+_includeDirs.stb = "AxtEngine/vendor/stb"
 
 group "Vendors"
     include "AxtEngine/vendor/glfw"
@@ -43,6 +44,8 @@ project "AxtEngine"
         "%{prj.name}/src/**.cpp",
         "%{prj.name}/vendor/glm/glm/**.hpp",
         "%{prj.name}/vendor/glm/glm/**.inl",
+        "%{prj.name}/vendor/stb/stb_image.cpp",
+        "%{prj.name}/vendor/stb/stb_image.h",
     }
 
     defines {
@@ -60,7 +63,7 @@ project "AxtEngine"
         "%{_includeDirs.glad}",
         "%{_includeDirs.imgui}",
         "%{_includeDirs.glm}",
-
+        "%{_includeDirs.stb}"
     }
     
     links {

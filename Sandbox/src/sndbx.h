@@ -23,6 +23,10 @@ private:
 	axt::Ref<axt::Shader> mySquareShader;
 	axt::Ref<axt::VertexArray> mySquareVertexArray;
 
+	axt::Ref<axt::Shader> myTextureShader;
+
+	axt::Ref<axt::Texture2D> myTexture2D;
+
 	axt::OrthoCamera myCamera;
 	glm::vec3 myCameraPosition;
 	float myCameraSpeed;

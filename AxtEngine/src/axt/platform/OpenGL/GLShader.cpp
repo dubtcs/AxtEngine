@@ -92,4 +92,8 @@ namespace axt {
 		GLint loc{ glGetUniformLocation(id, name.c_str()) };
 		glUniform2f(loc, vec2.x, vec2.y);
 	}
+	void GLShader::SetValue(const std::string& name, const int& val) const {
+		GLint loc{ glGetUniformLocation(id, name.c_str()) };
+		glUniform1i(loc, val);
+	}
 }
