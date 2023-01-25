@@ -10,6 +10,7 @@ namespace axt {
 
 	class AXT_API Renderer {
 	public:
+		static void Init();
 		static void SceneStart(const OrthoCamera& ortho);
 		static void Submit(const Ref<VertexArray>& vertexArray, const Ref<Shader>& shader, const glm::mat4& modelTransform = glm::mat4{ 1.f });
 		static void SceneEnd();

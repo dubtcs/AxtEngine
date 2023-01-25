@@ -25,7 +25,7 @@ private:
 
 	axt::Ref<axt::Shader> myTextureShader;
 
-	axt::Ref<axt::Texture2D> myTexture2D;
+	axt::Ref<axt::Texture2D> myTexture2D, myTransparentText;
 
 	axt::OrthoCamera myCamera;
 	glm::vec3 myCameraPosition;

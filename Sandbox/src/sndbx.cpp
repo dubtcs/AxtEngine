@@ -115,8 +115,9 @@ SandRenderLayer::SandRenderLayer(const std::string& name) : axt::Layer(),
 	myTextureShader.reset(axt::Shader::Create(axt::OpenShader(vertexPath), axt::OpenShader(pixelPath)));
 
 	myTexture2D = axt::Texture2D::Create("textures/bruh.png");
-
-	myTexture2D->Bind();
+	myTransparentText = axt::Texture2D::Create("textures/si.png");
+	
+	myTransparentText->Bind();
 	std::dynamic_pointer_cast<axt::GLShader>(myTextureShader)->SetValue("uTexture", 0);
 }
 
@@ -168,6 +169,8 @@ void SandRenderLayer::OnUpdate(float dt) {
 	axt::Renderer::Submit(myVertexArray, myShader);
 
 	myTextureShader->Bind();
+	axt::Renderer::Submit(mySquareVertexArray, myTextureShader);
+	myTransparentText->Bind();
 	axt::Renderer::Submit(mySquareVertexArray, myTextureShader);
 
 	axt::Renderer::SceneEnd();

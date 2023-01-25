@@ -15,6 +15,7 @@ namespace axt {
 			None = 0, OpenGL
 		};
 	public:
+		virtual void Init() = 0;
 		virtual void Clear() const = 0;
 		virtual void SetClearColor(const glm::vec4& newColor) const = 0;
 		virtual void DrawIndexed(const Ref<VertexArray>& vertexArray) const = 0;

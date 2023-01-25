@@ -28,7 +28,7 @@ namespace axt {
 		window = std::unique_ptr<AxtWindow>{ AxtWindow::Create() };
 		window->SetVsync(true);
 		window->SetEventCallback(std::bind(&App::OnEvent, this, std::placeholders::_1));
-
+		Renderer::Init();
 		// temp
 		guilayer = new GuiLayer{};
 		PushOverlay(guilayer);

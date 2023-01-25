@@ -14,6 +14,10 @@ namespace axt {
 
 	Renderer::SceneData* Renderer::scene = new Renderer::SceneData;
 
+	void Renderer::Init() {
+		RenderCommand::Init();
+	}
+
 	void Renderer::SceneStart(const OrthoCamera& ortho) {
 		scene->viewProjection = ortho.GetViewProjection();
 	}

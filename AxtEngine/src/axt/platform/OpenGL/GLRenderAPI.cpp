@@ -6,6 +6,11 @@
 
 namespace axt {
 
+	void GLRenderAPI::Init() {
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	}
+
 	void GLRenderAPI::Clear() const {
 		glClear(GL_COLOR_BUFFER_BIT);
 	}
