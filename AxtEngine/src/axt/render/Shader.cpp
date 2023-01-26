@@ -7,10 +7,10 @@
 
 namespace axt {
 
-	Shader* Shader::Create(const std::string vertexSource, const std::string pixelSource) {
+	Ref<Shader> Shader::Create(const std::string vertexSource, const std::string pixelSource) {
 		switch (Renderer::GetApi()) {
 		case(RenderAPI::API::None): break;
-		case(RenderAPI::API::OpenGL): return (new GLShader{vertexSource, pixelSource});
+		case(RenderAPI::API::OpenGL): return std::make_shared<GLShader>(vertexSource, pixelSource);//return (new GLShader{vertexSource, pixelSource});
 		}
 
 		AXT_CORE_ASSERT(false, "No render api found");

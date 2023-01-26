@@ -38,20 +38,20 @@ namespace axt {
 		}
 	}
 
-	VertexBuffer* VertexBuffer::Create(float* vertices, uint32_t size) {
+	Ref<VertexBuffer> VertexBuffer::Create(float* vertices, uint32_t size) {
 		switch (Renderer::GetApi()) {
-		case(RenderAPI::API::None): return nullptr;
-		case(RenderAPI::API::OpenGL) : return (new OGLVertexBuffer{ vertices, size });
+		case(RenderAPI::API::None): break;
+		case(RenderAPI::API::OpenGL): return std::make_shared<OGLVertexBuffer>(vertices, size);//return (new OGLVertexBuffer{ vertices, size });
 		}
 
 		AXT_CORE_ASSERT(false, "No render api found");
 		return nullptr;
 	}
 
-	IndexBuffer* IndexBuffer::Create(uint32_t* indices, uint32_t size) {
+	Ref<IndexBuffer> IndexBuffer::Create(uint32_t* indices, uint32_t size) {
 		switch (Renderer::GetApi()) {
-		case(RenderAPI::API::None):return nullptr;
-		case(RenderAPI::API::OpenGL):return (new OGLIndexBuffer{ indices, size });
+		case(RenderAPI::API::None): break;
+		case(RenderAPI::API::OpenGL): return std::make_shared<OGLIndexBuffer>(indices, size);//return (new OGLIndexBuffer{ indices, size });
 		}
 
 		AXT_CORE_ASSERT(false, "No render api found");

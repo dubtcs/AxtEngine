@@ -9,7 +9,7 @@ namespace axt {
 	class AXT_API Shader {
 	public:
 		virtual ~Shader() {}
-		static Shader* Create(const std::string vertexSource, const std::string pixelSource);
+		static Ref<Shader> Create(const std::string vertexSource, const std::string pixelSource);
 
 		/*template<typename T>
 		static T* GetPlatformShader(Shader*& bruh) {

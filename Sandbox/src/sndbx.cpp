@@ -49,7 +49,7 @@ SandRenderLayer::SandRenderLayer(const std::string& name) : axt::Layer(),
 	myCameraSpeed{ 1.f },
 	mySquarePosition{ 0.f, 0.f, 0.f } {
 
-	myVertexArray.reset(axt::VertexArray::Create());
+	myVertexArray = axt::VertexArray::Create();
 
 	float verts[7 * 3]{
 		0.0f, .5f, 0.0f,   0.8f, 0.5f, 0.1f, 1.f,
@@ -58,7 +58,7 @@ SandRenderLayer::SandRenderLayer(const std::string& name) : axt::Layer(),
 	};
 
 	axt::Ref<axt::VertexBuffer> vBuffer;
-	vBuffer.reset(axt::VertexBuffer::Create(verts, sizeof(verts)));
+	vBuffer = axt::VertexBuffer::Create(verts, sizeof(verts));
 	{
 		axt::BufferLayout vLayout{
 			{axt::ShaderDataType::Float3, "inPos"},
@@ -71,7 +71,7 @@ SandRenderLayer::SandRenderLayer(const std::string& name) : axt::Layer(),
 
 	uint32_t ind[3]{ 0, 1, 2 }; // had this set to 1,2,3 ffs
 	axt::Ref<axt::IndexBuffer> iBuffer;
-	iBuffer.reset(axt::IndexBuffer::Create(ind, 3));
+	iBuffer = axt::IndexBuffer::Create(ind, 3);
 	myVertexArray->AddIndexBuffer(iBuffer);
 
 	float squareVertices[5 * 4]{
@@ -81,9 +81,9 @@ SandRenderLayer::SandRenderLayer(const std::string& name) : axt::Layer(),
 		-0.5f, 0.5f, 0.f, 0.f, 1.f
 	};
 
-	mySquareVertexArray.reset(axt::VertexArray::Create());
+	mySquareVertexArray = axt::VertexArray::Create();
 	axt::Ref<axt::VertexBuffer> squareVB;
-	squareVB.reset(axt::VertexBuffer::Create(squareVertices, sizeof(squareVertices)));
+	squareVB = axt::VertexBuffer::Create(squareVertices, sizeof(squareVertices));
 
 	{
 		axt::BufferLayout squareLayout{
@@ -96,23 +96,23 @@ SandRenderLayer::SandRenderLayer(const std::string& name) : axt::Layer(),
 
 	uint32_t squareIndices[]{ 0,1,2,0,2,3 };
 	axt::Ref<axt::IndexBuffer> squareIB;
-	squareIB.reset(axt::IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t)));
+	squareIB = axt::IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t));
 	mySquareVertexArray->AddIndexBuffer(squareIB);
 
 	// Shaders
 	std::string vertexPath{ "shaders/v.vert" };
 	std::string pixelPath{ "shaders/flatColor.frag" };
 
-	myShader.reset(axt::Shader::Create(axt::OpenShader(vertexPath), axt::OpenShader(pixelPath)));
+	myShader = axt::Shader::Create(axt::OpenShader(vertexPath), axt::OpenShader(pixelPath));
 
 	vertexPath = "shaders/square.vert";
 
-	mySquareShader.reset(axt::Shader::Create(axt::OpenShader(vertexPath), axt::OpenShader(pixelPath)));
+	mySquareShader = axt::Shader::Create(axt::OpenShader(vertexPath), axt::OpenShader(pixelPath));
 
 	pixelPath = "shaders/tPos.frag";
 	vertexPath = "shaders/tPos.vert";
 
-	myTextureShader.reset(axt::Shader::Create(axt::OpenShader(vertexPath), axt::OpenShader(pixelPath)));
+	myTextureShader = axt::Shader::Create(axt::OpenShader(vertexPath), axt::OpenShader(pixelPath));
 
 	myTexture2D = axt::Texture2D::Create("textures/bruh.png");
 	myTransparentText = axt::Texture2D::Create("textures/si.png");
