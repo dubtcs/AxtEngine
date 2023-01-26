@@ -2,10 +2,92 @@
 
 #include "GLShader.h"
 
+#include "axt/core/OpenShader.h"
+
 #include <glad/glad.h>
 #include <glm/gtc/type_ptr.hpp>
 
+static const char* GLSL_VERSION{"#version 450\n"};
+
 namespace axt {
+
+	GLShader::GLShader(const std::string& filepath) {
+
+	}
+
+	GLShader::GLShader(const std::string& filepath, unsigned int shadertypes) {
+		//AXT_CORE_TRACE(shadertypes);
+		char info[512]; // for debug
+		std::string shaderSource{ OpenShader(filepath) };
+		std::vector<unsigned int> shaderIds;
+
+		// vertex
+		if (shadertypes | ShaderType::Vertex) {
+			//AXT_CORE_TRACE("Vertex Shader");
+
+			const char* src[3]{ GLSL_VERSION, "#define GLSL_VERTEX\n", shaderSource.c_str() };
+			unsigned int vid{ glCreateShader(GL_VERTEX_SHADER) };
+			shaderIds.push_back(vid);
+
+			glShaderSource(vid, 3, src, 0);
+			glCompileShader(vid);
+			int pass{ 0 };
+			glGetShaderiv(vid, GL_COMPILE_STATUS, &pass);
+			if (pass == GL_FALSE) {
+				glGetShaderInfoLog(vid, 512, nullptr, info);
+				for (unsigned int i : shaderIds) {
+					glDeleteShader(i);
+				}
+				AXT_CORE_ERROR("Vertex shader error: {0}", info);
+				return;
+			}
+		}
+		// pixel / fragment
+		if (shadertypes | ShaderType::Pixel) {
+			//AXT_CORE_TRACE("Pixel Shader");
+
+			const char* src[3]{ GLSL_VERSION, "#define GLSL_FRAGMENT\n", shaderSource.c_str() };
+			unsigned int fid{ glCreateShader(GL_FRAGMENT_SHADER) };
+			shaderIds.push_back(fid);
+
+			glShaderSource(fid, 3, src, 0);
+			glCompileShader(fid);
+			int pass{ 0 };
+			glGetShaderiv(fid, GL_COMPILE_STATUS, &pass);
+			if (pass == GL_FALSE) {
+				glGetShaderInfoLog(fid, 512, nullptr, info);
+				for (unsigned int i : shaderIds) {
+					glDeleteShader(i);
+				}
+				AXT_CORE_ERROR("Fragment shader error: {0}", info);
+				return;
+			}
+		}
+
+		// Shader Program
+		id = glCreateProgram();
+		int pass{ 0 };
+
+		for (unsigned int i : shaderIds) {
+			glAttachShader(id, i);
+		}
+		glLinkProgram(id);
+		glGetProgramiv(id, GL_LINK_STATUS, (int*)&pass);
+		if (pass == GL_FALSE) {
+			glGetProgramInfoLog(id, 512, nullptr, info);
+			for (unsigned int i : shaderIds) {
+				glDeleteShader(i);
+			}
+			glDeleteProgram(id);
+			AXT_CORE_ERROR("Shader program linking error: {0}", info);
+			return;
+		}
+
+		for (unsigned int i : shaderIds) {
+			glDetachShader(id, i);
+		}
+
+	}
 
 	GLShader::GLShader(const std::string vSource, const std::string fSource) {
 		char info[512];

@@ -6,10 +6,18 @@
 
 namespace axt {
 
+	enum ShaderType {
+		Vertex = 1 << 0,
+		Pixel = 1 << 1,
+		Geometry = 1 << 2,
+	};
+
 	class AXT_API Shader {
 	public:
 		virtual ~Shader() {}
-		static Ref<Shader> Create(const std::string vertexSource, const std::string pixelSource);
+		static Ref<Shader> Create(const std::string& filepath, unsigned int shadertypes);
+		//static Ref<Shader> Create(const std::string& filepath);
+		static Ref<Shader> Create(const std::string vertexSource, const std::string pixelSource); // deprecated
 
 		/*template<typename T>
 		static T* GetPlatformShader(Shader*& bruh) {

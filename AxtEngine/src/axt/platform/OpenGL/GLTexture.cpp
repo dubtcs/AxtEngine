@@ -15,7 +15,7 @@ namespace axt {
 		myHeight = y;
 		GLenum glFormat{ 0 }, dataFormat{ 0 };
 
-		AXT_TRACE("{0}", channels);
+		//AXT_TRACE("{0}", channels);
 		if (channels == 4) {
 			glFormat = GL_RGBA8;
 			dataFormat = GL_RGBA;

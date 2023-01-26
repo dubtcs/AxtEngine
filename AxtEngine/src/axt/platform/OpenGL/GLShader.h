@@ -11,7 +11,9 @@ namespace axt {
 
 	class AXT_API GLShader : public Shader {
 	public:
-		GLShader(const std::string vertexSource, const std::string fragmentSource);
+		GLShader(const std::string& filepath);
+		GLShader(const std::string& filepath, unsigned int shadertypes);
+		GLShader(const std::string vertexSource, const std::string fragmentSource); // deprecated
 		virtual ~GLShader() override;
 	public:
 		virtual void Bind() const override;

@@ -100,19 +100,16 @@ SandRenderLayer::SandRenderLayer(const std::string& name) : axt::Layer(),
 	mySquareVertexArray->AddIndexBuffer(squareIB);
 
 	// Shaders
-	std::string vertexPath{ "shaders/v.vert" };
-	std::string pixelPath{ "shaders/flatColor.frag" };
+	//std::string vertexPath{ "shaders/v.vert" };
+	//std::string pixelPath{ "shaders/flatColor.frag" };
 
-	myShader = axt::Shader::Create(axt::OpenShader(vertexPath), axt::OpenShader(pixelPath));
+	//myShader = axt::Shader::Create(axt::OpenShader(vertexPath), axt::OpenShader(pixelPath));
 
-	vertexPath = "shaders/square.vert";
+	//vertexPath = "shaders/square.vert";
 
-	mySquareShader = axt::Shader::Create(axt::OpenShader(vertexPath), axt::OpenShader(pixelPath));
+	mySquareShader = axt::Shader::Create("shaders/shader2.glsl", axt::ShaderType::Vertex & axt::ShaderType::Pixel);
 
-	pixelPath = "shaders/tPos.frag";
-	vertexPath = "shaders/tPos.vert";
-
-	myTextureShader = axt::Shader::Create(axt::OpenShader(vertexPath), axt::OpenShader(pixelPath));
+	myTextureShader = axt::Shader::Create("shaders/shader.glsl", axt::ShaderType::Vertex & axt::ShaderType::Pixel);
 
 	myTexture2D = axt::Texture2D::Create("textures/bruh.png");
 	myTransparentText = axt::Texture2D::Create("textures/si.png");
@@ -164,9 +161,9 @@ void SandRenderLayer::OnUpdate(float dt) {
 	std::dynamic_pointer_cast<axt::GLShader>(mySquareShader)->SetValue("uColor", mySquareColor);
 	axt::Renderer::Submit(mySquareVertexArray, mySquareShader, squareTransform);//glm::translate(glm::mat4{ 1.f }, mySquarePosition));
 
-	myShader->Bind();
+	/*myShader->Bind();
 	std::dynamic_pointer_cast<axt::GLShader>(myShader)->SetValue("uColor", { 0.1f, 0.6f, 0.8f, 1.f });
-	axt::Renderer::Submit(myVertexArray, myShader);
+	axt::Renderer::Submit(myVertexArray, myShader);*/
 
 	myTextureShader->Bind();
 	axt::Renderer::Submit(mySquareVertexArray, myTextureShader);
