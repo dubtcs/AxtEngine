@@ -107,9 +107,11 @@ SandRenderLayer::SandRenderLayer(const std::string& name) : axt::Layer(),
 
 	//vertexPath = "shaders/square.vert";
 
-	mySquareShader = axt::Shader::Create("shaders/shader2.glsl", axt::ShaderType::Vertex & axt::ShaderType::Pixel);
+	mySquareShader = axt::Shader::Create("Shader1", "shaders/shader2.glsl", axt::ShaderType::Vertex & axt::ShaderType::Pixel);
+	myShaderLib.Add("SquareShader", mySquareShader);
 
-	myTextureShader = axt::Shader::Create("shaders/shader.glsl", axt::ShaderType::Vertex & axt::ShaderType::Pixel);
+	myTextureShader = axt::Shader::Create("Shader2", "shaders/shader.glsl", axt::ShaderType::Vertex & axt::ShaderType::Pixel);
+	myShaderLib.Add("TexturedShader", myTextureShader);
 
 	myTexture2D = axt::Texture2D::Create("textures/bruh.png");
 	myTransparentText = axt::Texture2D::Create("textures/si.png");
@@ -157,9 +159,11 @@ void SandRenderLayer::OnUpdate(float dt) {
 
 	glm::mat4 squareTransform{ glm::translate(glm::mat4{1.f}, mySquarePosition) };
 
-	mySquareShader->Bind();
-	std::dynamic_pointer_cast<axt::GLShader>(mySquareShader)->SetValue("uColor", mySquareColor);
-	axt::Renderer::Submit(mySquareVertexArray, mySquareShader, squareTransform);//glm::translate(glm::mat4{ 1.f }, mySquarePosition));
+	//mySquareShader->Bind();
+	axt::Ref<axt::Shader> currentShader{ myShaderLib.Get("SquareShader") };
+	currentShader->Bind();
+	std::dynamic_pointer_cast<axt::GLShader>(currentShader)->SetValue("uColor", mySquareColor);
+	axt::Renderer::Submit(mySquareVertexArray, currentShader, squareTransform);//glm::translate(glm::mat4{ 1.f }, mySquarePosition));
 
 	/*myShader->Bind();
 	std::dynamic_pointer_cast<axt::GLShader>(myShader)->SetValue("uColor", { 0.1f, 0.6f, 0.8f, 1.f });

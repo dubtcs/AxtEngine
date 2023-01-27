@@ -11,5 +11,6 @@
 
 #include <string>
 #include <vector>
+#include <array>
 
 #include "axt/core/Log.h"

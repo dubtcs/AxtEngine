@@ -12,12 +12,13 @@ namespace axt {
 	class AXT_API GLShader : public Shader {
 	public:
 		GLShader(const std::string& filepath);
-		GLShader(const std::string& filepath, unsigned int shadertypes);
+		GLShader(const std::string& name, const std::string& filepath, unsigned int shadertypes);
 		GLShader(const std::string vertexSource, const std::string fragmentSource); // deprecated
 		virtual ~GLShader() override;
 	public:
 		virtual void Bind() const override;
 		virtual void Unbind() const override;
+		virtual const std::string& GetName() const override;
 	public:
 		//void SetUniform(const std::string& name, const glm::mat4& uniform) const;
 		void SetValue(const std::string& name, const glm::vec2& vec2) const;
@@ -29,6 +30,7 @@ namespace axt {
 
 		void SetValue(const std::string& name, const int& val) const;
 	private:
+		std::string myName;
 		uint32_t id;
 	};
 

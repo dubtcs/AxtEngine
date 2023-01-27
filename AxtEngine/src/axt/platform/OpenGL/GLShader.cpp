@@ -8,6 +8,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 static const char* GLSL_VERSION{"#version 450\n"};
+static const unsigned short MAX_SHADER_CAPACITY{ 3 };
 
 namespace axt {
 
@@ -15,11 +16,12 @@ namespace axt {
 
 	}
 
-	GLShader::GLShader(const std::string& filepath, unsigned int shadertypes) {
+	GLShader::GLShader(const std::string& name, const std::string& filepath, unsigned int shadertypes) : myName{ name } {
 		//AXT_CORE_TRACE(shadertypes);
 		char info[512]; // for debug
 		std::string shaderSource{ OpenShader(filepath) };
-		std::vector<unsigned int> shaderIds;
+		std::array<unsigned int, MAX_SHADER_CAPACITY> shaderIds;
+		unsigned int currentShaderIndex{ 0 };
 
 		// vertex
 		if (shadertypes | ShaderType::Vertex) {
@@ -27,7 +29,7 @@ namespace axt {
 
 			const char* src[3]{ GLSL_VERSION, "#define GLSL_VERTEX\n", shaderSource.c_str() };
 			unsigned int vid{ glCreateShader(GL_VERTEX_SHADER) };
-			shaderIds.push_back(vid);
+			shaderIds[currentShaderIndex++] = vid;
 
 			glShaderSource(vid, 3, src, 0);
 			glCompileShader(vid);
@@ -35,8 +37,8 @@ namespace axt {
 			glGetShaderiv(vid, GL_COMPILE_STATUS, &pass);
 			if (pass == GL_FALSE) {
 				glGetShaderInfoLog(vid, 512, nullptr, info);
-				for (unsigned int i : shaderIds) {
-					glDeleteShader(i);
+				for (unsigned int i{ 0 }; i < currentShaderIndex; i++) {
+					glDeleteShader(shaderIds[i]);
 				}
 				AXT_CORE_ERROR("Vertex shader error: {0}", info);
 				return;
@@ -48,7 +50,7 @@ namespace axt {
 
 			const char* src[3]{ GLSL_VERSION, "#define GLSL_FRAGMENT\n", shaderSource.c_str() };
 			unsigned int fid{ glCreateShader(GL_FRAGMENT_SHADER) };
-			shaderIds.push_back(fid);
+			shaderIds[currentShaderIndex++] = fid;
 
 			glShaderSource(fid, 3, src, 0);
 			glCompileShader(fid);
@@ -56,8 +58,8 @@ namespace axt {
 			glGetShaderiv(fid, GL_COMPILE_STATUS, &pass);
 			if (pass == GL_FALSE) {
 				glGetShaderInfoLog(fid, 512, nullptr, info);
-				for (unsigned int i : shaderIds) {
-					glDeleteShader(i);
+				for (unsigned int i{ 0 }; i < currentShaderIndex; i++) {
+					glDeleteShader(shaderIds[i]);
 				}
 				AXT_CORE_ERROR("Fragment shader error: {0}", info);
 				return;
@@ -67,24 +69,25 @@ namespace axt {
 		// Shader Program
 		id = glCreateProgram();
 		int pass{ 0 };
+		AXT_CORE_TRACE("Shader type total: {0}", currentShaderIndex);
 
-		for (unsigned int i : shaderIds) {
-			glAttachShader(id, i);
+		for (unsigned int i{ 0 }; i <= currentShaderIndex; i++) {
+			glAttachShader(id, shaderIds[i]);
 		}
 		glLinkProgram(id);
 		glGetProgramiv(id, GL_LINK_STATUS, (int*)&pass);
 		if (pass == GL_FALSE) {
 			glGetProgramInfoLog(id, 512, nullptr, info);
-			for (unsigned int i : shaderIds) {
-				glDeleteShader(i);
+			for (unsigned int i{ 0 }; i <= currentShaderIndex; i++) {
+				glDeleteShader(shaderIds[i]);
 			}
 			glDeleteProgram(id);
 			AXT_CORE_ERROR("Shader program linking error: {0}", info);
 			return;
 		}
 
-		for (unsigned int i : shaderIds) {
-			glDetachShader(id, i);
+		for (unsigned int i{ 0 }; i <= currentShaderIndex; i++) {
+			glDetachShader(id, shaderIds[i]);
 		}
 
 	}
@@ -147,6 +150,10 @@ namespace axt {
 
 	void GLShader::Unbind() const {
 		glUseProgram(0);
+	}
+
+	const std::string& GLShader::GetName() const {
+		return myName;
 	}
 
 	/*void GLShader::SetUniform(const std::string& name, const glm::mat4& uniform) const {

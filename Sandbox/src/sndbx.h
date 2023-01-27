@@ -17,6 +17,8 @@ public:
 private:
 	bool OnKeyPressedEvent(axt::KeyPressedEvent& event);
 private:
+	axt::ShaderLib myShaderLib;
+
 	axt::Ref<axt::VertexArray> myVertexArray;
 	axt::Ref<axt::Shader> myShader;
 	
