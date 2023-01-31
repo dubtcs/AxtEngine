@@ -8,7 +8,7 @@
 
 namespace axt {
 
-	class AXT_API Renderer {
+	class AXT_API Render3D {
 	public:
 		static void Init();
 		static void SceneStart(const OrthoCamera& ortho);

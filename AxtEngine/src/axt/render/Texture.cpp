@@ -8,7 +8,7 @@
 namespace axt {
 
 	Ref<Texture2D> Texture2D::Create(const std::string& filepath) {
-		switch (Renderer::GetApi()) {
+		switch (Render3D::GetApi()) {
 		case(RenderAPI::API::None): break;
 		case(RenderAPI::API::OpenGL): return std::make_shared<GLTexture2D>(filepath);
 		}

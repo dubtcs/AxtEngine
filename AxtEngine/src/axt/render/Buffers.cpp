@@ -39,7 +39,7 @@ namespace axt {
 	}
 
 	Ref<VertexBuffer> VertexBuffer::Create(float* vertices, uint32_t size) {
-		switch (Renderer::GetApi()) {
+		switch (Render3D::GetApi()) {
 		case(RenderAPI::API::None): break;
 		case(RenderAPI::API::OpenGL): return std::make_shared<OGLVertexBuffer>(vertices, size);//return (new OGLVertexBuffer{ vertices, size });
 		}
@@ -49,7 +49,7 @@ namespace axt {
 	}
 
 	Ref<IndexBuffer> IndexBuffer::Create(uint32_t* indices, uint32_t size) {
-		switch (Renderer::GetApi()) {
+		switch (Render3D::GetApi()) {
 		case(RenderAPI::API::None): break;
 		case(RenderAPI::API::OpenGL): return std::make_shared<OGLIndexBuffer>(indices, size);//return (new OGLIndexBuffer{ indices, size });
 		}

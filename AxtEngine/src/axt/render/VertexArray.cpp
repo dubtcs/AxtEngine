@@ -8,7 +8,7 @@
 namespace axt{
 
 	Ref<VertexArray> VertexArray::Create() {
-		switch (Renderer::GetApi()) {
+		switch (Render3D::GetApi()) {
 		case(RenderAPI::API::OpenGL): return std::make_shared<GLVertexArray>();//return new GLVertexArray{};
 		}
 		AXT_CORE_ASSERT(false, "No render api found");

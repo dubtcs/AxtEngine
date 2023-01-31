@@ -12,21 +12,21 @@
 
 namespace axt {
 
-	Renderer::SceneData* Renderer::scene = new Renderer::SceneData;
+	Render3D::SceneData* Render3D::scene = new Render3D::SceneData;
 
-	void Renderer::Init() {
+	void Render3D::Init() {
 		RenderCommand::Init();
 	}
 
-	void Renderer::SceneStart(const OrthoCamera& ortho) {
+	void Render3D::SceneStart(const OrthoCamera& ortho) {
 		scene->viewProjection = ortho.GetViewProjection();
 	}
 
-	void Renderer::SceneEnd() {
+	void Render3D::SceneEnd() {
 
 	}
 
-	void Renderer::Submit(const Ref<VertexArray>& vertexArray, const Ref<Shader>& shader, const glm::mat4& modelTransform) {
+	void Render3D::Submit(const Ref<VertexArray>& vertexArray, const Ref<Shader>& shader, const glm::mat4& modelTransform) {
 		shader->Bind();
 
 		// temp

@@ -12,7 +12,7 @@ namespace axt {
 	/**********/
 
 	Ref<Shader> Shader::Create(const std::string& name, const std::string& filepath, unsigned int shadertypes) {
-		switch (Renderer::GetApi()) {
+		switch (Render3D::GetApi()) {
 		case(RenderAPI::API::None): break;
 		case(RenderAPI::API::OpenGL): return std::make_shared<GLShader>(name, filepath, shadertypes);
 		}
@@ -23,7 +23,7 @@ namespace axt {
 
 	// deprecated
 	Ref<Shader> Shader::Create(const std::string vertexSource, const std::string pixelSource) {
-		switch (Renderer::GetApi()) {
+		switch (Render3D::GetApi()) {
 		case(RenderAPI::API::None): break;
 		case(RenderAPI::API::OpenGL): return std::make_shared<GLShader>(vertexSource, pixelSource);//return (new GLShader{vertexSource, pixelSource});
 		}

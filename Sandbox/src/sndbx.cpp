@@ -155,26 +155,21 @@ void SandRenderLayer::OnUpdate(float dt) {
 	const glm::mat4& viewProjection{ myCamera.GetViewProjection() };
 	myCamera.SetPosition(myCameraPosition);
 
-	axt::Renderer::SceneStart(myCamera);
+	axt::Render3D::SceneStart(myCamera);
 
 	glm::mat4 squareTransform{ glm::translate(glm::mat4{1.f}, mySquarePosition) };
 
-	//mySquareShader->Bind();
 	axt::Ref<axt::Shader> currentShader{ myShaderLib.Get("SquareShader") };
 	currentShader->Bind();
 	std::dynamic_pointer_cast<axt::GLShader>(currentShader)->SetValue("uColor", mySquareColor);
-	axt::Renderer::Submit(mySquareVertexArray, currentShader, squareTransform);//glm::translate(glm::mat4{ 1.f }, mySquarePosition));
+	axt::Render3D::Submit(mySquareVertexArray, currentShader, squareTransform); //glm::translate(glm::mat4{ 1.f }, mySquarePosition));
 
-	/*myShader->Bind();
-	std::dynamic_pointer_cast<axt::GLShader>(myShader)->SetValue("uColor", { 0.1f, 0.6f, 0.8f, 1.f });
-	axt::Renderer::Submit(myVertexArray, myShader);*/
-
-	myTextureShader->Bind();
-	axt::Renderer::Submit(mySquareVertexArray, myTextureShader);
+	myShaderLib.Get("TexturedShader")->Bind();
+	axt::Render3D::Submit(mySquareVertexArray, myTextureShader);
 	myTransparentText->Bind();
-	axt::Renderer::Submit(mySquareVertexArray, myTextureShader);
+	axt::Render3D::Submit(mySquareVertexArray, myTextureShader);
 
-	axt::Renderer::SceneEnd();
+	axt::Render3D::SceneEnd();
 }
 
 void SandRenderLayer::OnEvent(axt::Event& event) {
