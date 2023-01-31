@@ -43,10 +43,8 @@ Sandbox::Sandbox() {
 
 // LAYERS
 SandRenderLayer::SandRenderLayer(const std::string& name) : axt::Layer(), 
-	myCamera{ -1.f, 1.f, -1.f, 1.f }, 
+	myCameraController{ 21/9 }, 
 	myClearColor{ 0.25f, 0.25f, 0.25f, 1.f },
-	myCameraPosition{ 0.f,0.f,0.f },
-	myCameraSpeed{ 1.f },
 	mySquarePosition{ 0.f, 0.f, 0.f } {
 
 	myVertexArray = axt::VertexArray::Create();
@@ -99,14 +97,6 @@ SandRenderLayer::SandRenderLayer(const std::string& name) : axt::Layer(),
 	squareIB = axt::IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t));
 	mySquareVertexArray->AddIndexBuffer(squareIB);
 
-	// Shaders
-	//std::string vertexPath{ "shaders/v.vert" };
-	//std::string pixelPath{ "shaders/flatColor.frag" };
-
-	//myShader = axt::Shader::Create(axt::OpenShader(vertexPath), axt::OpenShader(pixelPath));
-
-	//vertexPath = "shaders/square.vert";
-
 	mySquareShader = axt::Shader::Create("Shader1", "shaders/shader2.glsl", axt::ShaderType::Vertex & axt::ShaderType::Pixel);
 	myShaderLib.Add("SquareShader", mySquareShader);
 
@@ -122,40 +112,11 @@ SandRenderLayer::SandRenderLayer(const std::string& name) : axt::Layer(),
 
 void SandRenderLayer::OnUpdate(float dt) {
 
-	if (axt::AxtInput::IsKeyPressed(AXT_KEY_A)) {
-		myCameraPosition.x -= myCameraSpeed * dt;
-	} else if (axt::AxtInput::IsKeyPressed(AXT_KEY_D)) {
-		myCameraPosition.x += myCameraSpeed * dt;
-	}
-	if (axt::AxtInput::IsKeyPressed(AXT_KEY_W)) {
-		myCameraPosition.y += myCameraSpeed * dt;
-	} else if (axt::AxtInput::IsKeyPressed(AXT_KEY_S)) {
-		myCameraPosition.y -= myCameraSpeed * dt;
-	}
-
-	// square movement
-	if (axt::AxtInput::IsKeyPressed(AXT_KEY_UP)) {
-		mySquarePosition.y += myCameraSpeed * dt;
-	}
-	else if (axt::AxtInput::IsKeyPressed(AXT_KEY_DOWN)) {
-		mySquarePosition.y -= myCameraSpeed * dt;
-	}
-	if (axt::AxtInput::IsKeyPressed(AXT_KEY_RIGHT)) {
-		mySquarePosition.x += myCameraSpeed * dt;
-	}
-	else if (axt::AxtInput::IsKeyPressed(AXT_KEY_LEFT)) {
-		mySquarePosition.x -= myCameraSpeed * dt;
-	}
-
+	myCameraController.OnUpdate(dt);
 	axt::RenderCommand::SetClearColor(myClearColor);
 	axt::RenderCommand::Clear();
 
-	std::string viewProjectionUniformName{ "uViewProjection" };
-
-	const glm::mat4& viewProjection{ myCamera.GetViewProjection() };
-	myCamera.SetPosition(myCameraPosition);
-
-	axt::Render3D::SceneStart(myCamera);
+	axt::Render3D::SceneStart( myCameraController.GetCamera() );
 
 	glm::mat4 squareTransform{ glm::translate(glm::mat4{1.f}, mySquarePosition) };
 
@@ -173,6 +134,7 @@ void SandRenderLayer::OnUpdate(float dt) {
 }
 
 void SandRenderLayer::OnEvent(axt::Event& event) {
+	myCameraController.OnEvent(event);
 	axt::EventHandler handler{ event };
 	handler.Fire<axt::KeyPressedEvent>(AXT_BIND_EVENT(SandRenderLayer::OnKeyPressedEvent));
 }

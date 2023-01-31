@@ -40,6 +40,10 @@ namespace axt {
 		rotation = newrotation;
 		RemakeMatrices();
 	}
+	void OrthoCamera::SetProjection(float l, float r, float b, float t) {
+		projection = glm::ortho(l, r, b, t, -1.f, 1.f);
+		viewProjection = projection * view;
+	}
 
 	const glm::vec3& OrthoCamera::GetPosition() const {
 		return position;

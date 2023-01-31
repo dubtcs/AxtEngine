@@ -26,6 +26,7 @@ namespace axt {
 	public:
 		void SetPosition(const glm::vec3& newPosition);
 		void SetRotation(const float& newRotation);
+		void SetProjection(float leftBound, float rightBound, float bottomBound, float topBound);
 		const glm::vec3& GetPosition() const;
 		const float& GetRotation() const;
 		const glm::mat4& GetViewProjection() const;

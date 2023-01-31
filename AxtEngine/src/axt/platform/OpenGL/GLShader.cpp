@@ -69,7 +69,7 @@ namespace axt {
 		// Shader Program
 		id = glCreateProgram();
 		int pass{ 0 };
-		AXT_CORE_TRACE("Shader type total: {0}", currentShaderIndex);
+		//AXT_CORE_TRACE("Shader type total: {0}", currentShaderIndex);
 
 		for (unsigned int i{ 0 }; i <= currentShaderIndex; i++) {
 			glAttachShader(id, shaderIds[i]);

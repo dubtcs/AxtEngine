@@ -17,6 +17,7 @@ public:
 private:
 	bool OnKeyPressedEvent(axt::KeyPressedEvent& event);
 private:
+	axt::OrthoCameraController myCameraController;
 	axt::ShaderLib myShaderLib;
 
 	axt::Ref<axt::VertexArray> myVertexArray;
@@ -28,10 +29,6 @@ private:
 	axt::Ref<axt::Shader> myTextureShader;
 
 	axt::Ref<axt::Texture2D> myTexture2D, myTransparentText;
-
-	axt::OrthoCamera myCamera;
-	glm::vec3 myCameraPosition;
-	float myCameraSpeed;
 
 	glm::vec3 mySquarePosition; // temp
 	glm::vec4 mySquareColor{ 0.25f, 0.5f, 0.4f, 1.f };

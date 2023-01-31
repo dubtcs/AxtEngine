@@ -22,4 +22,8 @@ namespace axt {
 		static SceneData* scene;
 	};
 
+	class AXT_API Render2D {
+
+	};
+
 }
