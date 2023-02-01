@@ -23,4 +23,8 @@ namespace axt {
 		glDrawElements(GL_TRIANGLES, vertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
 	}
 
+	void GLRenderAPI::SetViewport(uint32_t x, uint32_t y, uint32_t w, uint32_t h) const {
+		glViewport(x, y, w, h);
+	}
+
 }

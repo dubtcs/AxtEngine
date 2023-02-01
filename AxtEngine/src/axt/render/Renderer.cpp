@@ -26,6 +26,10 @@ namespace axt {
 
 	}
 
+	void Render3D::WindowResized(const uint32_t x, const uint32_t y) {
+		RenderCommand::SetViewport(0, 0, x, y);
+	}
+
 	void Render3D::Submit(const Ref<VertexArray>& vertexArray, const Ref<Shader>& shader, const glm::mat4& modelTransform) {
 		shader->Bind();
 

@@ -45,8 +45,10 @@ namespace axt {
 			float frameDelta{ currentTime - lastFrameTime };
 			lastFrameTime = currentTime;
 
-			for (Layer* curLayer : layerstack) {
-				curLayer->OnUpdate(frameDelta);
+			if (!mIsMinimized) {
+				for (Layer* curLayer : layerstack) {
+					curLayer->OnUpdate(frameDelta);
+				}
 			}
 
 			guilayer->Begin();
@@ -62,6 +64,7 @@ namespace axt {
 	bool App::OnEvent(Event& bindEvent) {
 		EventHandler handler{ bindEvent };
 		handler.Fire<WindowCloseEvent>(std::bind(&App::OnWindowClose, this, std::placeholders::_1));
+		handler.Fire<WindowResizeEvent>(std::bind(&App::OnWindowResize, this, std::placeholders::_1));
 
 		// back to front for events
 		for (std::vector<Layer*>::iterator iter{ layerstack.end() }; iter != layerstack.begin();) {
@@ -87,6 +90,18 @@ namespace axt {
 	bool App::OnWindowClose(WindowCloseEvent& ev) {
 		running = false;
 		return true;
+	}
+
+	bool App::OnWindowResize(WindowResizeEvent& ev) {
+		if (ev.GetHeight() == 0 || ev.GetWidth() == 0) {
+			mIsMinimized = true;
+			return false;
+		}
+		mIsMinimized = false;
+
+		Render3D::WindowResized(ev.GetWidth(), ev.GetHeight());
+
+		return false;
 	}
 
 }

@@ -58,7 +58,7 @@ namespace axt {
 				WindowData& winData = *(WindowData*)glfwGetWindowUserPointer(win);
 				winData.width = w;
 				winData.height = h;
-
+				AXT_CORE_INFO("RES");
 				WindowResizeEvent resizeEvent{ w, h };
 				winData.callback(resizeEvent);
 			});
@@ -129,7 +129,6 @@ namespace axt {
 
 	void WWindow::Update() {
 		glfwPollEvents();
-		//glfwSwapBuffers(window);
 		context->SwapBuffers();
 	}
 

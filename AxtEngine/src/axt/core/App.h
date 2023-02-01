@@ -32,8 +32,11 @@ namespace axt {
 		static App& GetApp() { return *instance; }
 		AxtWindow& GetWindow() { return *window; }
 	protected:
-		bool running{ true };
 		bool OnWindowClose(WindowCloseEvent& ev);
+		bool OnWindowResize(WindowResizeEvent& ev);
+	protected:
+		bool running{ true };
+		bool mIsMinimized{ false };
 
 		float lastFrameTime{ 0.f };
 
