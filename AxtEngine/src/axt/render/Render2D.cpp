@@ -3,10 +3,7 @@
 #include "Render2D.h"
 
 #include "RenderCommand.h"
-
-//temp
-#include "axt/platform/OpenGL/GLShader.h"
-#include <glm/gtx/string_cast.hpp>
+#include <glm/ext/matrix_transform.hpp>
 
 namespace axt {
 
@@ -19,7 +16,6 @@ namespace axt {
 	static Render2DScene* sScene;
 
 	void Render2D::Init() {
-		AXT_INFO("2D INIT");
 		sScene = new Render2DScene{};
 		sScene->mVertexArray = VertexArray::Create();
 
@@ -51,8 +47,7 @@ namespace axt {
 
 	void Render2D::SceneStart(const OrthoCamera& camera) {
 		sScene->mShader->Bind();
-		std::dynamic_pointer_cast<GLShader>(sScene->mShader)->SetValue("uViewProjection", camera.GetViewProjection());
-		std::dynamic_pointer_cast<GLShader>(sScene->mShader)->SetValue("uModelTransform", glm::mat4{ 1.f });
+		sScene->mShader->SetValue("uViewProjection", camera.GetViewProjection());
 		// spent an embarassing amount of time troubleshooting this. I was sending in a vec3 instead of mat4
 		// bc SetValue has a vec3 overload, it worked without errors ;-;
 	}
@@ -61,13 +56,16 @@ namespace axt {
 
 	}
 
-	void Render2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color) {
+	void Render2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color, const float& rotation) {
 		DrawQuad({ position.x, position.y, 0.f }, size, color);
 	}
 
-	void Render2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color) {
+	void Render2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color, const float& rotation) {
+		glm::mat4 lIdentityMatrix{ 1.f };
+		glm::mat4 lTransform{ glm::translate(lIdentityMatrix, position) * glm::scale(lIdentityMatrix, glm::vec3{size.x, size.y, 0.f}) * glm::rotate(lIdentityMatrix, glm::radians(rotation), glm::vec3{0.f, 0.f, 1.f}) };
 		sScene->mShader->Bind();
-		std::dynamic_pointer_cast<GLShader>(sScene->mShader)->SetValue("uColor", color);
+		sScene->mShader->SetValue("uModelTransform", lTransform);
+		sScene->mShader->SetValue("uColor", color);
 		sScene->mVertexArray->Bind();
 		RenderCommand::DrawIndexed(sScene->mVertexArray);
 	}

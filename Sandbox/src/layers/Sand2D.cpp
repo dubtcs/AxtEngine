@@ -26,7 +26,7 @@ void Sand2D::OnUpdate(float dt) {
 	axt::RenderCommand::Clear();
 
 	axt::Render2D::SceneStart(mCameraController.GetCamera());
-	axt::Render2D::DrawQuad(glm::vec3{ 0.f }, glm::vec3{ 1.f }, mObjectColor);
+	axt::Render2D::DrawQuad(glm::vec3{ 0.f }, mObjectSize, mObjectColor, mObjectRotation);
 	axt::Render2D::SceneEnd();
 }
 
@@ -37,5 +37,7 @@ void Sand2D::OnEvent(axt::Event& ev) {
 void Sand2D::OnImGuiRender() {
 	ImGui::Begin("Control");
 	ImGui::ColorEdit4("Object Color", glm::value_ptr(mObjectColor));
+	ImGui::DragFloat2("Object Scale", glm::value_ptr(mObjectSize));
+	ImGui::DragFloat("Object Rotation", &mObjectRotation);
 	ImGui::End();
 }

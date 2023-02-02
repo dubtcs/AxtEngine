@@ -3,6 +3,7 @@
 #include "axt/Core.h"
 
 #include <string>
+#include <glm/glm.hpp>
 
 namespace axt {
 
@@ -32,7 +33,15 @@ namespace axt {
 		virtual void Bind() const = 0;
 		virtual void Unbind() const = 0;
 		virtual const std::string& GetName() const = 0;
-		//virtual void SetUniform(const std::string& name, const glm::mat4& uniform) const = 0;
+
+		virtual void SetValue(const std::string& name, const glm::vec2& vec2) const = 0;
+		virtual void SetValue(const std::string& name, const glm::vec3& vec3) const = 0;
+		virtual void SetValue(const std::string& name, const glm::vec4& vec4) const = 0;
+
+		virtual void SetValue(const std::string& name, const glm::mat3& mat3) const = 0;
+		virtual void SetValue(const std::string& name, const glm::mat4& mat4) const = 0;
+
+		virtual void SetValue(const std::string& name, const int& val) const = 0;
 	};
 
 	class AXT_API ShaderLib {

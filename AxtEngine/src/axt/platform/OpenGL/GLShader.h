@@ -21,14 +21,14 @@ namespace axt {
 		virtual const std::string& GetName() const override;
 	public:
 		//void SetUniform(const std::string& name, const glm::mat4& uniform) const;
-		void SetValue(const std::string& name, const glm::vec2& vec2) const;
-		void SetValue(const std::string& name, const glm::vec3& vec3) const;
-		void SetValue(const std::string& name, const glm::vec4& vec4) const;
+		virtual void SetValue(const std::string& name, const glm::vec2& vec2) const override;
+		virtual void SetValue(const std::string& name, const glm::vec3& vec3) const override;
+		virtual void SetValue(const std::string& name, const glm::vec4& vec4) const override;
 
-		void SetValue(const std::string& name, const glm::mat3& mat3) const;
-		void SetValue(const std::string& name, const glm::mat4& mat4) const;
+		virtual void SetValue(const std::string& name, const glm::mat3& mat3) const override;
+		virtual void SetValue(const std::string& name, const glm::mat4& mat4) const override;
 
-		void SetValue(const std::string& name, const int& val) const;
+		virtual void SetValue(const std::string& name, const int& val) const override;
 	private:
 		std::string myName;
 		uint32_t id;

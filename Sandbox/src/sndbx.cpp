@@ -16,5 +16,4 @@ axt::App* axt::CreateApp() {
 // APP
 Sandbox::Sandbox() {
 	PushLayer(new Sand2D{});
-	//PushLayer(new Sandpaper{});
 }
