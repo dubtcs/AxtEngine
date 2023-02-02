@@ -24,7 +24,9 @@ namespace axt {
 	};
 
 	class AXT_API Render2D {
-
+	public:
+		//static void Init();
+		//static void WindowResized(const uint32_t x, const uint32_t y);
 	};
 
 }

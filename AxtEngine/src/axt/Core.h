@@ -2,8 +2,16 @@
 
 #include <memory>
 
-#ifdef AXT_PLATFORM_WINDOWS
+// use without premake flags
+#ifdef _WIN32
+	#ifdef _WIN64
+		#define AXT_PLATFORM_WINDOWS
+	#else
+		#error "Only x64 is supported"
+	#endif
+#endif
 
+#ifdef AXT_PLATFORM_WINDOWS
 	#ifdef AXT_DLL
 		#ifdef AXT_BUILD_DLL
 			#define AXT_API __declspec(dllexport)
@@ -13,7 +21,6 @@
 	#else
 		#define AXT_API
 	#endif
-
 #endif
 
 #define AXT_BIND_EVENT(f) std::bind(&f, this, std::placeholders::_1)

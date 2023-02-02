@@ -24,6 +24,7 @@ namespace axt {
 	}
 
 	void GLRenderAPI::SetViewport(uint32_t x, uint32_t y, uint32_t w, uint32_t h) const {
+		AXT_CORE_INFO("{0}, {1}, {2}, {3}", x, y, w, h);
 		glViewport(x, y, w, h);
 	}
 

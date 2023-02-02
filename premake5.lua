@@ -78,7 +78,6 @@ project "AxtEngine"
 
         defines {
             "AXT_BUILD_DLL";
-            "AXT_PLATFORM_WINDOWS";
             "GLFW_INCLUDE_NONE";
         }
 
@@ -87,12 +86,12 @@ project "AxtEngine"
         -- }
 
     filter "configurations:Debug"
-        defines {"AXT_DEBUG"}
+        defines {"AXT_DEBUG", "AXT_ENABLE_ASSERTS"}
         runtime "Debug"
         symbols "On"
 
     filter "configurations:Release"
-        defines {"AXT_RELEASE"}
+        defines {"AXT_RELEASE", "AXT_ENABLE_ASSERTS"}
         runtime "Release"
         optimize "On"
 
@@ -137,11 +136,9 @@ project "Sandbox"
         systemversion "latest"
 
         defines {
-            "AXT_PLATFORM_WINDOWS";
+            --"AXT_PLATFORM_WINDOWS";
         }
 
-	-- buildoptions "/MT"
-    
     filter "configurations:Debug"
         defines "AXT_DEBUG"
         runtime "Debug"

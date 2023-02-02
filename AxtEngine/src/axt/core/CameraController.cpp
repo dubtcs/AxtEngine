@@ -56,6 +56,7 @@ namespace axt {
 	// protected
 	bool OrthoCameraController::OnWindowResize(WindowResizeEvent& event) {
 		myAspectRatio = ((float)event.GetWidth()) / ((float)event.GetHeight());
+		AXT_CORE_INFO("New Aspect Ratio: {0}", myAspectRatio);
 		myCamera.SetProjection(-myAspectRatio * myZoomLevel, myAspectRatio * myZoomLevel, -myZoomLevel, myZoomLevel);
 		return false;
 	}

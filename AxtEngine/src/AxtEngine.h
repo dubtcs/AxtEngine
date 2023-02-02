@@ -1,5 +1,9 @@
 #pragma once
 
+/*
+* Be sure to include <axt/EntryPoint.h> in the main file you want the app to start
+*/
+
 #include "axt/Core.h"
 
 #include "axt/core/App.h"
@@ -20,4 +24,5 @@
 #include "axt/render/RenderContext.h"
 #include "axt/render/Texture.h"
 
-#include "axt/EntryPoint.h"
+// not needed. Include at main
+//#include "axt/EntryPoint.h"
