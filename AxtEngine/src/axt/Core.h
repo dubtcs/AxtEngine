@@ -29,8 +29,18 @@ namespace axt {
 
 	template<typename T>
 	using Ref = std::shared_ptr<T>;
+	template<typename T, typename... A>
+
+	constexpr Ref<T> NewRef(A&&... a) {
+		return std::make_shared<T>(a...);
+	}
 
 	template<typename T>
 	using Unique = std::unique_ptr<T>;
+
+	template<typename T, typename... A>
+	constexpr Unique<T> NewUnique(A&&... a) {
+		return std::make_unique<T>(a...);
+	}
 
 }

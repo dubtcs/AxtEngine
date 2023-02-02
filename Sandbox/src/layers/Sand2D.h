@@ -13,7 +13,7 @@ public:
 	virtual void OnEvent(axt::Event& ev) override;
 	virtual void OnImGuiRender() override;
 protected:
-	axt::OrthoCameraController mCameraController{ 3440.f/1440.f }; // ultrawide
+	axt::OrthoCameraController mCameraController{ 1920.f / 1080.f }; // ultrawide
 	glm::vec4 mObjectColor{ 1.f, 0.47f, 0.47f, 1.f }; // salmon-ish color ig
 	glm::vec4 mClearColor{ 0.25f, 0.25f, 0.25f, 1.f };
 

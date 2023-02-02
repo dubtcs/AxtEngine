@@ -9,6 +9,4 @@ namespace axt {
 
 	RenderAPI* RenderCommand::renderApi{ new GLRenderAPI{} };
 
-
-
 }

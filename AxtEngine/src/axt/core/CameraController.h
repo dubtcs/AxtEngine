@@ -32,4 +32,9 @@ namespace axt {
 		OrthoCamera myCamera;
 	};
 
+	// should probably move this into a "3D Camera" file with the actual camera
+	class AXT_API CameraController {
+
+	};
+
 }

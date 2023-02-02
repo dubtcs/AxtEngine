@@ -1,4 +1,4 @@
-#include "Sand3D.h"
+#include "Sandpaper.h"
 
 // TEMP
 #include <imgui.h>
@@ -14,7 +14,7 @@
 #include <glm/gtc/type_ptr.hpp>
 // END TEMP
 
-Sand3D::Sand3D(const std::string & name) : axt::Layer(),
+Sandpaper::Sandpaper(const std::string & name) : axt::Layer(),
 	myCameraController{ 21 / 9 },
 	myClearColor{ 0.25f, 0.25f, 0.25f, 1.f },
 	mySquarePosition{ 0.f, 0.f, 0.f } 
@@ -83,7 +83,7 @@ Sand3D::Sand3D(const std::string & name) : axt::Layer(),
 	std::dynamic_pointer_cast<axt::GLShader>(myTextureShader)->SetValue("uTexture", 0);
 }
 
-void Sand3D::OnUpdate(float dt) {
+void Sandpaper::OnUpdate(float dt) {
 
 	myCameraController.OnUpdate(dt);
 	axt::RenderCommand::SetClearColor(myClearColor);
@@ -106,19 +106,19 @@ void Sand3D::OnUpdate(float dt) {
 	axt::Render3D::SceneEnd();
 }
 
-void Sand3D::OnEvent(axt::Event& event) {
+void Sandpaper::OnEvent(axt::Event& event) {
 	myCameraController.OnEvent(event);
 	axt::EventHandler handler{ event };
-	handler.Fire<axt::KeyPressedEvent>(AXT_BIND_EVENT(Sand3D::OnKeyPressedEvent));
+	handler.Fire<axt::KeyPressedEvent>(AXT_BIND_EVENT(Sandpaper::OnKeyPressedEvent));
 }
 
-void Sand3D::OnImGuiRender() {
+void Sandpaper::OnImGuiRender() {
 	ImGui::Begin("Color Settings");
 	ImGui::ColorEdit4("Square Color", glm::value_ptr(mySquareColor));
 	ImGui::End();
 }
 
-bool Sand3D::OnKeyPressedEvent(axt::KeyPressedEvent& event) {
+bool Sandpaper::OnKeyPressedEvent(axt::KeyPressedEvent& event) {
 
 	return true;
 }

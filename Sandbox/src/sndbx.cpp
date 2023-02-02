@@ -6,6 +6,7 @@
 
 #include "layers/Sand2D.h"
 #include "layers/Sand3D.h"
+#include "layers/Sandpaper.h"
 
 // ENTRY POINT
 axt::App* axt::CreateApp() {
@@ -15,4 +16,5 @@ axt::App* axt::CreateApp() {
 // APP
 Sandbox::Sandbox() {
 	PushLayer(new Sand2D{});
+	//PushLayer(new Sandpaper{});
 }

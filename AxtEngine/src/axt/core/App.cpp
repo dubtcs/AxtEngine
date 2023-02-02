@@ -7,6 +7,7 @@
 //temp
 #include "axt/core/OpenShader.h"
 #include "axt/core/Input.h"
+
 #include "axt/render/Renderer.h"
 
 #include "axt/render/Camera.h"
@@ -28,14 +29,16 @@ namespace axt {
 		window = std::unique_ptr<AxtWindow>{ AxtWindow::Create() };
 		window->SetVsync(true);
 		window->SetEventCallback(std::bind(&App::OnEvent, this, std::placeholders::_1));
-		Render3D::Init();
+		Renderer::Init();
 		// temp
 		guilayer = new GuiLayer{};
 		PushOverlay(guilayer);
 	}
 
 	App::~App() {
-
+		for (Layer*& cur : layerstack) {
+			cur->OnDetach();
+		}
 	}
 
 	void App::Run() {
@@ -99,7 +102,7 @@ namespace axt {
 		}
 		mIsMinimized = false;
 
-		Render3D::WindowResized(ev.GetWidth(), ev.GetHeight());
+		Renderer::WindowResize(ev.GetWidth(), ev.GetHeight());
 
 		return false;
 	}

@@ -15,14 +15,14 @@ namespace axt {
 
 		// Translation
 		if (AxtInput::IsKeyPressed(AXT_KEY_D)) {
-			myCameraPosition.x += myCameraMovementSpeed * dt;
+			myCameraPosition.x += myCameraMovementSpeed * dt * myZoomLevel;
 		} else if (AxtInput::IsKeyPressed(AXT_KEY_A)) {
-			myCameraPosition.x -= myCameraMovementSpeed * dt;
+			myCameraPosition.x -= myCameraMovementSpeed * dt * myZoomLevel;
 		}
 		if (AxtInput::IsKeyPressed(AXT_KEY_W)) {
-			myCameraPosition.y += myCameraMovementSpeed * dt;
+			myCameraPosition.y += myCameraMovementSpeed * dt * myZoomLevel;
 		} else if (AxtInput::IsKeyPressed(AXT_KEY_S)) {
-			myCameraPosition.y -= myCameraMovementSpeed * dt;
+			myCameraPosition.y -= myCameraMovementSpeed * dt * myZoomLevel;
 		}
 
 		// Rotation
@@ -56,7 +56,6 @@ namespace axt {
 	// protected
 	bool OrthoCameraController::OnWindowResize(WindowResizeEvent& event) {
 		myAspectRatio = ((float)event.GetWidth()) / ((float)event.GetHeight());
-		AXT_CORE_INFO("New Aspect Ratio: {0}", myAspectRatio);
 		myCamera.SetProjection(-myAspectRatio * myZoomLevel, myAspectRatio * myZoomLevel, -myZoomLevel, myZoomLevel);
 		return false;
 	}
