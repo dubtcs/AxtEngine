@@ -24,9 +24,7 @@ namespace axt {
 		unsigned int currentShaderIndex{ 0 };
 
 		// vertex
-		if (shadertypes | ShaderType::Vertex) {
-			//AXT_CORE_TRACE("Vertex Shader");
-
+		if (shadertypes & ShaderType::Vertex) {
 			const char* src[3]{ GLSL_VERSION, "#define GLSL_VERTEX\n", shaderSource.c_str() };
 			unsigned int vid{ glCreateShader(GL_VERTEX_SHADER) };
 			shaderIds[currentShaderIndex++] = vid;
@@ -45,9 +43,7 @@ namespace axt {
 			}
 		}
 		// pixel / fragment
-		if (shadertypes | ShaderType::Pixel) {
-			//AXT_CORE_TRACE("Pixel Shader");
-
+		if (shadertypes & ShaderType::Pixel) {
 			const char* src[3]{ GLSL_VERSION, "#define GLSL_FRAGMENT\n", shaderSource.c_str() };
 			unsigned int fid{ glCreateShader(GL_FRAGMENT_SHADER) };
 			shaderIds[currentShaderIndex++] = fid;

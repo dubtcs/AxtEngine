@@ -125,6 +125,7 @@ project "Sandbox"
         "AxtEngine/src",
         "%{_includeDirs.glm}",
         "%{_includeDirs.imgui}",
+        "%{_includeDirs.glad}",
 
     }
 
