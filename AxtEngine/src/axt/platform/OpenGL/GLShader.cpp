@@ -18,6 +18,8 @@ namespace axt {
 
 	GLShader::GLShader(const std::string& name, const std::string& filepath, unsigned int shadertypes) : myName{ name } {
 		//AXT_CORE_TRACE(shadertypes);
+		AXT_PROFILE_FUNCTION();
+
 		char info[512]; // for debug
 		std::string shaderSource{ OpenShader(filepath) };
 		std::array<unsigned int, MAX_SHADER_CAPACITY> shaderIds;
@@ -89,6 +91,8 @@ namespace axt {
 	}
 
 	GLShader::GLShader(const std::string vSource, const std::string fSource) {
+		AXT_PROFILE_FUNCTION();
+
 		char info[512];
 		// Vertex Shader
 		unsigned int vid{ glCreateShader(GL_VERTEX_SHADER) };
@@ -158,26 +162,38 @@ namespace axt {
 	}*/
 
 	void GLShader::SetValue(const std::string& name, const glm::mat4& mat4) const {
+		AXT_PROFILE_FUNCTION();
+
 		GLint loc{ glGetUniformLocation(id, name.c_str()) };
 		glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(mat4));
 	}
 	void GLShader::SetValue(const std::string& name, const glm::mat3& mat3) const {
+		AXT_PROFILE_FUNCTION();
+
 		GLint loc{ glGetUniformLocation(id, name.c_str()) };
 		glUniformMatrix3fv(loc, 1, GL_FALSE, glm::value_ptr(mat3));
 	}
 	void GLShader::SetValue(const std::string& name, const glm::vec4& vec4) const {
+		AXT_PROFILE_FUNCTION();
+
 		GLint loc{ glGetUniformLocation(id, name.c_str()) };
 		glUniform4f(loc, vec4.x, vec4.y, vec4.z, vec4.w);
 	}
 	void GLShader::SetValue(const std::string& name, const glm::vec3& vec3) const {
+		AXT_PROFILE_FUNCTION();
+
 		GLint loc{ glGetUniformLocation(id, name.c_str()) };
 		glUniform3f(loc, vec3.x, vec3.y, vec3.z);
 	}
 	void GLShader::SetValue(const std::string& name, const glm::vec2& vec2) const {
+		AXT_PROFILE_FUNCTION();
+
 		GLint loc{ glGetUniformLocation(id, name.c_str()) };
 		glUniform2f(loc, vec2.x, vec2.y);
 	}
 	void GLShader::SetValue(const std::string& name, const int& val) const {
+		AXT_PROFILE_FUNCTION();
+
 		GLint loc{ glGetUniformLocation(id, name.c_str()) };
 		glUniform1i(loc, val);
 	}

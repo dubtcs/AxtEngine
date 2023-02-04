@@ -43,7 +43,7 @@ namespace axt {
 		GuiLayer* guilayer;
 		LayerStack layerstack;
 
-		Ref<AxtWindow> window; // may need witch back to shared ptr
+		Unique<AxtWindow> window; // may need witch back to shared ptr
 
 		// for multiple renders
 		std::vector<Ref<VertexArray>> vertexArrays;

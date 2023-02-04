@@ -12,6 +12,7 @@ namespace axt {
 	}
 
 	void OrthoCameraController::OnUpdate(float dt) {
+		AXT_PROFILE_FUNCTION();
 
 		// Translation
 		if (AxtInput::IsKeyPressed(AXT_KEY_D)) {
@@ -40,6 +41,8 @@ namespace axt {
 	}
 
 	void OrthoCameraController::OnEvent(Event& event) {
+		AXT_PROFILE_FUNCTION();
+
 		EventHandler handler{ event };
 		handler.Fire<WindowResizeEvent>(AXT_BIND_EVENT(OrthoCameraController::OnWindowResize));
 		handler.Fire<MouseScrollEvent>(AXT_BIND_EVENT(OrthoCameraController::OnMouseScroll));
@@ -55,12 +58,16 @@ namespace axt {
 
 	// protected
 	bool OrthoCameraController::OnWindowResize(WindowResizeEvent& event) {
+		AXT_PROFILE_FUNCTION();
+
 		myAspectRatio = ((float)event.GetWidth()) / ((float)event.GetHeight());
 		myCamera.SetProjection(-myAspectRatio * myZoomLevel, myAspectRatio * myZoomLevel, -myZoomLevel, myZoomLevel);
 		return false;
 	}
 
 	bool OrthoCameraController::OnMouseScroll(MouseScrollEvent& event) {
+		AXT_PROFILE_FUNCTION();
+
 		myZoomLevel = (float)std::max(0.25, std::min(25.0, myZoomLevel - (event.GetY() * (double)myZoomSpeed)));
 		myCamera.SetProjection(-myAspectRatio * myZoomLevel, myAspectRatio * myZoomLevel, -myZoomLevel, myZoomLevel);
 		return false;

@@ -20,7 +20,7 @@ namespace axt {
 	class AXT_API AxtWindow {
 	public:
 		// Platform agnostic window creation
-		static AxtWindow* Create(const AxtWindowConfig& config = AxtWindowConfig{});
+		static Unique<AxtWindow> Create(const AxtWindowConfig& config = AxtWindowConfig{});
 	public:
 		virtual void Update() = 0;
 		virtual void SetVsync(bool toggle) = 0;

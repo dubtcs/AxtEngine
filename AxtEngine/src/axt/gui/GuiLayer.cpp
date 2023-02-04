@@ -25,6 +25,8 @@ namespace axt {
 
 	void GuiLayer::OnAttach() {
 
+		AXT_PROFILE_FUNCTION();
+
 		IMGUI_CHECKVERSION();
 
 		ImGui::CreateContext();
@@ -48,18 +50,24 @@ namespace axt {
 	}
 
 	void GuiLayer::OnDetach() {
+		AXT_PROFILE_FUNCTION();
+
 		ImGui_ImplOpenGL3_Shutdown();
 		ImGui_ImplGlfw_Shutdown();
 		ImGui::DestroyContext();
 	}
 
 	void GuiLayer::Begin() {
+		AXT_PROFILE_FUNCTION();
+
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
 	}
 
 	void GuiLayer::End() {
+		AXT_PROFILE_FUNCTION();
+
 		ImGuiIO& io{ ImGui::GetIO() };
 		App& app{ App::GetApp() };
 		const AxtWindow& window{ app.GetWindow() };
@@ -76,9 +84,9 @@ namespace axt {
 		}
 	}
 
-	void GuiLayer::OnImGuiRender() {
+	/*void GuiLayer::OnImGuiRender() {
 		static bool show{ true };
 		ImGui::ShowDemoWindow(&show);
-	}
+	}*/
 
 }

@@ -8,6 +8,8 @@ namespace axt {
 
 	// Returns a text file as a string
 	std::string OpenShader(const std::string filepath) {
+		AXT_PROFILE_FUNCTION();
+
 		std::string output;
 		std::ifstream file;
 		file.exceptions(std::ifstream::failbit | std::ifstream::badbit);

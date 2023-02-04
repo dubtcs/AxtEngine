@@ -18,11 +18,12 @@ namespace axt {
 
 	static bool axtGlfwInit{ false };
 
-	AxtWindow* AxtWindow::Create(const AxtWindowConfig& config) {
-		return new WWindow(config);
+	Unique<AxtWindow> AxtWindow::Create(const AxtWindowConfig& config) {
+		return NewUnique<WWindow>(config);//new WWindow(config);
 	}
 
 	WWindow::WWindow(const AxtWindowConfig& config) : data{ config } {
+		AXT_PROFILE_FUNCTION();
 		Init();
 	}
 
@@ -35,6 +36,7 @@ namespace axt {
 	}
 
 	void WWindow::Init() {
+		AXT_PROFILE_FUNCTION();
 
 		AXT_CORE_INFO("Creating window {0} ({1}, {2})", data.title, data.width, data.height);
 		if (!axtGlfwInit) {
@@ -123,11 +125,19 @@ namespace axt {
 	}
 
 	void WWindow::Shutdown() {
+		AXT_PROFILE_FUNCTION();
+
 		glfwDestroyWindow(window);
 	}
 
 	void WWindow::Update() {
-		glfwPollEvents();
+		AXT_PROFILE_FUNCTION();
+		{
+			AXT_PROFILE_SCOPE("WWindow::Update glfwPollEvents");
+
+			glfwPollEvents();
+		}
+		
 		context->SwapBuffers();
 	}
 

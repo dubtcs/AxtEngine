@@ -16,7 +16,7 @@ namespace axt {
 		void OnAttach() override;
 		void OnDetach() override;
 		//void OnUpdate() override;
-		void OnImGuiRender() override;
+		//void OnImGuiRender() override;
 		void Begin();
 		void End();
 	private:

@@ -17,6 +17,8 @@ namespace axt {
 	static Render2DScene* sScene;
 
 	void Render2D::Init() {
+		AXT_PROFILE_FUNCTION();
+
 		sScene = new Render2DScene{};
 		sScene->mVertexArray = VertexArray::Create();
 
@@ -52,6 +54,8 @@ namespace axt {
 	}
 
 	void Render2D::SceneStart(const OrthoCamera& camera) {
+		AXT_PROFILE_FUNCTION();
+
 		sScene->mShader->Bind();
 		sScene->mShader->SetValue("uViewProjection", camera.GetViewProjection());
 	}
@@ -65,6 +69,8 @@ namespace axt {
 	}
 
 	void Render2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color, const float& rotation) {
+		AXT_PROFILE_FUNCTION();
+
 		glm::mat4 lIdentityMatrix{ 1.f };
 		glm::mat4 lTransform{ glm::translate(lIdentityMatrix, position) * glm::scale(lIdentityMatrix, glm::vec3{size.x, size.y, 0.f}) * glm::rotate(lIdentityMatrix, glm::radians(rotation), glm::vec3{0.f, 0.f, 1.f}) };
 		sScene->mShader->SetValue("uModelTransform", lTransform);
@@ -79,6 +85,8 @@ namespace axt {
 	}
 
 	void Render2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, Ref<Texture2D> texture, const float& rotation) {
+		AXT_PROFILE_FUNCTION();
+
 		glm::mat4 lIdentityMatrix{ 1.f };
 		glm::mat4 lTransform{ glm::translate(lIdentityMatrix, position) * glm::scale(lIdentityMatrix, glm::vec3{size.x, size.y, 0.f}) * glm::rotate(lIdentityMatrix, glm::radians(rotation), glm::vec3{0.f, 0.f, 1.f}) };
 		sScene->mShader->SetValue("uModelTransform", lTransform);

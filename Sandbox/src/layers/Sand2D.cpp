@@ -12,15 +12,21 @@ Sand2D::Sand2D() : Layer("Sand2DLayer") {
 }
 
 void Sand2D::OnAttach() {
+	AXT_PROFILE_FUNCTION();
+
 	axt::Render2D::Init();
 	mTexture = axt::Texture2D::Create("textures/si.png");
 }
 
 void Sand2D::OnDetach() {
+	AXT_PROFILE_FUNCTION();
+
 	axt::Render2D::Shutdown();
 }
 
 void Sand2D::OnUpdate(float dt) {
+	AXT_PROFILE_FUNCTION();
+
 	mCameraController.OnUpdate(dt);
 
 	axt::RenderCommand::SetClearColor(mClearColor);
@@ -37,6 +43,8 @@ void Sand2D::OnEvent(axt::Event& ev) {
 }
 
 void Sand2D::OnImGuiRender() {
+	AXT_PROFILE_FUNCTION();
+
 	ImGui::Begin("Control");
 	ImGui::Text("Opaque Object");
 	ImGui::ColorEdit4("Object Color", glm::value_ptr(mObjectColor));

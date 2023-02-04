@@ -1,6 +1,6 @@
 #pragma once
 
-#ifdef AXT_PLATFORM_WINDOWS
+#ifdef _WIN32
 #include <Windows.h>
 #endif
 
@@ -14,3 +14,6 @@
 #include <array>
 
 #include "axt/core/Log.h"
+
+#include "axt/helper/Profiler.h"
+//#include "axt/helper/Instrument.h"

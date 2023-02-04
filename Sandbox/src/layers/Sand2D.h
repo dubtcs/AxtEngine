@@ -27,7 +27,5 @@ protected:
 	ObjectData obj2{ glm::vec3{1.f, 1.f, 0.f}, glm::vec2{1.25f}, 0.f };
 
 	// temp
-	//axt::Ref<axt::VertexArray> mVertexArray;
-	//axt::Ref<axt::Shader> mShader;
 	axt::Ref<axt::Texture2D> mTexture;
 };

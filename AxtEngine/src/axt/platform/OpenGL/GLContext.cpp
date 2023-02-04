@@ -12,6 +12,8 @@ namespace axt {
 	}
 
 	void OpenGLContext::Init() {
+		AXT_PROFILE_FUNCTION();
+
 		glfwMakeContextCurrent(window);
 		glfwMakeContextCurrent(window);
 		int suc2{ gladLoadGLLoader((GLADloadproc)glfwGetProcAddress) };
@@ -24,6 +26,8 @@ namespace axt {
 	}
 
 	void OpenGLContext::SwapBuffers() {
+		AXT_PROFILE_FUNCTION();
+
 		glfwSwapBuffers(window);
 	}
 

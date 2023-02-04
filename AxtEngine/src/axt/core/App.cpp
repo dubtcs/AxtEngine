@@ -14,6 +14,7 @@
 
 // TEMP
 #include <GLFW/glfw3.h>
+#include "axt/helper/Profiler.h"
 // ONLY FOR DELTA TIME
 
 #include <glm/gtx/string_cast.hpp>
@@ -23,10 +24,12 @@ namespace axt {
 	App* App::instance{ nullptr };
 
 	App::App() : myCamera{-1.f, 1.f, -1.f, 1.f} {
+		AXT_PROFILE_FUNCTION();
+
 		AXT_CORE_INFO("AxtEngine starting.");
 		AXT_ASSERT((instance == nullptr), "Application was not nullptr");
 		instance = this;
-		window = std::unique_ptr<AxtWindow>{ AxtWindow::Create() };
+		window = AxtWindow::Create();
 		window->SetVsync(true);
 		window->SetEventCallback(std::bind(&App::OnEvent, this, std::placeholders::_1));
 		Renderer::Init();
@@ -42,13 +45,17 @@ namespace axt {
 	}
 
 	void App::Run() {
+
 		while (running) {
+			AXT_PROFILE_SCOPE("Run Step");
 
 			float currentTime{ static_cast<float>(glfwGetTime()) };
 			float frameDelta{ currentTime - lastFrameTime };
 			lastFrameTime = currentTime;
 
 			if (!mIsMinimized) {
+				AXT_PROFILE_SCOPE("Layerstack updates");
+
 				for (Layer* curLayer : layerstack) {
 					curLayer->OnUpdate(frameDelta);
 				}
@@ -96,6 +103,8 @@ namespace axt {
 	}
 
 	bool App::OnWindowResize(WindowResizeEvent& ev) {
+		AXT_PROFILE_FUNCTION();
+
 		if (ev.GetHeight() == 0 || ev.GetWidth() == 0) {
 			mIsMinimized = true;
 			return false;

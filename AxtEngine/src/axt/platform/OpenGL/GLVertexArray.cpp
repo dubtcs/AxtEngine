@@ -37,14 +37,20 @@ namespace axt {
 	}
 
 	void GLVertexArray::Bind() const {
+		AXT_PROFILE_FUNCTION();
+		
 		glBindVertexArray(id);
 	}
 
 	void GLVertexArray::Unbind() const {
+		AXT_PROFILE_FUNCTION();
+		
 		glBindVertexArray(0);
 	}
 
 	void GLVertexArray::AddVertexBuffer(const Ref<VertexBuffer>& vertexBuffer) {
+		AXT_PROFILE_FUNCTION();
+
 		glBindVertexArray(id);
 		vertexBuffer->Bind();
 		uint32_t index{ 0 };
@@ -58,6 +64,8 @@ namespace axt {
 	}
 
 	void GLVertexArray::AddIndexBuffer(const Ref<IndexBuffer>& indexBuffer) {
+		AXT_PROFILE_FUNCTION();
+
 		glBindVertexArray(id);
 		indexBuffer->Bind();
 		this->indexBuffer = indexBuffer;

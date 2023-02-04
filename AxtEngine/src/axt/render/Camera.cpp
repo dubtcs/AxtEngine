@@ -41,6 +41,8 @@ namespace axt {
 		RemakeMatrices();
 	}
 	void OrthoCamera::SetProjection(float l, float r, float b, float t) {
+		AXT_PROFILE_FUNCTION();
+
 		projection = glm::ortho(l, r, b, t, -1.f, 1.f);
 		viewProjection = projection * view;
 	}

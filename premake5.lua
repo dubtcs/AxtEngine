@@ -78,6 +78,7 @@ project "AxtEngine"
 
         defines {
             "AXT_BUILD_DLL";
+            --"AXT_PROFILING_ENABLED";
             "GLFW_INCLUDE_NONE";
         }
 
