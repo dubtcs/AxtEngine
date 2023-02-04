@@ -7,7 +7,7 @@
 #include <glad/glad.h>
 #include <glm/gtc/type_ptr.hpp>
 
-static const char* GLSL_VERSION{"#version 450\n"};
+static const char* GLSL_VERSION{"#version 460\n"};
 static const unsigned short MAX_SHADER_CAPACITY{ 3 };
 
 namespace axt {

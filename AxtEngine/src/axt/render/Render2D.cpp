@@ -68,6 +68,30 @@ namespace axt {
 		DrawQuad({ position.x, position.y, 0.f }, size, color);
 	}
 
+	void Render2D::DrawQuad(const QuadProperties&& fQuad) {
+		AXT_PROFILE_FUNCTION();
+		glm::mat4 fIdentityMatrix{ 1.f };
+		glm::mat4 fTransform{ glm::translate(fIdentityMatrix, fQuad.position) * glm::scale(fIdentityMatrix, glm::vec3{fQuad.size.x, fQuad.size.y, 0.f}) }; 
+		if (fQuad.rotation != 0.f) {
+			fTransform *= glm::rotate(fIdentityMatrix, glm::radians(fQuad.rotation), glm::vec3{ 0.f, 0.f, 1.f });
+		}
+		sScene->mShader->SetValue("uModelTransform", fTransform);
+		sScene->mShader->SetValue("uColor", fQuad.color);
+		if (fQuad.texture) {
+			fQuad.texture->Bind(); // texture
+		}
+		else {
+			sScene->mTexture->Bind(); // white texture
+		}
+		sScene->mVertexArray->Bind();
+		RenderCommand::DrawIndexed(sScene->mVertexArray);
+	}
+
+
+
+
+
+	// DEPRECATED
 	void Render2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color, const float& rotation) {
 		AXT_PROFILE_FUNCTION();
 
@@ -95,5 +119,6 @@ namespace axt {
 		sScene->mVertexArray->Bind();
 		RenderCommand::DrawIndexed(sScene->mVertexArray);
 	}
+
 
 }

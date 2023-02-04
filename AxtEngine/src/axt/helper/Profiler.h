@@ -11,11 +11,6 @@ namespace axt {
 
 	namespace profiling {
 
-		struct AXT_API ProfileData {
-			const char* name;
-			long long mStart, mEnd;
-		};
-
 		class AXT_API Profile {
 		public:
 			Profile(const char* name) : mName{ name }, mStopped{ false } {}
@@ -28,13 +23,18 @@ namespace axt {
 		};
 
 		class AXT_API ProfileSession {
+		private:
+			struct ProfileData {
+				const char* name;
+				long long mStart, mEnd;
+			};
 		public:
 			static void Begin(const char* sessionName, const char* filepath = "ProfilerResultsAXT.json");
 			static void End();
-			static void Header();
-			static void Footer();
 			static void WriteData(const ProfileData& data);
 		private:
+			static void Header();
+			static void Footer();
 			static ProfileSession mInstance;
 			std::ofstream mFileStream;
 			int mProfileCount{ 0 };

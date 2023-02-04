@@ -12,14 +12,24 @@ namespace axt {
 
 	class AXT_API Render2D {
 	public:
+		struct AXT_API QuadProperties {
+			glm::vec3 position{ 1.f };
+			glm::vec2 size{ 1.f };
+			glm::vec4 color{ 1.f };
+			float rotation{ 0.f };
+			Ref<Texture2D> texture;
+		};
+	public:
 		static void Init();
 		static void Shutdown();
 		static void SceneStart(const OrthoCamera& camera);
 		static void SceneEnd();
 
+		static void DrawQuad(const QuadProperties&& props);
+
+		// deprecated
 		static void DrawQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color, const float& rotation = 0.f);
 		static void DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color, const float& rotation = 0.f);
-
 		static void DrawQuad(const glm::vec2& position, const glm::vec2& size, Ref<Texture2D> texture, const float& rotation = 0.f);
 		static void DrawQuad(const glm::vec3& position, const glm::vec2& size, Ref<Texture2D> texture, const float& rotation = 0.f);
 	};

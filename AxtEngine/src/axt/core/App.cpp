@@ -14,7 +14,6 @@
 
 // TEMP
 #include <GLFW/glfw3.h>
-#include "axt/helper/Profiler.h"
 // ONLY FOR DELTA TIME
 
 #include <glm/gtx/string_cast.hpp>

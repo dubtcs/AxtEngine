@@ -17,6 +17,7 @@
 #ifdef GLSL_FRAGMENT
     uniform sampler2D uTexture;
     uniform vec4 uColor;
+    uniform float uTilingMagnitude = 1.0;
 
     in vec2 fTexPos;
 

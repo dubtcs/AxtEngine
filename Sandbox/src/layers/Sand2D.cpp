@@ -33,8 +33,8 @@ void Sand2D::OnUpdate(float dt) {
 	axt::RenderCommand::Clear();
 
 	axt::Render2D::SceneStart(mCameraController.GetCamera());
-	axt::Render2D::DrawQuad(obj1.position, obj1.size, mObjectColor, obj1.rotation);
-	axt::Render2D::DrawQuad(obj2.position, obj2.size, mTexture, obj2.rotation);
+	axt::Render2D::DrawQuad(axt::Render2D::QuadProperties{ .position{obj1.position}, .size{obj1.size}, .color{mObjectColor}, .rotation{obj1.rotation} });
+	axt::Render2D::DrawQuad(axt::Render2D::QuadProperties{ .position{obj2.position}, .size{obj2.size}, .rotation{obj2.rotation}, .texture{mTexture} });
 	axt::Render2D::SceneEnd();
 }
 
