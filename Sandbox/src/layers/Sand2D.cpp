@@ -8,7 +8,7 @@
 #include <axt/platform/OpenGL/GLShader.h>
 
 Sand2D::Sand2D() : Layer("Sand2DLayer") {
-
+	AXT_TRACE(sizeof(axt::Render2D::QuadProperties));
 }
 
 void Sand2D::OnAttach() {

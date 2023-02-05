@@ -64,10 +64,6 @@ namespace axt {
 
 	}
 
-	void Render2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color, const float& rotation) {
-		DrawQuad({ position.x, position.y, 0.f }, size, color);
-	}
-
 	void Render2D::DrawQuad(const QuadProperties&& fQuad) {
 		AXT_PROFILE_FUNCTION();
 		glm::mat4 fIdentityMatrix{ 1.f };
@@ -86,39 +82,5 @@ namespace axt {
 		sScene->mVertexArray->Bind();
 		RenderCommand::DrawIndexed(sScene->mVertexArray);
 	}
-
-
-
-
-
-	// DEPRECATED
-	void Render2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color, const float& rotation) {
-		AXT_PROFILE_FUNCTION();
-
-		glm::mat4 lIdentityMatrix{ 1.f };
-		glm::mat4 lTransform{ glm::translate(lIdentityMatrix, position) * glm::scale(lIdentityMatrix, glm::vec3{size.x, size.y, 0.f}) * glm::rotate(lIdentityMatrix, glm::radians(rotation), glm::vec3{0.f, 0.f, 1.f}) };
-		sScene->mShader->SetValue("uModelTransform", lTransform);
-		sScene->mShader->SetValue("uColor", color);
-		sScene->mTexture->Bind(); // using white texture
-		sScene->mVertexArray->Bind();
-		RenderCommand::DrawIndexed(sScene->mVertexArray);
-	}
-
-	void Render2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, Ref<Texture2D> texture, const float& rotation) {
-		DrawQuad({ position.x, position.y, 0.f }, size, texture, rotation);
-	}
-
-	void Render2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, Ref<Texture2D> texture, const float& rotation) {
-		AXT_PROFILE_FUNCTION();
-
-		glm::mat4 lIdentityMatrix{ 1.f };
-		glm::mat4 lTransform{ glm::translate(lIdentityMatrix, position) * glm::scale(lIdentityMatrix, glm::vec3{size.x, size.y, 0.f}) * glm::rotate(lIdentityMatrix, glm::radians(rotation), glm::vec3{0.f, 0.f, 1.f}) };
-		sScene->mShader->SetValue("uModelTransform", lTransform);
-		sScene->mShader->SetValue("uColor", glm::vec4{ 1.f });
-		texture->Bind(); // using custom texture
-		sScene->mVertexArray->Bind();
-		RenderCommand::DrawIndexed(sScene->mVertexArray);
-	}
-
 
 }

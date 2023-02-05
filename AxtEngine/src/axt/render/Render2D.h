@@ -26,12 +26,6 @@ namespace axt {
 		static void SceneEnd();
 
 		static void DrawQuad(const QuadProperties&& props);
-
-		// deprecated
-		static void DrawQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color, const float& rotation = 0.f);
-		static void DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color, const float& rotation = 0.f);
-		static void DrawQuad(const glm::vec2& position, const glm::vec2& size, Ref<Texture2D> texture, const float& rotation = 0.f);
-		static void DrawQuad(const glm::vec3& position, const glm::vec2& size, Ref<Texture2D> texture, const float& rotation = 0.f);
 	};
 
 }

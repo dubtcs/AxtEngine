@@ -27,4 +27,3 @@
         outColor = texture(uTexture, fTexPos) * uColor;//uColor;
     }
 #endif
-
