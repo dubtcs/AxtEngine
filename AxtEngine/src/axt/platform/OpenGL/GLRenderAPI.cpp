@@ -20,12 +20,14 @@ namespace axt {
 		glClearColor(newColor.x, newColor.y, newColor.z, newColor.a);
 	}
 
-	void GLRenderAPI::DrawIndexed(const Ref<VertexArray>& vertexArray) const {
-		glDrawElements(GL_TRIANGLES, vertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
+	void GLRenderAPI::DrawIndexed(const Ref<VertexArray>& vertexArray, uint32_t count) const {
+		count = (count == 0) ? vertexArray->GetIndexBuffer()->GetCount() : count;
+		//AXT_CORE_TRACE("{0} -> Drawing: {1} verts", __FUNCTION__, count);
+		glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, nullptr);
 	}
 
 	void GLRenderAPI::SetViewport(uint32_t x, uint32_t y, uint32_t w, uint32_t h) const {
-		AXT_CORE_INFO("{0}, {1}, {2}, {3}", x, y, w, h);
+		//AXT_CORE_INFO("{0}, {1}, {2}, {3}", x, y, w, h);
 		glViewport(x, y, w, h);
 	}
 

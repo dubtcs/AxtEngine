@@ -9,6 +9,7 @@ namespace axt {
 	namespace Renderer {
 		static void Init() { RenderCommand::Init(); }
 		static void WindowResize(const uint32_t x, const uint32_t y) { RenderCommand::SetViewport(0, 0, x, y); }
+		inline static RenderAPI::API GetApi() { return RenderAPI::GetAPI(); }
 	}
 
 }

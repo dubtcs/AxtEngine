@@ -16,6 +16,7 @@ protected:
 	struct ObjectData {
 		glm::vec3 position;
 		glm::vec2 size;
+		glm::vec4 color;
 		float rotation;
 	};
 
@@ -23,8 +24,8 @@ protected:
 	glm::vec4 mObjectColor{ 1.f, 0.47f, 0.47f, 1.f }; // salmon-ish color ig
 	glm::vec4 mClearColor{ 0.25f, 0.25f, 0.25f, 1.f };
 
-	ObjectData obj1{ glm::vec3{0.f}, glm::vec2{1.f}, 0.f };
-	ObjectData obj2{ glm::vec3{1.f, 1.f, 0.f}, glm::vec2{1.25f}, 0.f };
+	ObjectData obj1{ glm::vec3{0.f}, glm::vec2{1.f}, mObjectColor, 0.f };
+	ObjectData obj2{ glm::vec3{1.f, 1.f, 0.f}, glm::vec2{1.25f}, mObjectColor, 0.f };
 
 	// temp
 	axt::Ref<axt::Texture2D> mTexture;

@@ -7,64 +7,138 @@
 
 namespace axt {
 
-	struct Render2DScene {
-		Ref<VertexArray> mVertexArray;
-		Ref<Shader> mShader;
-		Ref<Texture2D> mTexture;
+	struct QuadVert {
+		glm::vec3 position;
+		glm::vec4 color;
+		glm::vec2 textureCoordinate;
 	};
 
-	// make this heap if the size gets pretty girthy
+	struct Render2DScene {
+		Ref<VertexArray> mVertexArray;
+		Ref<VertexBuffer> mVertexBuffer;
+		Ref<Shader> mShader;
+		Ref<Texture2D> mTexture;
+
+		uint32_t mIndexCount{ 0 };
+		const uint32_t mMaxQuads{ 10000 };
+		const uint32_t mMaxVertices{ mMaxQuads * 4 };
+		const uint32_t mMaxIndices{ mMaxQuads * 6 };
+
+		QuadVert* mQuadStart{ nullptr }; // starting point of quad array
+		QuadVert* mCurrentQuadVertex{ nullptr }; // current index in scene
+	};
+
 	static Render2DScene* sScene;
+
+	/*
+	Batch render:
+	Create VertexArray
+	Create VertexBuffer with max storage
+	Bufferlayout based on QuadVert
+	Index buffer
+	*/
 
 	void Render2D::Init() {
 		AXT_PROFILE_FUNCTION();
 
 		sScene = new Render2DScene{};
 		sScene->mVertexArray = VertexArray::Create();
+		sScene->mVertexBuffer = VertexBuffer::Create(sScene->mMaxVertices * sizeof(QuadVert));
 
-		float lSquareVertices[4 * 5]{
-			0.5f, 0.5f, 0.f, 0.f, 0.f,
-			0.5f, -0.5f, 0.f, 1.f, 0.f,
-			-0.5f, -0.5f, 0.f, 1.f, 1.f,
-			-0.5f, 0.5f, 0.f, 0.f, 1.f
-		};
-		axt::Ref<axt::VertexBuffer> lVertexBuffer{ axt::VertexBuffer::Create(lSquareVertices, sizeof(lSquareVertices)) };
+		// QuadVert structure
 		axt::BufferLayout lBufferLayout{
 			{axt::ShaderDataType::Float3, "inPos"},
+			{axt::ShaderDataType::Float4, "inColor"},
 			{axt::ShaderDataType::Float2, "inTexPos"},
 		};
-		lVertexBuffer->SetLayout(lBufferLayout);
+		sScene->mVertexBuffer->SetLayout(lBufferLayout);
+		sScene->mVertexArray->AddVertexBuffer(sScene->mVertexBuffer);
 
-		sScene->mVertexArray->AddVertexBuffer(lVertexBuffer);
+		sScene->mQuadStart = new QuadVert[sScene->mMaxQuads];
 
-		uint32_t lSquareIndices[]{ 0, 1, 2, 0, 2, 3 };
-		axt::Ref<axt::IndexBuffer> lIndexBuffer{ axt::IndexBuffer::Create(lSquareIndices, (sizeof(lSquareIndices) / sizeof(uint32_t))) };
+		Unique<uint32_t[]> fIndexData{ NewUnique<uint32_t[]>(sScene->mMaxIndices) };
+		uint32_t fIndexOffset{ 0 };
+		for (uint32_t i{ 0 }; i < sScene->mMaxIndices; i += 6) {
+			fIndexData[i] = fIndexOffset;
+			fIndexData[i + 1] = fIndexOffset + 1;
+			fIndexData[i + 2] = fIndexOffset + 2;
 
-		sScene->mVertexArray->AddIndexBuffer(lIndexBuffer);
+			fIndexData[i + 3] = fIndexOffset + 2;
+			fIndexData[i + 4] = fIndexOffset + 3;
+			fIndexData[i + 5] = fIndexOffset + 0;
 
-		sScene->mShader = axt::Shader::Create("Shader1", "shaders/aio_vp.glsl", axt::ShaderType::Vertex | axt::ShaderType::Pixel);
+			fIndexOffset += 4;
+		}
+		Ref<IndexBuffer> fIndexBuffer{ IndexBuffer::Create(fIndexData.get(), sScene->mMaxIndices)};
+		sScene->mVertexArray->AddIndexBuffer(fIndexBuffer);
 
-		sScene->mTexture = axt::Texture2D::Create(1, 1);
-		uint32_t lTexData{ 0xffffffff };
-		sScene->mTexture->SetData(&lTexData, sizeof(lTexData));
+		sScene->mShader = axt::Shader::Create("Shader1", "shaders/bruh.glsl", axt::ShaderType::Vertex | axt::ShaderType::Pixel);
 	}
 
 	void Render2D::Shutdown() {
+
 		delete sScene;
 	}
 
 	void Render2D::SceneStart(const OrthoCamera& camera) {
 		AXT_PROFILE_FUNCTION();
+		sScene->mCurrentQuadVertex = sScene->mQuadStart;
+		sScene->mIndexCount = 0;
 
 		sScene->mShader->Bind();
 		sScene->mShader->SetValue("uViewProjection", camera.GetViewProjection());
 	}
 
 	void Render2D::SceneEnd() {
+		AXT_PROFILE_FUNCTION();
+
+		uint32_t fDataSize{ static_cast<uint32_t>((char*)sScene->mCurrentQuadVertex - (char*)sScene->mQuadStart) };
+		sScene->mVertexBuffer->SubmitData(sScene->mQuadStart, fDataSize);
+
+		RenderCommand::DrawIndexed(sScene->mVertexArray, sScene->mIndexCount);
+	}
+
+	void Render2D::Flush() {
 
 	}
 
 	void Render2D::DrawQuad(const QuadProperties&& fQuad) {
+		AXT_PROFILE_FUNCTION();
+
+		if (sScene->mIndexCount + 4 > sScene->mMaxQuads) {
+			AXT_CORE_ASSERT(false, "Render2D::DrawQuad QuadAmount limit overflow!");
+			return;
+		}
+
+		// bottom left
+		sScene->mCurrentQuadVertex->position = fQuad.position;
+		sScene->mCurrentQuadVertex->color = fQuad.color;
+		sScene->mCurrentQuadVertex->textureCoordinate = { 0.f, 0.f };
+		sScene->mCurrentQuadVertex++;
+
+		// bottom right
+		sScene->mCurrentQuadVertex->position = { fQuad.position.x + fQuad.size.x, fQuad.position.y, 0.f };
+		sScene->mCurrentQuadVertex->color = fQuad.color;
+		sScene->mCurrentQuadVertex->textureCoordinate = { 1.f, 0.f };
+		sScene->mCurrentQuadVertex++;
+
+		//top right
+		sScene->mCurrentQuadVertex->position = { fQuad.position.x + fQuad.size.x, fQuad.position.y + fQuad.size.y, 0.f };
+		sScene->mCurrentQuadVertex->color = fQuad.color;
+		sScene->mCurrentQuadVertex->textureCoordinate = { 1.f, 1.f };
+		sScene->mCurrentQuadVertex++;
+
+		// top left
+		sScene->mCurrentQuadVertex->position = { fQuad.position.x, fQuad.position.y + fQuad.size.y, 0.f };
+		sScene->mCurrentQuadVertex->color = fQuad.color;
+		sScene->mCurrentQuadVertex->textureCoordinate = { 0.f, 1.f };
+		sScene->mCurrentQuadVertex++;
+
+		sScene->mIndexCount += 6;
+	}
+
+	//void Render2D::DrawQuad(const QuadProperties&& fQuad) {
+	void Foing(const Render2D::QuadProperties&& fQuad ) {
 		AXT_PROFILE_FUNCTION();
 		glm::mat4 fIdentityMatrix{ 1.f };
 		glm::mat4 fTransform{ glm::translate(fIdentityMatrix, fQuad.position) * glm::scale(fIdentityMatrix, glm::vec3{fQuad.size.x, fQuad.size.y, 0.f}) }; 

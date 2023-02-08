@@ -19,7 +19,7 @@ namespace axt {
 		virtual void Clear() const = 0;
 		virtual void SetViewport(uint32_t x, uint32_t y, uint32_t w, uint32_t h) const = 0;
 		virtual void SetClearColor(const glm::vec4& newColor) const = 0;
-		virtual void DrawIndexed(const Ref<VertexArray>& vertexArray) const = 0;
+		virtual void DrawIndexed(const Ref<VertexArray>& vertexArray, uint32_t count = 0) const = 0;
 		static API GetAPI() { return api; }
 	private:
 		static API api;

@@ -24,6 +24,6 @@
     out vec4 outColor;
 
     void main() {
-        outColor = texture(uTexture, fTexPos) * uColor;//uColor;
+        outColor = vec4(1.0);//uColor;//texture(uTexture, fTexPos) * uColor;//uColor;
     }
 #endif

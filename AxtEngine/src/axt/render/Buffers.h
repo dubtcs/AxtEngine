@@ -65,12 +65,14 @@ namespace axt {
 	class AXT_API VertexBuffer {
 	public:
 		virtual ~VertexBuffer() {};
+		static Ref<VertexBuffer> Create(uint32_t size);
 		static Ref<VertexBuffer> Create(float* vertices, uint32_t size);
 	public:
 		virtual void Bind() const = 0;
 		virtual void Unbind() const = 0;
 		virtual void SetLayout(const BufferLayout& newLayout) = 0;
 		virtual const BufferLayout& GetLayout() const = 0;
+		virtual void SubmitData(const void* data, uint32_t size) const = 0;
 	};
 
 	class AXT_API IndexBuffer {

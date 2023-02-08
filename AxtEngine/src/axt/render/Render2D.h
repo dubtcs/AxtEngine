@@ -24,6 +24,7 @@ namespace axt {
 		static void Shutdown();
 		static void SceneStart(const OrthoCamera& camera);
 		static void SceneEnd();
+		static void Flush();
 
 		static void DrawQuad(const QuadProperties&& props);
 	};

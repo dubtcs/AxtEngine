@@ -41,8 +41,18 @@ namespace axt {
 
 	Ref<VertexBuffer> VertexBuffer::Create(float* vertices, uint32_t size) {
 		switch (Render3D::GetApi()) {
-		case(RenderAPI::API::None): break;
-		case(RenderAPI::API::OpenGL): return std::make_shared<OGLVertexBuffer>(vertices, size);//return (new OGLVertexBuffer{ vertices, size });
+			case(RenderAPI::API::None): break;
+			case(RenderAPI::API::OpenGL): return NewRef<OGLVertexBuffer>(vertices, size);//return (new OGLVertexBuffer{ vertices, size });
+		}
+
+		AXT_CORE_ASSERT(false, "No render api found");
+		return nullptr;
+	}
+
+	Ref<VertexBuffer> VertexBuffer::Create(uint32_t size) {
+		switch (Render3D::GetApi()) {
+			case(RenderAPI::API::None): break;
+			case(RenderAPI::API::OpenGL): return NewRef<OGLVertexBuffer>(size);//return (new OGLVertexBuffer{ vertices, size });
 		}
 
 		AXT_CORE_ASSERT(false, "No render api found");
@@ -52,7 +62,7 @@ namespace axt {
 	Ref<IndexBuffer> IndexBuffer::Create(uint32_t* indices, uint32_t size) {
 		switch (Render3D::GetApi()) {
 		case(RenderAPI::API::None): break;
-		case(RenderAPI::API::OpenGL): return std::make_shared<OGLIndexBuffer>(indices, size);//return (new OGLIndexBuffer{ indices, size });
+		case(RenderAPI::API::OpenGL): return NewRef<OGLIndexBuffer>(indices, size);//return (new OGLIndexBuffer{ indices, size });
 		}
 
 		AXT_CORE_ASSERT(false, "No render api found");
