@@ -36,7 +36,14 @@ namespace axt {
 		TextureLib mTextureLibrary;
 	};
 
-	static Render2DScene* sData;
+	static Render2DScene* gData;
+
+	static const glm::vec4 gQuadPositions[4]{
+		glm::vec4{ -0.5f, -0.5f, 0.0f, 1.f },
+		glm::vec4{  0.5f, -0.5f, 0.0f, 1.f },
+		glm::vec4{  0.5f,  0.5f, 0.0f, 1.f },
+		glm::vec4{ -0.5f,  0.5f, 0.0f, 1.f },
+	};
 
 	/*
 	Batch render:
@@ -58,9 +65,9 @@ namespace axt {
 	void Render2D::Init() {
 		AXT_PROFILE_FUNCTION();
 
-		sData = new Render2DScene{};
-		sData->mVertexArray = VertexArray::Create();
-		sData->mVertexBuffer = VertexBuffer::Create(sData->mMaxVertices * sizeof(QuadVert));
+		gData = new Render2DScene{};
+		gData->mVertexArray = VertexArray::Create();
+		gData->mVertexBuffer = VertexBuffer::Create(gData->mMaxVertices * sizeof(QuadVert));
 
 		// QuadVert structure
 		axt::BufferLayout lBufferLayout{
@@ -69,14 +76,14 @@ namespace axt {
 			{axt::ShaderDataType::Float2, "inTexPos"},
 			{axt::ShaderDataType::Float, "inTexId"}
 		};
-		sData->mVertexBuffer->SetLayout(lBufferLayout);
-		sData->mVertexArray->AddVertexBuffer(sData->mVertexBuffer);
+		gData->mVertexBuffer->SetLayout(lBufferLayout);
+		gData->mVertexArray->AddVertexBuffer(gData->mVertexBuffer);
 
-		sData->mQuadStart = new QuadVert[sData->mMaxQuads];
+		gData->mQuadStart = new QuadVert[gData->mMaxQuads];
 
-		Unique<uint32_t[]> fIndexData{ NewUnique<uint32_t[]>(sData->mMaxIndices) };
+		Unique<uint32_t[]> fIndexData{ NewUnique<uint32_t[]>(gData->mMaxIndices) };
 		uint32_t fIndexOffset{ 0 };
-		for (uint32_t i{ 0 }; i < sData->mMaxIndices; i += 6) {
+		for (uint32_t i{ 0 }; i < gData->mMaxIndices; i += 6) {
 			fIndexData[i] = fIndexOffset;
 			fIndexData[i + 1] = fIndexOffset + 1;
 			fIndexData[i + 2] = fIndexOffset + 2;
@@ -87,51 +94,51 @@ namespace axt {
 
 			fIndexOffset += 4;
 		}
-		Ref<IndexBuffer> fIndexBuffer{ IndexBuffer::Create(fIndexData.get(), sData->mMaxIndices)};
-		sData->mVertexArray->AddIndexBuffer(fIndexBuffer);
+		Ref<IndexBuffer> fIndexBuffer{ IndexBuffer::Create(fIndexData.get(), gData->mMaxIndices)};
+		gData->mVertexArray->AddIndexBuffer(fIndexBuffer);
 
-		//sData->mShader = axt::Shader::Create("Shader1", "shaders/bruh.glsl", axt::ShaderType::Vertex | axt::ShaderType::Pixel);
-		sData->mShader = axt::Shader::Create("Shader1", "shaders/aio2_vp.glsl", axt::ShaderType::Vertex | axt::ShaderType::Pixel);
+		//gData->mShader = axt::Shader::Create("Shader1", "shaders/bruh.glsl", axt::ShaderType::Vertex | axt::ShaderType::Pixel);
+		gData->mShader = axt::Shader::Create("Shader1", "shaders/aio2_vp.glsl", axt::ShaderType::Vertex | axt::ShaderType::Pixel);
 
 		// creating a white texture
-		sData->mWhiteTexture = Texture2D::Create(1, 1);
+		gData->mWhiteTexture = Texture2D::Create(1, 1);
 		uint32_t fWhite{ 0xffffffff }; // 1 in all 4 channels
-		sData->mWhiteTexture->SetData(&fWhite, sizeof(uint32_t));
+		gData->mWhiteTexture->SetData(&fWhite, sizeof(uint32_t));
 
-		sData->mTextureArray[0] = sData->mWhiteTexture;
-		sData->mTextureLibrary.Add("White", sData->mWhiteTexture);
+		gData->mTextureArray[0] = gData->mWhiteTexture;
+		gData->mTextureLibrary.Add("White", gData->mWhiteTexture);
 		Ref<Texture2D> fBruh{ Texture2D::Create("textures/si.png") };
-		sData->mTextureLibrary.Add("Bruh", fBruh);
+		gData->mTextureLibrary.Add("Bruh", fBruh);
 	}
 
 	void Render2D::Shutdown() {
 
-		delete sData;
+		delete gData;
 	}
 
 	void Render2D::SceneStart(const OrthoCamera& camera) {
 		AXT_PROFILE_FUNCTION();
-		sData->mCurrentQuadVertex = sData->mQuadStart;
-		sData->mIndexCount = 0;
+		gData->mCurrentQuadVertex = gData->mQuadStart;
+		gData->mIndexCount = 0;
 
-		sData->mShader->Bind();
-		sData->mShader->SetValue("uViewProjection", camera.GetViewProjection());
+		gData->mShader->Bind();
+		gData->mShader->SetValue("uViewProjection", camera.GetViewProjection());
 
 		int fShaderSampler2D[MAX_TEXTURE_UNITS];
 		for (int i{ 0 }; i < MAX_TEXTURE_UNITS; i++) {
 			fShaderSampler2D[i] = i;
 		}
-		sData->mShader->SetValue("uTextures", fShaderSampler2D, MAX_TEXTURE_UNITS);
+		gData->mShader->SetValue("uTextures", fShaderSampler2D, MAX_TEXTURE_UNITS);
 
-		sData->mTexturesUsed = 1;
-		sData->mTextureArray[0] = sData->mWhiteTexture; // always set 0 to default texture
+		gData->mTexturesUsed = 1;
+		gData->mTextureArray[0] = gData->mWhiteTexture; // always set 0 to default texture
 	}
 
 	void Render2D::SceneEnd() {
 		AXT_PROFILE_FUNCTION();
 
-		uint32_t fDataSize{ static_cast<uint32_t>((char*)sData->mCurrentQuadVertex - (char*)sData->mQuadStart) };
-		sData->mVertexBuffer->SubmitData(sData->mQuadStart, fDataSize);
+		uint32_t fDataSize{ static_cast<uint32_t>((char*)gData->mCurrentQuadVertex - (char*)gData->mQuadStart) };
+		gData->mVertexBuffer->SubmitData(gData->mQuadStart, fDataSize);
 
 		Flush();
 	}
@@ -139,31 +146,28 @@ namespace axt {
 	void Render2D::Flush() {
 
 		// loop through textures, bind them to their slot (0-31)
-		for (int i{ 0 }; i < sData->mTexturesUsed; i++) {
-			AXT_CORE_TRACE("TEX HEIGHT: {0}", (sData->mTextureArray[i]->GetHeight()));
-			sData->mTextureArray[i]->Bind(i);
+		for (int i{ 0 }; i < gData->mTexturesUsed; i++) {
+			gData->mTextureArray[i]->Bind(i);
 		}
 
-		AXT_CORE_TRACE("{0} -> Textures used: {1}", __FUNCSIG__, sData->mTexturesUsed);
-
-		RenderCommand::DrawIndexed(sData->mVertexArray, sData->mIndexCount);
+		RenderCommand::DrawIndexed(gData->mVertexArray, gData->mIndexCount);
 	}
 
 	void Render2D::DrawQuad(const QuadProperties&& fQuad) {
 		AXT_PROFILE_FUNCTION();
 
-		if (sData->mIndexCount + 4 > sData->mMaxQuads) {
+		if (gData->mIndexCount + 4 > gData->mMaxQuads) {
 			AXT_CORE_ASSERT(false, "Render2D::DrawQuad QuadAmount limit overflow!");
 			return;
 		}
 
 		float fTexId{ 0 };
-		if (sData->mTextureLibrary.Contains(fQuad.texName)) {
+		if (gData->mTextureLibrary.Contains(fQuad.texName)) {
 			bool fTexFound{ false };
-			const Ref<Texture>& fTextureRequest{ sData->mTextureLibrary.Get(fQuad.texName) };
+			const Ref<Texture>& fTextureRequest{ gData->mTextureLibrary.Get(fQuad.texName) };
 			// check if the texture is in the used textures array
-			for (int i{ 0 }; i < sData->mTexturesUsed; i++) {
-				if (sData->mTextureArray[i].get() == fTextureRequest.get()) {
+			for (int i{ 0 }; i < gData->mTexturesUsed; i++) {
+				if (gData->mTextureArray[i].get() == fTextureRequest.get()) {
 					fTexId = static_cast<float>(i);
 					fTexFound = true;
 					break;
@@ -171,41 +175,29 @@ namespace axt {
 			}
 			// requested texture exists but isn't loaded
 			if (!fTexFound) {
-				sData->mTextureArray[sData->mTexturesUsed++] = sData->mTextureLibrary.Get(fQuad.texName);
-				fTexId = static_cast<float>(sData->mTexturesUsed - 1);
+				gData->mTextureArray[gData->mTexturesUsed++] = gData->mTextureLibrary.Get(fQuad.texName);
+				fTexId = static_cast<float>(gData->mTexturesUsed - 1);
 			}
 		}
 		// if the texture doesn't exits it just uses index 0 - the white texture
 
-		// bottom left
-		sData->mCurrentQuadVertex->position = fQuad.position;
-		sData->mCurrentQuadVertex->color = fQuad.color;
-		sData->mCurrentQuadVertex->textureCoordinate = { 0.f, 0.f };
-		sData->mCurrentQuadVertex->textureId = fTexId;
-		sData->mCurrentQuadVertex++;
+		// model space transform
+		const glm::mat4 fIdMat{ 1.f };
+		const glm::mat4 fModelTransform{
+			glm::translate(fIdMat, fQuad.position) *
+			glm::rotate(fIdMat, fQuad.rotation, glm::vec3{0.f,0.f,1.f}) *
+			glm::scale(fIdMat, glm::vec3{fQuad.size.x, fQuad.size.y, 1.f})
+		};
 
-		// bottom right
-		sData->mCurrentQuadVertex->position = { fQuad.position.x + fQuad.size.x, fQuad.position.y, 0.f };
-		sData->mCurrentQuadVertex->color = fQuad.color;
-		sData->mCurrentQuadVertex->textureCoordinate = { 1.f, 0.f };
-		sData->mCurrentQuadVertex->textureId = fTexId;
-		sData->mCurrentQuadVertex++;
+		for (const glm::vec4& fCurrentPosition : gQuadPositions) {
+			gData->mCurrentQuadVertex->position = fModelTransform * fCurrentPosition;;
+			gData->mCurrentQuadVertex->color = fQuad.color;
+			gData->mCurrentQuadVertex->textureCoordinate = { fCurrentPosition.x + 0.5f, fCurrentPosition.y + 0.5f };
+			gData->mCurrentQuadVertex->textureId = fTexId;
+			gData->mCurrentQuadVertex++;
+		}
 
-		//top right
-		sData->mCurrentQuadVertex->position = { fQuad.position.x + fQuad.size.x, fQuad.position.y + fQuad.size.y, 0.f };
-		sData->mCurrentQuadVertex->color = fQuad.color;
-		sData->mCurrentQuadVertex->textureCoordinate = { 1.f, 1.f };
-		sData->mCurrentQuadVertex->textureId = fTexId;
-		sData->mCurrentQuadVertex++;
-
-		// top left
-		sData->mCurrentQuadVertex->position = { fQuad.position.x, fQuad.position.y + fQuad.size.y, 0.f };
-		sData->mCurrentQuadVertex->color = fQuad.color;
-		sData->mCurrentQuadVertex->textureCoordinate = { 0.f, 1.f };
-		sData->mCurrentQuadVertex->textureId = fTexId;
-		sData->mCurrentQuadVertex++;
-
-		sData->mIndexCount += 6;
+		gData->mIndexCount += 6;
 	}
 
 }

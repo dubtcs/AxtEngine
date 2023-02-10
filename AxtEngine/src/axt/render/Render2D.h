@@ -17,6 +17,7 @@ namespace axt {
 			glm::vec2 size{ 1.f };
 			glm::vec4 color{ 1.f };
 			std::string texName = "White";
+			float rotation = 0.f;
 		};
 	public:
 		static void Init();
