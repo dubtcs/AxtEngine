@@ -29,6 +29,8 @@ namespace axt {
 		virtual void SetValue(const std::string& name, const glm::mat4& mat4) const override;
 
 		virtual void SetValue(const std::string& name, const int& val) const override;
+
+		virtual void SetValue(const std::string& name, int* start, const int count) const override;
 	private:
 		std::string myName;
 		uint32_t id;

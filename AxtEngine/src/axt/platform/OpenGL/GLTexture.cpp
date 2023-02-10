@@ -62,4 +62,8 @@ namespace axt {
 		glBindTextureUnit(textureSlot, id);
 	}
 
+	bool GLTexture2D::operator==(const Texture2D& other) const {
+		return (((GLTexture2D&)other).id == id);
+	}
+
 }

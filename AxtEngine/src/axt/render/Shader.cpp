@@ -14,7 +14,7 @@ namespace axt {
 	Ref<Shader> Shader::Create(const std::string& name, const std::string& filepath, unsigned int shadertypes) {
 		switch (Render3D::GetApi()) {
 		case(RenderAPI::API::None): break;
-		case(RenderAPI::API::OpenGL): return std::make_shared<GLShader>(name, filepath, shadertypes);
+		case(RenderAPI::API::OpenGL): return NewRef<GLShader>(name, filepath, shadertypes);
 		}
 
 		AXT_CORE_ASSERT(false, "No render api found");
@@ -25,7 +25,7 @@ namespace axt {
 	Ref<Shader> Shader::Create(const std::string vertexSource, const std::string pixelSource) {
 		switch (Render3D::GetApi()) {
 		case(RenderAPI::API::None): break;
-		case(RenderAPI::API::OpenGL): return std::make_shared<GLShader>(vertexSource, pixelSource);//return (new GLShader{vertexSource, pixelSource});
+		case(RenderAPI::API::OpenGL): return NewRef<GLShader>(vertexSource, pixelSource);//return (new GLShader{vertexSource, pixelSource});
 		}
 
 		AXT_CORE_ASSERT(false, "No render api found");

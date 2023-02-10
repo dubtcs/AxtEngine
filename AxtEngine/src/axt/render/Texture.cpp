@@ -27,4 +27,27 @@ namespace axt {
 		return nullptr;
 	}
 
+	// LIBRARY
+
+	void TextureLib::Add(const std::string& name, Ref<Texture2D>& texture) {
+		if (mTextureMap.contains(name)) {
+			AXT_CORE_WARN("Texture already exists!");
+			return;
+		}
+		mTextureMap[name] = texture;
+		return;
+	}
+
+	Ref<Texture2D> TextureLib::Get(const std::string& name) const {
+		if (mTextureMap.contains(name)) {
+			return mTextureMap.at(name);
+		}
+		AXT_CORE_WARN("No texture name exists!");
+		return nullptr;
+	}
+
+	bool TextureLib::Contains(const std::string& name) const {
+		return mTextureMap.contains(name);
+	}
+
 }

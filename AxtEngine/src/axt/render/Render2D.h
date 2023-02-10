@@ -16,8 +16,7 @@ namespace axt {
 			glm::vec3 position{ 1.f };
 			glm::vec2 size{ 1.f };
 			glm::vec4 color{ 1.f };
-			float rotation{ 0.f };
-			Ref<Texture2D> texture;
+			std::string texName = "White";
 		};
 	public:
 		static void Init();

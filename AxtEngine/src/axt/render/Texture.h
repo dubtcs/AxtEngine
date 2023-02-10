@@ -19,6 +19,17 @@ namespace axt {
 	public:
 		static Ref<Texture2D> Create(uint32_t x, uint32_t y);
 		static Ref<Texture2D> Create(const std::string& filepath);
+		virtual bool operator==(const Texture2D& other) const = 0;
+	};
+
+	class AXT_API TextureLib {
+	public:
+		void Add(const std::string& name, Ref<Texture2D>& texture);
+		void Add(const std::string& name, const std::string& filepath);
+		Ref<Texture2D> Get(const std::string& name) const;
+		bool Contains(const std::string& name) const;
+	private:
+		std::unordered_map<std::string, Ref<Texture2D>> mTextureMap;
 	};
 
 }

@@ -42,6 +42,8 @@ namespace axt {
 		virtual void SetValue(const std::string& name, const glm::mat4& mat4) const = 0;
 
 		virtual void SetValue(const std::string& name, const int& val) const = 0;
+
+		virtual void SetValue(const std::string& name, int* start, const int count) const = 0;
 	};
 
 	class AXT_API ShaderLib {

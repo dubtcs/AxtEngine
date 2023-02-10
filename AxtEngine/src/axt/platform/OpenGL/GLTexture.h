@@ -20,6 +20,7 @@ namespace axt {
 		virtual void SetData(void* data, uint32_t size) override;
 		virtual uint32_t GetWidth() const override { return mWidth; };
 		virtual uint32_t GetHeight() const override { return mHeight; };
+		virtual bool operator==(const Texture2D& other) const override;
 	protected:
 		uint32_t mWidth, mHeight, id;
 		GLenum mGlFormat, mDataFormat;

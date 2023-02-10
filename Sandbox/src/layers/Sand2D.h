@@ -22,7 +22,7 @@ protected:
 
 	axt::OrthoCameraController mCameraController{ 1920.f / 1080.f }; // ultrawide
 	glm::vec4 mObjectColor{ 1.f, 0.47f, 0.47f, 1.f }; // salmon-ish color ig
-	glm::vec4 mClearColor{ 0.25f, 0.25f, 0.25f, 1.f };
+	glm::vec4 mClearColor{ 0.1f, 0.1f, 0.1f, 1.f };
 
 	ObjectData obj1{ glm::vec3{0.f}, glm::vec2{1.f}, mObjectColor, 0.f };
 	ObjectData obj2{ glm::vec3{1.f, 1.f, 0.f}, glm::vec2{1.25f}, mObjectColor, 0.f };
