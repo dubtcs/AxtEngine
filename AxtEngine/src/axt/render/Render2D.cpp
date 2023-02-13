@@ -7,11 +7,12 @@
 
 // 32 is usually the most for desktop gpus
 constexpr int MAX_TEXTURE_UNITS = 32;
+constexpr uint32_t MAX_QUADS = 17;
 
 /*
 TODO:
-
-Batch rendering breaks after passing the quad limit. App becomes completely unresponsive once it does
+Fix batch rendering.. again.
+This doesn't really need a view matrix, I think. Can just use object position and camera position offsets to adjust viewspace.
 */
 
 namespace axt {
@@ -29,16 +30,16 @@ namespace axt {
 		Ref<Shader> mShader;
 		Ref<Texture2D> mWhiteTexture;
 
+		uint32_t mTexturesUsed{ 1 };
+		uint32_t mVertexCount{ 0 };
 		uint32_t mIndexCount{ 0 };
-		const uint32_t mMaxQuads{ 10000 };
-		const uint32_t mMaxVertices{ mMaxQuads * 4 };
-		const uint32_t mMaxIndices{ mMaxQuads * 6 };
+		const uint32_t mMaxVertices{ MAX_QUADS * 4 };
+		const uint32_t mMaxIndices{ MAX_QUADS * 6 };
 
 		QuadVert* mQuadStart{ nullptr }; // starting point of quad array
 		QuadVert* mCurrentQuadVertex{ nullptr }; // current index in scene
 
 		std::array<Ref<Texture2D>, MAX_TEXTURE_UNITS> mTextureArray;
-		int mTexturesUsed{ 1 };
 		TextureLib mTextureLibrary;
 	};
 
@@ -87,7 +88,7 @@ namespace axt {
 		gData->mVertexBuffer->SetLayout(lBufferLayout);
 		gData->mVertexArray->AddVertexBuffer(gData->mVertexBuffer);
 
-		gData->mQuadStart = new QuadVert[gData->mMaxQuads];
+		gData->mQuadStart = new QuadVert[MAX_QUADS * 4]; // forgot to multiply this by 4 lol
 
 		Unique<uint32_t[]> fIndexData{ NewUnique<uint32_t[]>(gData->mMaxIndices) };
 		uint32_t fIndexOffset{ 0 };
@@ -105,7 +106,6 @@ namespace axt {
 		Ref<IndexBuffer> fIndexBuffer{ IndexBuffer::Create(fIndexData.get(), gData->mMaxIndices)};
 		gData->mVertexArray->AddIndexBuffer(fIndexBuffer);
 
-		//gData->mShader = axt::Shader::Create("Shader1", "shaders/bruh.glsl", axt::ShaderType::Vertex | axt::ShaderType::Pixel);
 		gData->mShader = axt::Shader::Create("Shader1", "shaders/aio2_vp.glsl", axt::ShaderType::Vertex | axt::ShaderType::Pixel);
 
 		// creating a white texture
@@ -130,6 +130,7 @@ namespace axt {
 		AXT_PROFILE_FUNCTION();
 		gData->mCurrentQuadVertex = gData->mQuadStart;
 		gData->mIndexCount = 0;
+		gData->mVertexCount = 0;
 
 		// reset stats
 		gStats.drawCalls = 0;
@@ -176,20 +177,22 @@ namespace axt {
 	// wipe vertex and index data
 	void Render2D::StageForOverflow() {
 		SceneEnd();
+		//AXT_CORE_TRACE("{0}, {1}, {2}, {3}, {4}", );
 		gData->mTexturesUsed = 1;
 		gData->mTextureArray[0] = gData->mWhiteTexture; // always set 0 to default texture
 		gData->mCurrentQuadVertex = gData->mQuadStart;
 		gData->mIndexCount = 0;
-		//memset(&gData->mTextureLibrary, 0, 0);
+		gData->mVertexCount = 0;
 	}
 
-	// add the wuad to memory
+	// add the quad to memory
 	// stage the current quads if overflow
 	// increment variables
 	void Render2D::DrawQuad(const QuadProperties&& fQuad) {
 		AXT_PROFILE_FUNCTION();
 
 		if (gData->mIndexCount + 6 > gData->mMaxIndices) {
+		//if( gData->mVertexCount + 4 > gData->mMaxVertices) {
 			//AXT_CORE_ASSERT(false, "Render2D::DrawQuad QuadAmount limit overflow!");
 			AXT_CORE_TRACE("Vertex overflow, scene reset.");
 			StageForOverflow();
@@ -218,7 +221,7 @@ namespace axt {
 		// model space transform
 		const glm::mat4 fIdMat{ 1.f };
 		const glm::mat4 fModelTransform{
-			glm::translate(fIdMat, fQuad.position) *
+			glm::translate(fIdMat, fQuad.position) * // can trim the rotation from this if it's not rotated
 			glm::rotate(fIdMat, fQuad.rotation, glm::vec3{0.f,0.f,1.f}) *
 			glm::scale(fIdMat, glm::vec3{fQuad.size.x, fQuad.size.y, 1.f})
 		};
@@ -229,6 +232,8 @@ namespace axt {
 			gData->mCurrentQuadVertex->textureCoordinate = { (fCurrentPosition.x + 0.5f) * fQuad.textureTiling, (fCurrentPosition.y + 0.5f) * fQuad.textureTiling };
 			gData->mCurrentQuadVertex->textureId = fTexId;
 			gData->mCurrentQuadVertex++;
+
+			gData->mVertexCount++;
 		}
 
 		gData->mIndexCount += 6;
