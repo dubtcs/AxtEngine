@@ -8,6 +8,12 @@
 // 32 is usually the most for desktop gpus
 constexpr int MAX_TEXTURE_UNITS = 32;
 
+/*
+TODO:
+
+Batch rendering breaks after passing the quad limit. App becomes completely unresponsive once it does
+*/
+
 namespace axt {
 
 	struct QuadVert {
@@ -37,6 +43,8 @@ namespace axt {
 	};
 
 	static Render2DScene* gData;
+
+	static Render2D::RenderStats gStats;
 
 	static const glm::vec4 gQuadPositions[4]{
 		glm::vec4{ -0.5f, -0.5f, 0.0f, 1.f },
@@ -109,6 +117,8 @@ namespace axt {
 		gData->mTextureLibrary.Add("White", gData->mWhiteTexture);
 		Ref<Texture2D> fBruh{ Texture2D::Create("textures/si.png") };
 		gData->mTextureLibrary.Add("Bruh", fBruh);
+		Ref<Texture2D> fCheck{ Texture2D::Create("textures/bruh.png") };
+		gData->mTextureLibrary.Add("Check", fCheck);
 	}
 
 	void Render2D::Shutdown() {
@@ -120,6 +130,11 @@ namespace axt {
 		AXT_PROFILE_FUNCTION();
 		gData->mCurrentQuadVertex = gData->mQuadStart;
 		gData->mIndexCount = 0;
+
+		// reset stats
+		gStats.drawCalls = 0;
+		gStats.quads = 0;
+		gStats.textures = 0;
 
 		gData->mShader->Bind();
 		gData->mShader->SetValue("uViewProjection", camera.GetViewProjection());
@@ -134,31 +149,50 @@ namespace axt {
 		gData->mTextureArray[0] = gData->mWhiteTexture; // always set 0 to default texture
 	}
 
+	// push data to gpu
 	void Render2D::SceneEnd() {
 		AXT_PROFILE_FUNCTION();
 
 		uint32_t fDataSize{ static_cast<uint32_t>((char*)gData->mCurrentQuadVertex - (char*)gData->mQuadStart) };
 		gData->mVertexBuffer->SubmitData(gData->mQuadStart, fDataSize);
 
-		Flush();
+		Stage();
 	}
 
-	void Render2D::Flush() {
+	// draw data on gpu
+	void Render2D::Stage() {
 
 		// loop through textures, bind them to their slot (0-31)
 		for (int i{ 0 }; i < gData->mTexturesUsed; i++) {
 			gData->mTextureArray[i]->Bind(i);
 		}
 
+		gStats.drawCalls++;
+		gStats.textures += gData->mTexturesUsed;
 		RenderCommand::DrawIndexed(gData->mVertexArray, gData->mIndexCount);
 	}
 
+	// reset variables
+	// wipe vertex and index data
+	void Render2D::StageForOverflow() {
+		SceneEnd();
+		gData->mTexturesUsed = 1;
+		gData->mTextureArray[0] = gData->mWhiteTexture; // always set 0 to default texture
+		gData->mCurrentQuadVertex = gData->mQuadStart;
+		gData->mIndexCount = 0;
+		//memset(&gData->mTextureLibrary, 0, 0);
+	}
+
+	// add the wuad to memory
+	// stage the current quads if overflow
+	// increment variables
 	void Render2D::DrawQuad(const QuadProperties&& fQuad) {
 		AXT_PROFILE_FUNCTION();
 
-		if (gData->mIndexCount + 4 > gData->mMaxQuads) {
-			AXT_CORE_ASSERT(false, "Render2D::DrawQuad QuadAmount limit overflow!");
-			return;
+		if (gData->mIndexCount + 6 > gData->mMaxIndices) {
+			//AXT_CORE_ASSERT(false, "Render2D::DrawQuad QuadAmount limit overflow!");
+			AXT_CORE_TRACE("Vertex overflow, scene reset.");
+			StageForOverflow();
 		}
 
 		float fTexId{ 0 };
@@ -175,8 +209,8 @@ namespace axt {
 			}
 			// requested texture exists but isn't loaded
 			if (!fTexFound) {
-				gData->mTextureArray[gData->mTexturesUsed++] = gData->mTextureLibrary.Get(fQuad.texName);
-				fTexId = static_cast<float>(gData->mTexturesUsed - 1);
+				gData->mTextureArray[gData->mTexturesUsed] = gData->mTextureLibrary.Get(fQuad.texName);
+				fTexId = static_cast<float>(gData->mTexturesUsed++);
 			}
 		}
 		// if the texture doesn't exits it just uses index 0 - the white texture
@@ -192,12 +226,18 @@ namespace axt {
 		for (const glm::vec4& fCurrentPosition : gQuadPositions) {
 			gData->mCurrentQuadVertex->position = fModelTransform * fCurrentPosition;;
 			gData->mCurrentQuadVertex->color = fQuad.color;
-			gData->mCurrentQuadVertex->textureCoordinate = { fCurrentPosition.x + 0.5f, fCurrentPosition.y + 0.5f };
+			gData->mCurrentQuadVertex->textureCoordinate = { (fCurrentPosition.x + 0.5f) * fQuad.textureTiling, (fCurrentPosition.y + 0.5f) * fQuad.textureTiling };
 			gData->mCurrentQuadVertex->textureId = fTexId;
 			gData->mCurrentQuadVertex++;
 		}
 
 		gData->mIndexCount += 6;
+		gStats.quads++;
+
+	}
+
+	Render2D::RenderStats Render2D::GetStats() {
+		return gStats;
 	}
 
 }

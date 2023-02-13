@@ -9,6 +9,10 @@
 
 namespace axt {
 
+	struct RenderStats {
+		int fps{ 0 };
+	};
+
 	class AXT_API RenderAPI {
 	public:
 		enum class API {

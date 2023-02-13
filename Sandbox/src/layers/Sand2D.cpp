@@ -7,6 +7,11 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <axt/platform/OpenGL/GLShader.h>
 
+// temp
+static int gFps{ 0 };
+static bool gDrawBulk{ true };
+static float gTexRotate{ 0.f };
+
 Sand2D::Sand2D() : Layer("Sand2DLayer") {
 
 }
@@ -29,13 +34,28 @@ void Sand2D::OnUpdate(float dt) {
 
 	mCameraController.OnUpdate(dt);
 
+	gFps = (static_cast<int>(60.f / dt));
+
 	axt::RenderCommand::SetClearColor(mClearColor);
 	axt::RenderCommand::Clear();
 
 	axt::Render2D::SceneStart(mCameraController.GetCamera());
 
+	axt::Render2D::DrawQuad(axt::Render2D::QuadProperties{ .position{0.f,0.f,-0.5f}, .size{50.f, 50.f}, .color{0.1f, 0.1f, 0.1f, 1.f}, .texName{"Check"}, .textureTiling{50.f}});
+
+#if 1 // bulk testing
+	if (gDrawBulk) {
+		for (float x{ -5 }; x < 5; x += 0.5f) {
+			for (float y{ -5 }; y < 5; y += 0.5f) {
+				axt::Render2D::DrawQuad(axt::Render2D::QuadProperties{ .position{x, y, -.1f}, .size{0.45f, 0.45f}, .color{ (x + 5.f) / 10.f, 0.5f, (y + 5.f) / 10.f, 1.f} });
+			}
+		}
+	}
+#endif
+
 	axt::Render2D::DrawQuad(axt::Render2D::QuadProperties{ .position{obj1.position}, .size{obj1.size}, .color{obj1.color}, .rotation{obj1.rotation} });
 	axt::Render2D::DrawQuad(axt::Render2D::QuadProperties{ .position{obj2.position}, .size{obj2.size}, .color{obj2.color}, .texName{"Bruh"}, .rotation{obj2.rotation} });
+	axt::Render2D::DrawQuad(axt::Render2D::QuadProperties{ .position{-2.25f, 0.f, 0.f}, .size{obj2.size}, .color{obj2.color}, .texName{"Check"}, .rotation{gTexRotate} });
 
 	axt::Render2D::SceneEnd();
 }
@@ -46,6 +66,8 @@ void Sand2D::OnEvent(axt::Event& ev) {
 
 void Sand2D::OnImGuiRender() {
 	AXT_PROFILE_FUNCTION();
+
+	axt::Render2D::RenderStats fStats{ axt::Render2D::GetStats() };
 
 	ImGui::Begin("Control");
 	ImGui::Text("Opaque Object");
@@ -58,5 +80,12 @@ void Sand2D::OnImGuiRender() {
 	ImGui::DragFloat3("Object2 Position", glm::value_ptr(obj2.position), 0.1f);
 	ImGui::DragFloat2("Object2 Scale", glm::value_ptr(obj2.size), 0.1f);
 	ImGui::DragFloat("Object2 Rotation", &obj2.rotation, 0.05f);
+	ImGui::Text("Object 3");
+	ImGui::DragFloat("Object3 Rotation", &gTexRotate, 0.05f);
+	ImGui::Text("FPS: %i", gFps);
+	ImGui::Text("Draw Calls: %i", fStats.drawCalls);
+	ImGui::Text("Quads: %i", fStats.quads);
+	ImGui::Text("Textures: %i", fStats.textures);
+	ImGui::Checkbox("Draw 400 extra quads", &gDrawBulk);
 	ImGui::End();
 }

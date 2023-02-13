@@ -25,7 +25,7 @@ protected:
 	glm::vec4 mClearColor{ 0.1f, 0.1f, 0.1f, 1.f };
 
 	ObjectData obj1{ glm::vec3{0.f}, glm::vec2{1.f}, mObjectColor, 0.f };
-	ObjectData obj2{ glm::vec3{1.f, 1.f, 0.f}, glm::vec2{1.25f}, mObjectColor, 0.f };
+	ObjectData obj2{ glm::vec3{0.f, 1.5f, 0.f}, glm::vec2{1.25f}, mObjectColor, 0.f };
 
 	// temp
 	axt::Ref<axt::Texture2D> mTexture;
