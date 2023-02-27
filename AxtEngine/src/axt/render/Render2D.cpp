@@ -7,7 +7,7 @@
 
 // 32 is usually the most for desktop gpus
 constexpr int MAX_TEXTURE_UNITS = 32;
-constexpr uint32_t MAX_QUADS = 17;
+constexpr uint32_t MAX_QUADS = 1000;
 
 /*
 TODO:
@@ -194,7 +194,6 @@ namespace axt {
 		if (gData->mIndexCount + 6 > gData->mMaxIndices) {
 		//if( gData->mVertexCount + 4 > gData->mMaxVertices) {
 			//AXT_CORE_ASSERT(false, "Render2D::DrawQuad QuadAmount limit overflow!");
-			AXT_CORE_TRACE("Vertex overflow, scene reset.");
 			StageForOverflow();
 		}
 
