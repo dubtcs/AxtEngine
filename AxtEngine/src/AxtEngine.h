@@ -20,6 +20,7 @@
 #include "axt/render/RenderCommand.h"
 #include "axt/render/VertexArray.h"
 #include "axt/render/Buffers.h"
+#include "axt/render/FrameBuffer.h"
 #include "axt/render/Shader.h"
 #include "axt/render/RenderContext.h"
 #include "axt/render/Texture.h"

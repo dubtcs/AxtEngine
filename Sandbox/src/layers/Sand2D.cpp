@@ -21,6 +21,7 @@ void Sand2D::OnAttach() {
 
 	axt::Render2D::Init();
 	mTexture = axt::Texture2D::Create("textures/si.png");
+	mFrameBuffer = axt::FrameBuffer::Create(axt::FrameBufferData{ .width{1920}, .height{1080} });
 }
 
 void Sand2D::OnDetach() {
@@ -31,6 +32,8 @@ void Sand2D::OnDetach() {
 
 void Sand2D::OnUpdate(float dt) {
 	AXT_PROFILE_FUNCTION();
+
+	mFrameBuffer->Bind();
 
 	mCameraController.OnUpdate(dt);
 
@@ -58,6 +61,8 @@ void Sand2D::OnUpdate(float dt) {
 	axt::Render2D::DrawQuad(axt::Render2D::QuadProperties{ .position{-2.25f, 0.f, 0.f}, .size{obj2.size}, .color{obj2.color}, .texName{"Check"}, .rotation{gTexRotate} });
 
 	axt::Render2D::SceneEnd();
+
+	mFrameBuffer->Unbind();
 }
 
 void Sand2D::OnEvent(axt::Event& ev) {
@@ -94,7 +99,9 @@ void Sand2D::OnImGuiRender() {
 	}
 
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.f, 0.f));
+
 	ImGui::Begin("Dockspace", &sDockspace, fWindowFlags);
+
 	ImGui::PopStyleVar();
 
 	if (sFullscreenPersistent) {
@@ -138,6 +145,10 @@ void Sand2D::OnImGuiRender() {
 	ImGui::Text("Quads: %i", fStats.quads);
 	ImGui::Text("Textures: %i", fStats.textures);
 	ImGui::Checkbox("Draw 400 extra quads", &gDrawBulk);
+	ImGui::End();
+
+	ImGui::Begin("Viewport");
+	ImGui::Image((void*)(mFrameBuffer->GetColorTextureID()), ImVec2{ 1920.f, 1080.f }, { 0.f, 1.f }, {1.f, 0.f});
 	ImGui::End();
 
 	ImGui::End(); // dockspace end

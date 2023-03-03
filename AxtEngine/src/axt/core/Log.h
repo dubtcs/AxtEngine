@@ -3,6 +3,8 @@
 #include "axt/Core.h"
 #include <spdlog/spdlog.h>
 
+#include <stdlib.h>
+
 namespace axt {
 
 	class AXT_API Log {
@@ -38,8 +40,8 @@ namespace axt {
 #define AXT_TRACE(...) axt::Log::GetClientLog()->trace(__VA_ARGS__)
 
 #ifdef AXT_ENABLE_ASSERTS
-	#define AXT_ASSERT(condition, msg) if(!condition) { AXT_ERROR("Condition failed: {0}", msg); std::terminate(); }
-	#define AXT_CORE_ASSERT(condition, msg) if(!condition) { AXT_CORE_ERROR("Condition failed: {0}", msg); std::terminate(); }
+	#define AXT_ASSERT(condition, msg) if(!condition) { AXT_ERROR("Condition failed {0}: {1}", __FUNCTION__, msg); std::quick_exit(EXIT_FAILURE); }
+	#define AXT_CORE_ASSERT(condition, msg) if(!condition) { AXT_CORE_ERROR("Condition failed {0}: {1}", __FUNCTION__, msg); std::quick_exit(EXIT_FAILURE); }
 #else
 	#define AXT_CORE_ASSERT(condition, msg)
 	#define AXT_ASSERT(condition, msg)

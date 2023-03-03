@@ -12,6 +12,8 @@ namespace axt {
 
 		std::string output;
 		std::ifstream file;
+
+		// TODO : SHOULD GET RID OF EXCEPTIONS
 		file.exceptions(std::ifstream::failbit | std::ifstream::badbit);
 		try {
 			file.open(filepath);

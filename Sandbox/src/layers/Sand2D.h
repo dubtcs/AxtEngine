@@ -29,4 +29,5 @@ protected:
 
 	// temp
 	axt::Ref<axt::Texture2D> mTexture;
+	axt::Ref<axt::FrameBuffer> mFrameBuffer;
 };

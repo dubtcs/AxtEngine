@@ -15,5 +15,6 @@ axt::App* axt::CreateApp() {
 
 // APP
 Sandbox::Sandbox() {
+	AXT_TRACE("DWJWDJWAJ");
 	PushLayer(new Sand2D{});
 }
