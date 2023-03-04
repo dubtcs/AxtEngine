@@ -167,6 +167,14 @@ namespace axt
 		ImGui::End();
 		ImGui::PopStyleVar();
 
+		ImGui::Begin("Output");
+		ImGui::Text(">>");
+		ImGui::End();
+
+		ImGui::Begin("Properties");
+		ImGui::Text(">>");
+		ImGui::End();
+
 		ImGui::End(); // dockspace end
 	}
 

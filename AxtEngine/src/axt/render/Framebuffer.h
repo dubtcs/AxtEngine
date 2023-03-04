@@ -17,6 +17,7 @@ namespace axt {
 		virtual uint32_t GetBufferID() const = 0;
 		virtual uint32_t GetColorTextureID() const = 0;
 		virtual void Resize(uint32_t x, uint32_t y) = 0;
+		virtual ~FrameBuffer() = default;
 	protected:
 		FrameBuffer(const FrameBufferData& newData) : mData{ newData } {}
 		FrameBufferData mData;

@@ -15,23 +15,23 @@ namespace axt {
 		AXT_PROFILE_FUNCTION();
 
 		// Translation
-		if (AxtInput::IsKeyPressed(AXT_KEY_D)) {
+		if (input::IsKeyPressed(AXT_KEY_D)) {
 			myCameraPosition.x += myCameraMovementSpeed * dt * myZoomLevel;
-		} else if (AxtInput::IsKeyPressed(AXT_KEY_A)) {
+		} else if (input::IsKeyPressed(AXT_KEY_A)) {
 			myCameraPosition.x -= myCameraMovementSpeed * dt * myZoomLevel;
 		}
-		if (AxtInput::IsKeyPressed(AXT_KEY_W)) {
+		if (input::IsKeyPressed(AXT_KEY_W)) {
 			myCameraPosition.y += myCameraMovementSpeed * dt * myZoomLevel;
-		} else if (AxtInput::IsKeyPressed(AXT_KEY_S)) {
+		} else if (input::IsKeyPressed(AXT_KEY_S)) {
 			myCameraPosition.y -= myCameraMovementSpeed * dt * myZoomLevel;
 		}
 
 		// Rotation
 		if (myRotationEnabled) {
-			if (AxtInput::IsKeyPressed(AXT_KEY_Q)) {
+			if (input::IsKeyPressed(AXT_KEY_Q)) {
 				myCameraRotation += myCameraRotationSpeed * dt;
 			}
-			else if (AxtInput::IsKeyPressed(AXT_KEY_E)) {
+			else if (input::IsKeyPressed(AXT_KEY_E)) {
 				myCameraRotation -= myCameraRotationSpeed * dt;
 			}
 			myCamera.SetRotation(myCameraRotation);
