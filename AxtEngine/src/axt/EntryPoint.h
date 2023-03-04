@@ -1,5 +1,7 @@
 #pragma once
 
+// ONLY INCLUDE ONCE IN THE MAIN APP FILE
+
 #ifdef AXT_PLATFORM_WINDOWS
 
 extern axt::App* axt::CreateApp();

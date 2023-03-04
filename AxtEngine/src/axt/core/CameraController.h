@@ -16,6 +16,7 @@ namespace axt {
 		void OnEvent(Event& event);
 		const OrthoCamera& GetCamera() const;
 		void SetRotationEnabled(bool toggle);
+		void Resize(float x, float y);
 	protected:
 		bool OnWindowResize(WindowResizeEvent& event);
 		bool OnMouseScroll(MouseScrollEvent& event);

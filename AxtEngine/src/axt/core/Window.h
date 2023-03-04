@@ -6,15 +6,15 @@
 
 #include "axt/render/RenderContext.h"
 
-constexpr unsigned int WIDTH{ 1920 };
-constexpr unsigned int HEIGHT{ 1080 };
+constexpr uint32_t WIDTH{ 1920 };
+constexpr uint32_t HEIGHT{ 1080 };
 
 namespace axt {
 
 	struct AXT_API AxtWindowConfig {
-		unsigned int width, height;
+		uint32_t width, height;
 		std::string title;
-		AxtWindowConfig(std::string title = "AxtWindow", unsigned int w = WIDTH, unsigned int h = HEIGHT) : title{title}, width{w}, height{h} {};
+		AxtWindowConfig(std::string title = "AxtWindow", uint32_t w = WIDTH, uint32_t h = HEIGHT) : title{title}, width{w}, height{h} {};
 	};
 
 	class AXT_API AxtWindow {
@@ -26,8 +26,8 @@ namespace axt {
 		virtual void SetVsync(bool toggle) = 0;
 		virtual void SetEventCallback(std::function<bool(Event&)>) {};
 		virtual bool IsVsync() const { return false; };
-		virtual unsigned int GetWidth() const { return 1; };
-		virtual unsigned int GetHeight() const { return 1; };
+		virtual uint32_t GetWidth() const { return 1; };
+		virtual uint32_t GetHeight() const { return 1; };
 		virtual void* GetNativeWindow() const = 0;
 	protected:
 		RenderContext* context{ nullptr };

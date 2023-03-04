@@ -56,12 +56,16 @@ namespace axt {
 		myRotationEnabled = toggle;
 	}
 
+	void OrthoCameraController::Resize(float x, float y) {
+		myAspectRatio = (x) / (y);
+		myCamera.SetProjection(-myAspectRatio * myZoomLevel, myAspectRatio * myZoomLevel, -myZoomLevel, myZoomLevel);
+	}
+
 	// protected
-	bool OrthoCameraController::OnWindowResize(WindowResizeEvent& event) {
+	bool OrthoCameraController::OnWindowResize(WindowResizeEvent& ev) {
 		AXT_PROFILE_FUNCTION();
 
-		myAspectRatio = ((float)event.GetWidth()) / ((float)event.GetHeight());
-		myCamera.SetProjection(-myAspectRatio * myZoomLevel, myAspectRatio * myZoomLevel, -myZoomLevel, myZoomLevel);
+		//Resize(static_cast<float>(ev.GetWidth()), static_cast<float>(ev.GetHeight()));
 		return false;
 	}
 
