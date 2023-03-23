@@ -26,6 +26,13 @@ namespace axt::ecs
 			ComponentTypeID cid{ GetComponentTypeID<T>() };
 
 			// make a ComponentPack for this attachment if none exists
+			if (mPacks.size() <= cid)
+			{
+				mPacks.resize(cid); // resize it to the ComponentID, that way we can use push_back to just poop one out at the end
+				mPacks.push_back({ sizeof(T) });
+			}
+
+			PackIndex i{ mPacks[cid].Add() };
 
 			mEntityInfo[id].Mask.set(cid);
 		}

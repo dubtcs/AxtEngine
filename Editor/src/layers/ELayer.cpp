@@ -25,10 +25,10 @@ namespace axt
 		ecs::EntityID i3{ s->NewEntity() };
 		ecs::EntityID i4{ s->NewEntity() };
 		s->Attach<int8_t>(i1);
-		s->Attach<uint32_t>(i2);
 		s->Attach<int8_t>(i3);
-		s->Attach<int64_t>(i4);
+		s->Attach<uint32_t>(i2);
 		s->Attach<uint32_t>(i4);
+		s->Attach<int64_t>(i4);
 		AXT_INFO(s->GetBitset(i1).to_string());
 		AXT_INFO(s->GetBitset(i2).to_string());
 		AXT_INFO(s->GetBitset(i3).to_string());

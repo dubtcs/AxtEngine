@@ -1,6 +1,7 @@
 #pragma once
 
 #include <axt/Core.h>
+#include "Typedef.h"
 
 namespace axt::ecs
 {
@@ -10,10 +11,11 @@ namespace axt::ecs
 	class AXT_API ComponentPack
 	{
 	public:
+		ComponentPack() = default;
+		ComponentPack(size_t elementSize) : mElementSize{ elementSize } { AXT_INFO("ComponentPack Created with ElementSize: {0}", elementSize); };
 		PackIndex Add();
 		void* Get(PackIndex& index);
 		void Remove(PackIndex& index);
-		ComponentPack(size_t elementSize) : mElementSize{ elementSize } {};
 
 		// TEMP FOR DEBUGGING
 		size_t GetSize() { return mData.size(); }
@@ -23,6 +25,10 @@ namespace axt::ecs
 			return *(static_cast<T*>(Get(index)));
 		}
 	protected:
+		//std::array<PackIndex, gMaxEntities> mEntityToIndex;
+
+		// TODO: Make an array/map to associate the EntityID to the data index
+
 		std::vector<char> mData;
 		size_t mElementSize;
 		uint32_t mLength{ 0 };
