@@ -10,3 +10,6 @@
 [submodule "AxtEngine/vendor/glm"]
 	path = AxtEngine/vendor/glm
 	url = https://github.com/g-truc/glm.git
+[submodule "AxtEngine/vendor/entt"]
+	path = AxtEngine/vendor/entt
+	url = https://github.com/skypjack/entt.git
