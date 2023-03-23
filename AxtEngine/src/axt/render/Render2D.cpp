@@ -164,7 +164,7 @@ namespace axt {
 	void Render2D::Stage() {
 
 		// loop through textures, bind them to their slot (0-31)
-		for (int i{ 0 }; i < gData->mTexturesUsed; i++) {
+		for (uint32_t i{ 0 }; i < gData->mTexturesUsed; i++) {
 			gData->mTextureArray[i]->Bind(i);
 		}
 
@@ -202,7 +202,7 @@ namespace axt {
 			bool fTexFound{ false };
 			const Ref<Texture>& fTextureRequest{ gData->mTextureLibrary.Get(fQuad.texName) };
 			// check if the texture is in the used textures array
-			for (int i{ 0 }; i < gData->mTexturesUsed; i++) {
+			for (uint32_t i{ 0 }; i < gData->mTexturesUsed; i++) {
 				if (gData->mTextureArray[i].get() == fTextureRequest.get()) {
 					fTexId = static_cast<float>(i);
 					fTexFound = true;

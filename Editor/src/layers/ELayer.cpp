@@ -6,6 +6,10 @@
 #include <imgui.h>
 #include <glm/gtc/type_ptr.hpp>
 
+#include <axt/ecs/ComponentPack.h>
+#include <axt/ecs/Scene.h>
+#include <axt/ecs/Typedef.h>
+
 static int gFps{ 0 };
 static bool gDrawBulk{ true };
 static float gTexRotate{ 0.f };
@@ -15,7 +19,43 @@ namespace axt
 
 	ELayer::ELayer()
 	{
-		
+		Unique<ecs::Scene> s{ NewUnique<ecs::Scene>() };
+		ecs::EntityID i1{ s->NewEntity() };
+		ecs::EntityID i2{ s->NewEntity() };
+		ecs::EntityID i3{ s->NewEntity() };
+		ecs::EntityID i4{ s->NewEntity() };
+		s->Attach<int8_t>(i1);
+		s->Attach<uint32_t>(i2);
+		s->Attach<int8_t>(i3);
+		s->Attach<int64_t>(i4);
+		s->Attach<uint32_t>(i4);
+		AXT_INFO(s->GetBitset(i1).to_string());
+		AXT_INFO(s->GetBitset(i2).to_string());
+		AXT_INFO(s->GetBitset(i3).to_string());
+		AXT_INFO(s->GetBitset(i4).to_string());
+#if 0
+		AXT_INFO((ecs::gMaxEntities * sizeof(ecs::Scene::EntityInfo)));
+		ecs::ComponentPack pack{ sizeof(uint32_t) };
+		ecs::PackIndex i1{ pack.Add() };
+		ecs::PackIndex i2{ pack.Add() };
+		ecs::PackIndex i3{ pack.Add() };
+		ecs::PackIndex i4{ pack.Add() };
+		AXT_TRACE("{0} , {1}, {2}, {3}", i1, i2, i3, i4);
+		uint32_t* mem{ nullptr };
+		mem = static_cast<uint32_t*>(pack.Get(i1));
+		*mem = 5;
+		mem = static_cast<uint32_t*>(pack.Get(i2));
+		*mem = 12;
+		mem = static_cast<uint32_t*>(pack.Get(i3));
+		*mem = 55;
+		mem = static_cast<uint32_t*>(pack.Get(i4));
+		*mem = 87;
+		//AXT_INFO("{0}, {1}, {2}", *(uint32_t*)pack.Get(i1), *(uint32_t*)pack.Get(i2), *(uint32_t*)pack.Get(i3));
+		//AXT_INFO("{0}, {1}, {2}", ecs::Fetch<uint32_t>(pack, i1), ecs::Fetch<uint32_t>(pack, i2), ecs::Fetch<uint32_t>(pack, i3));
+		AXT_INFO("{0}, {1}, {2}, {3}", pack.FetchAs<uint32_t>(i1), pack.FetchAs<uint32_t>(i2), pack.FetchAs<uint32_t>(i3), pack.FetchAs<uint32_t>(i4));
+		pack.Remove(i2);
+		AXT_INFO("{0}, {1}, {2}", pack.FetchAs<uint32_t>(i1), pack.FetchAs<uint32_t>(i2), pack.FetchAs<uint32_t>(i3));
+#endif
 	}
 
 	void ELayer::OnAttach()

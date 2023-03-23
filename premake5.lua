@@ -19,6 +19,7 @@ _includeDirs.glad = "AxtEngine/vendor/glad/include"
 _includeDirs.imgui = "AxtEngine/vendor/imgui"
 _includeDirs.glm = "AxtEngine/vendor/glm"
 _includeDirs.stb = "AxtEngine/vendor/stb"
+_includeDirs.entt = "AxtEngine/vendor/entt/single_include"
 
 group "Vendors"
     include "AxtEngine/vendor/glfw"
@@ -63,7 +64,8 @@ project "AxtEngine"
         "%{_includeDirs.glad}",
         "%{_includeDirs.imgui}",
         "%{_includeDirs.glm}",
-        "%{_includeDirs.stb}"
+        "%{_includeDirs.stb}",
+        "%{_includeDirs.entt}",
     }
     
     links {
@@ -155,60 +157,6 @@ project "Sandbox"
         defines "AXT_DIST"
         runtime "Release"
         optimize "On"
-
-project "Sandbox"
-    location "Sandbox"
-    kind "ConsoleApp"
-    language "C++"
-    cppdialect "C++20"
-    staticruntime "on"
-
-    targetdir ("bin/"..output.."/%{prj.name}")
-    objdir ("bin-int/"..output.."/%{prj.name}")
-
-    files {
-        "%{prj.name}/src/**.h",
-        "%{prj.name}/src/**.cpp",
-        -- "AxtEngine/vendor/glm/glm/**.hpp",
-        -- "AxtEngine/vendor/glm/glm/**.inl",
-        --"%{_includeDirs.imgui}",
-
-    }
-
-    includedirs {
-        "AxtEngine/vendor/spdlog/include",
-        "AxtEngine/src",
-        "%{_includeDirs.glm}",
-        "%{_includeDirs.imgui}",
-        "%{_includeDirs.glad}",
-
-    }
-
-    links {
-        "AxtEngine"
-    }
-
-    filter "system:windows"
-        systemversion "latest"
-
-        defines {
-            --"AXT_PLATFORM_WINDOWS";
-        }
-
-    filter "configurations:Debug"
-        defines "AXT_DEBUG"
-        runtime "Debug"
-        symbols "On"
-
-    filter "configurations:Release"
-        defines "AXT_RELEASE"
-        runtime "Release"
-        optimize "On"
-
-    filter "configurations:Dist"
-        defines "AXT_DIST"
-        runtime "Release"
-        optimize "On"
 -- SANDBOX
 
 -- EDITOR
@@ -233,6 +181,7 @@ project "Editor"
         "%{_includeDirs.glm}",
         "%{_includeDirs.imgui}",
         "%{_includeDirs.glad}",
+        "%{_includeDirs.entt}",
     }
 
     links {
