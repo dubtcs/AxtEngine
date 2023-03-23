@@ -13,7 +13,7 @@ namespace axt::ecs
 	{
 	public:
 		EntityID Create();
-		void Remove(EntityID& id);
+		void Remove(const EntityID& id);
 		IDManager();
 	protected:
 		std::stack<EntityID> mStack;

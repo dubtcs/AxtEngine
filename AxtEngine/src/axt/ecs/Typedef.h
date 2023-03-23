@@ -7,6 +7,7 @@ namespace axt::ecs
 {
 
 	inline constexpr uint32_t gMaxEntities{ 1'000'000 }; // 100
+	inline constexpr uint32_t gMaxEntitiesOOB{ gMaxEntities + 1 }; // 101
 	inline constexpr uint16_t gMaxComponents{ 32 }; // 16
 
 	using Signature = std::bitset< gMaxComponents >;

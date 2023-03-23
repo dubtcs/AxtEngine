@@ -19,6 +19,39 @@ namespace axt
 
 	ELayer::ELayer()
 	{
+		using namespace ecs;
+
+		Unique<Scene> s{ NewUnique<Scene>() };
+		EntityID i1{ s->CreateEntity() };
+		s->Attach<uint32_t>(i1);
+		s->Attach<uint8_t>(i1);
+		EntityID i2{ s->CreateEntity() };
+		s->Attach<uint8_t>(i2);
+
+		s->DestroyEntity(i2);
+
+#if 0 // Testing new replacements
+		Unique<IDManager> m{ NewUnique<IDManager>() };
+		Unique<ComponentPack> p{ NewUnique<ComponentPack>(sizeof(uint32_t)) };
+
+		EntityID id[]{ 0,1,2,3 };
+
+		for (EntityID i : id)
+		{
+			p->Add(i);
+			uint32_t* v{ static_cast<uint32_t*>(p->Get(i)) };
+			*v = i*55;
+			AXT_TRACE(p->FetchAs<uint32_t>(i));
+		}
+
+		p->Remove(id[2]);
+
+		for (EntityID i : id)
+			AXT_TRACE(p->FetchAs<uint32_t>(i));
+
+#endif
+
+#if 0
 		Unique<ecs::Scene> s{ NewUnique<ecs::Scene>() };
 		ecs::EntityID i1{ s->NewEntity() };
 		ecs::EntityID i2{ s->NewEntity() };
@@ -33,6 +66,7 @@ namespace axt
 		AXT_INFO(s->GetBitset(i2).to_string());
 		AXT_INFO(s->GetBitset(i3).to_string());
 		AXT_INFO(s->GetBitset(i4).to_string());
+#endif
 #if 0
 		AXT_INFO((ecs::gMaxEntities * sizeof(ecs::Scene::EntityInfo)));
 		ecs::ComponentPack pack{ sizeof(uint32_t) };

@@ -19,7 +19,7 @@ namespace axt::ecs
 		return r;
 	}
 
-	void IDManager::Remove(EntityID& id)
+	void IDManager::Remove(const EntityID& id)
 	{
 		mStack.push(id);
 		mIdsUsed--;

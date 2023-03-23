@@ -14,33 +14,34 @@ namespace axt::ecs
 	class AXT_API Scene
 	{
 	public:
-		EntityID NewEntity();
-		void DestroyEntity(EntityID& id);
+		EntityID CreateEntity();
+		void DestroyEntity(const EntityID& id);
 		std::bitset<gMaxComponents>& GetBitset(EntityID& id)
 		{
-			return mEntityInfo[id].Mask;
+			return mEntityInfo->at(id).Mask;
 		}
 		template<typename T>
-		void Attach(EntityID& id)
+		void Attach(const EntityID& id)
 		{
 			ComponentTypeID cid{ GetComponentTypeID<T>() };
 
 			// make a ComponentPack for this attachment if none exists
-			if (mPacks.size() <= cid)
+			if (mPacks->size() <= cid)
 			{
-				mPacks.resize(cid); // resize it to the ComponentID, that way we can use push_back to just poop one out at the end
-				mPacks.push_back({ sizeof(T) });
+				mPacks->resize(cid); // resize it to the ComponentID, that way we can use push_back to just poop one out at the end
+				mPacks->push_back({ sizeof(T) });
 			}
 
-			PackIndex i{ mPacks[cid].Add() };
+			mPacks->at(cid).Add(id);
 
-			mEntityInfo[id].Mask.set(cid);
+			mEntityInfo->at(id).Mask.set(cid);
 		}
 		template<typename T>
-		void Detach(EntityID& id)
+		void Detach(const EntityID& id)
 		{
-			mEntityInfo[id].Mask.reset(GetComponentTypeID<T>());
+			mEntityInfo->at(id).Mask.reset(GetComponentTypeID<T>());
 		}
+		Scene();
 	public:
 		struct EntityInfo
 		{
@@ -50,8 +51,8 @@ namespace axt::ecs
 		};
 	protected:
 		IDManager mIDManager;
-		std::vector<ComponentPack> mPacks;
-		std::array<EntityInfo, gMaxEntities> mEntityInfo{};
+		Ref<std::vector<ComponentPack>> mPacks;
+		Ref<std::array<EntityInfo, gMaxEntities>> mEntityInfo;
 	};
 
 }

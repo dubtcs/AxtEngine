@@ -3,6 +3,8 @@
 #include <axt/Core.h>
 #include "Typedef.h"
 
+#include <ostream>
+
 namespace axt::ecs
 {
 
@@ -12,24 +14,28 @@ namespace axt::ecs
 	{
 	public:
 		ComponentPack() = default;
-		ComponentPack(size_t elementSize) : mElementSize{ elementSize } { AXT_INFO("ComponentPack Created with ElementSize: {0}", elementSize); };
-		PackIndex Add();
-		void* Get(PackIndex& index);
-		void Remove(PackIndex& index);
+		ComponentPack(size_t elementSize);
+		void* Get(const EntityID& id);
+		void Add(const EntityID& id);
+		void Remove(const EntityID& id);
 
 		// TEMP FOR DEBUGGING
-		size_t GetSize() { return mData.size(); }
+		size_t GetSize() { return mData->size(); }
 		template<typename T>
 		T FetchAs(PackIndex& index)
 		{
 			return *(static_cast<T*>(Get(index)));
 		}
+		template<typename T>
+		T FetchAs(const EntityID& id)
+		{
+			return *(static_cast<T*>(Get(id)));
+		}
+
 	protected:
-		//std::array<PackIndex, gMaxEntities> mEntityToIndex;
-
-		// TODO: Make an array/map to associate the EntityID to the data index
-
-		std::vector<char> mData;
+		Ref<std::vector<char>> mData;
+		Ref<std::vector<size_t>> mIndexToEntity;
+		Ref<std::array<size_t, gMaxEntities>> mEntityToIndex;
 		size_t mElementSize;
 		uint32_t mLength{ 0 };
 	};
