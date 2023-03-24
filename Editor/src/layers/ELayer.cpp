@@ -6,9 +6,7 @@
 #include <imgui.h>
 #include <glm/gtc/type_ptr.hpp>
 
-#include <axt/ecs/ComponentPack.h>
-#include <axt/ecs/Scene.h>
-#include <axt/ecs/Typedef.h>
+#include <axt/ecs/SceneView.h>
 
 static int gFps{ 0 };
 static bool gDrawBulk{ true };
@@ -17,8 +15,33 @@ static float gTexRotate{ 0.f };
 namespace axt
 {
 
-	ELayer::ELayer()
+	ELayer::ELayer() :
+		mScene{ NewRef<ecs::Scene>() }
 	{
+		using namespace ecs;
+
+		std::vector<EntityID> ids;
+		for (uint32_t i{ 0 }; i < 250; i++)
+		{
+			ids.push_back(mScene->CreateEntity());
+		}
+
+		struct Transform
+		{
+			float x;
+		};
+		struct Color
+		{
+			float x;
+		};
+
+		for (EntityID& i : ids)
+		{
+			mScene->Attach<Transform>(i);
+			mScene->Attach<Color>(i);
+		}
+
+#if 0 // test Scene Destroy propagating to each pack
 		using namespace ecs;
 
 		Unique<Scene> s{ NewUnique<Scene>() };
@@ -29,7 +52,7 @@ namespace axt
 		s->Attach<uint8_t>(i2);
 
 		s->DestroyEntity(i2);
-
+#endif
 #if 0 // Testing new replacements
 		Unique<IDManager> m{ NewUnique<IDManager>() };
 		Unique<ComponentPack> p{ NewUnique<ComponentPack>(sizeof(uint32_t)) };

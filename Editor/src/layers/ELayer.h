@@ -40,6 +40,8 @@ namespace axt
 		// temp
 		Ref<Texture2D> mTexture;
 		Ref<FrameBuffer> mFrameBuffer;
+
+		Ref<ecs::Scene> mScene;
 	};
 
 }

@@ -5,7 +5,8 @@
 namespace axt::ecs
 {
 
-	IDManager::IDManager()
+	IDManager::IDManager() :
+		mIdsUsed{ 0 }
 	{
 		for (EntityID i{ gMaxEntities }; i > 0; i--)
 			mStack.push(i - 1);

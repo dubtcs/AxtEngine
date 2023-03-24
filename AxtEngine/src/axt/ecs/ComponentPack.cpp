@@ -15,7 +15,7 @@ namespace axt::ecs
 		mData = NewRef<std::vector<char>>();
 		mIndexToEntity = NewRef<std::vector<size_t>>();
 		mEntityToIndex = NewRef<std::array<size_t, gMaxEntities>>();
-		mEntityToIndex->fill(gMaxEntitiesOOB);
+		mEntityToIndex->fill(gMaxEntitiesOOB); // filled to invalidate every ID
 	}
 
 	void* ComponentPack::Get(const EntityID& id)
@@ -62,6 +62,8 @@ namespace axt::ecs
 		mEntityToIndex->at(id) = gMaxEntitiesOOB;
 
 		mLength--;
+		mData->resize(mLength * mElementSize);
+
 	}
 
 }
