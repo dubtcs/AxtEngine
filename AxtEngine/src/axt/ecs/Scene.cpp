@@ -30,14 +30,30 @@ namespace axt::ecs
 		mIDManager.Remove(id);
 	}
 
-	Signature& Scene::GetBitset(const EntityID& id)
-	{
-		return mEntityInfo->at(id).Mask;
-	}
-
 	Ref<std::array<Scene::EntityInfo, gMaxEntities>> Scene::GetEntityInfo()
 	{
 		return mEntityInfo;
+	}
+
+	const IDManager& Scene::GetIDManager() const
+	{
+		return mIDManager;
+	}
+
+	Entity::Entity(Ref<Scene>& s) :
+		mScene { s.get() }
+	{
+		mID = s->CreateEntity();
+	}
+
+	Entity::~Entity()
+	{
+		Destroy();
+	}
+
+	void Entity::Destroy()
+	{
+		mScene->DestroyEntity(mID);
 	}
 
 }

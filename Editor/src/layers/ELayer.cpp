@@ -8,38 +8,145 @@
 
 #include <axt/ecs/SceneView.h>
 
+#include <entt/entt.hpp>
+
 static int gFps{ 0 };
 static bool gDrawBulk{ true };
 static float gTexRotate{ 0.f };
+
+struct Transform
+{
+	glm::vec3 Position;
+};
 
 namespace axt
 {
 
 	ELayer::ELayer() :
-		mScene{ NewRef<ecs::Scene>() }
+		mScene{ NewRef<ecs::Scene>() },
+		OBJ{ mScene }
 	{
-		using namespace ecs;
+#if 0
+		constexpr uint32_t EAMOUNT{ 1'000'000 };
 
-		std::vector<EntityID> ids;
-		for (uint32_t i{ 0 }; i < 250; i++)
-		{
-			ids.push_back(mScene->CreateEntity());
-		}
+		/*
+		Create 10'000 entities
+		attach transforms
+		create a view
+		*/
 
 		struct Transform
 		{
-			float x;
-		};
-		struct Color
-		{
-			float x;
+			glm::vec3 Position;
 		};
 
-		for (EntityID& i : ids)
+		ecs::Entity e{ mScene };
+		e.Attach<Transform>();
+#endif
+#if 0
+		ecs::EntityID ids[10]{};
+
+		AXT_INFO("Assignment:");
+		for (uint32_t i{ 0 }; i < 10; i++)
 		{
-			mScene->Attach<Transform>(i);
-			mScene->Attach<Color>(i);
+			ids[i] = mScene->CreateEntity();
+			Transform& t{ mScene->Attach<Transform>(ids[i]) };
+			t.Position.x = static_cast<float>(i);
+			AXT_TRACE("{0} : {0}", i);
 		}
+
+		AXT_INFO("Deletion");
+		for (uint32_t i{ 0 }; i < 5; i++)
+		{
+			mScene->Detach<Transform>(ids[i * 2]);
+		}
+
+		ecs::SceneView<Transform> view{ mScene };
+		for (ecs::EntityID e : view)
+		{
+			Transform& t{ mScene->GetComponent<Transform>(e) };
+			AXT_TRACE("Transform: {0} : {1}", e, t.Position.x);
+		}
+#endif
+
+#if 0
+		{
+			AXT_PROFILE_SCOPE("nECS");
+			using namespace ecs;
+
+			std::vector<EntityID> ids;
+
+			{
+				AXT_PROFILE_SCOPE("Create entities");
+				for (uint32_t i{ 0 }; i < EAMOUNT; i++)
+				{
+					ids.push_back(mScene->CreateEntity());
+				}
+			}
+
+			{
+				AXT_PROFILE_SCOPE("Attach transforms");
+				for (EntityID& i : ids)
+				{
+					mScene->Attach<Transform>(i);
+				}
+			}
+
+			{
+				AXT_PROFILE_SCOPE("Create scene view");
+				SceneView<Transform> view{ mScene };
+				{
+					AXT_PROFILE_SCOPE("Assign transform values");
+					for (EntityID id : view)
+					{
+						Transform& t{ mScene->GetComponent<Transform>(id) };
+						t.Position.x = 126.4f;
+						//AXT_INFO(mScene->GetComponent<Transform>(ids.at(id))->Position.x);
+					}
+				}
+
+			}
+		}
+
+		{
+			AXT_PROFILE_SCOPE("ENTT");
+			using namespace entt;
+
+			registry r{};
+
+			std::vector<entity> ids;
+			{
+				AXT_PROFILE_SCOPE("Create entities");
+				for (uint32_t i{ 0 }; i < EAMOUNT; i++)
+				{
+					ids.push_back(r.create());
+				}
+			}
+
+			{
+				AXT_PROFILE_SCOPE("Attach transforms");
+				for (entity& i : ids)
+				{
+					r.emplace<Transform>(i);
+				}
+			}
+
+			{
+				AXT_PROFILE_SCOPE("Create scene view");
+				auto view{ r.view<Transform>() };
+				{
+					AXT_PROFILE_SCOPE("Assign transform values");
+					for (entity id : view)
+					{
+						auto& t = view.get<Transform>(id);
+						t.Position.x = 126.4f;
+						//AXT_INFO(mScene->GetComponent<Transform>(ids.at(id))->Position.x);
+					}
+				}
+			}
+
+		}
+#endif
 
 #if 0 // test Scene Destroy propagating to each pack
 		using namespace ecs;
@@ -122,6 +229,8 @@ namespace axt
 		Render2D::Init();
 		mTexture = Texture2D::Create("textures/si.png");
 		mFrameBuffer = FrameBuffer::Create(FrameBufferData{ .width{1920}, .height{1080} });
+
+		OBJ.Attach<Transform>();
 	}
 
 	void ELayer::OnDetach()
@@ -163,8 +272,10 @@ namespace axt
 		}
 #endif
 
-		Render2D::DrawQuad(Render2D::QuadProperties{ .position{obj1.position}, .size{obj1.size}, .color{obj1.color}, .rotation{obj1.rotation} });
-		Render2D::DrawQuad(Render2D::QuadProperties{ .position{obj2.position}, .size{obj2.size}, .color{obj2.color}, .texName{"Bruh"}, .rotation{obj2.rotation} });
+		//Transform& T{ mScene->GetComponent<Transform>(o1ID) };
+		Transform& T{ OBJ.GetComponent<Transform>() };
+		Render2D::DrawQuad(Render2D::QuadProperties{ .position{T.Position}, .size{obj1.size}, .color{obj1.color}, .rotation{obj1.rotation} });
+		//Render2D::DrawQuad(Render2D::QuadProperties{ .position{obj2.position}, .size{obj2.size}, .color{obj2.color}, .texName{"Bruh"}, .rotation{obj2.rotation} });
 		Render2D::DrawQuad(Render2D::QuadProperties{ .position{-2.25f, 0.f, 0.f}, .size{obj2.size}, .color{obj2.color}, .texName{"Check"}, .rotation{gTexRotate} });
 
 		Render2D::SceneEnd();
@@ -234,7 +345,11 @@ namespace axt
 		ImGui::Begin("Control");
 		ImGui::Text("Opaque Object");
 		ImGui::ColorEdit4("Object Color", glm::value_ptr(obj1.color));
-		ImGui::DragFloat3("Object Position", glm::value_ptr(obj1.position), 0.1f);
+
+		//Transform& T{ mScene->GetComponent<Transform>(o1ID) };
+		Transform& T{ OBJ.GetComponent<Transform>() };
+		ImGui::DragFloat3("Object Position", glm::value_ptr(T.Position), 0.1f);
+
 		ImGui::DragFloat2("Object Scale", glm::value_ptr(obj1.size), 0.1f);
 		ImGui::DragFloat("Object Rotation", &obj1.rotation, 0.05f);
 		ImGui::Text("Textured Object");

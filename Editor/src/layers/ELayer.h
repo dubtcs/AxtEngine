@@ -42,6 +42,9 @@ namespace axt
 		Ref<FrameBuffer> mFrameBuffer;
 
 		Ref<ecs::Scene> mScene;
+		ecs::EntityID o1ID;
+
+		ecs::Entity OBJ;
 	};
 
 }
