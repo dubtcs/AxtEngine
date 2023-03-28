@@ -26,7 +26,7 @@ namespace axt::ecs
 		const IDManager& GetIDManager() const;
 
 		template<typename T>
-		T& Attach(const EntityID& id)
+		T& Attach(const EntityID& id) // Initialize entry with blank data
 		{
 			ComponentTypeID cid{ GetComponentTypeID<T>() };
 
@@ -40,6 +40,40 @@ namespace axt::ecs
 
 			mEntityInfo->at(id).Mask.set(cid);
 			return *static_cast<T*>(mPacks->at(cid).Add(id));
+		}
+		template<typename T>
+		T& Attach(const EntityID& id, const T& copycat) // Initialize entry with an existing object
+		{
+			ComponentTypeID cid{ GetComponentTypeID<T>() };
+
+			// make a ComponentPack for this attachment if none exists
+			if (mPacks->size() <= cid)
+			{
+				mPacks->resize(cid); // resize it to the ComponentID, that way we can use push_back to just poop one out at the end
+				mPacks->push_back({ sizeof(T) });
+			}
+
+			mEntityInfo->at(id).Mask.set(cid);
+			T& data{ *static_cast<T*>(mPacks->at(cid).Add(id)) };
+			data = copycat;
+			return data;
+		}
+		template<typename T, typename... Ar>
+		T& Attach(const EntityID& id, Ar&&... params) // Initialize entry with parameter pack
+		{
+			ComponentTypeID cid{ GetComponentTypeID<T>() };
+
+			// make a ComponentPack for this attachment if none exists
+			if (mPacks->size() <= cid)
+			{
+				mPacks->resize(cid); // resize it to the ComponentID, that way we can use push_back to just poop one out at the end
+				mPacks->push_back({ sizeof(T) });
+			}
+
+			mEntityInfo->at(id).Mask.set(cid);
+			T& data{ *static_cast<T*>(mPacks->at(cid).Add(id)) };
+			data = T{ params... };
+			return data;
 		}
 		template<typename T>
 		void Detach(const EntityID& id)

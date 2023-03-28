@@ -6,7 +6,7 @@
 
 #include <algorithm>
 
-inline constexpr size_t gMinVectorCapacity{ 25 };
+using DataIterator = std::vector<char>::iterator;
 
 namespace axt::ecs
 {
@@ -14,88 +14,57 @@ namespace axt::ecs
 	ComponentPack::ComponentPack(size_t s) :
 		mElementSize{ s }
 	{
-		//mData = NewRef<std::vector<char>>(gMinVectorCapacity * s);
-		//mIndexToEntity = NewRef<std::vector<size_t>>(gMinVectorCapacity);
-		// try a hash map-esque way of packing data, reserve a minimum amount of data, say 20% max components, then expand if we need too
-
 		mData = NewRef<std::vector<char>>();
-		mIndexToEntity = NewRef<std::vector<size_t>>();
-		mEntityToIndex = NewRef<std::array<size_t, gMaxEntities>>();
+		mIndexToEntity = NewRef<std::vector<EntityID>>();
+		mEntityToIndex = NewRef<std::array<PackIndex, gMaxEntities>>();
 		mEntityToIndex->fill(gMaxEntitiesOOB); // filled to invalidate every ID
 	}
 
 	void* ComponentPack::Get(const EntityID& id)
 	{
-		size_t index{ mEntityToIndex->at(id) };
+		PackIndex index{ mEntityToIndex->at(id) };
 		void* address{ &(mData->at(index * mElementSize)) };
 		return address;
 	}
 
 	void* ComponentPack::Add(const EntityID& id)
 	{
-		// expanding buffer size to fit another element
-		mData->resize(mData->size() + mElementSize);
-
-		mEntityToIndex->at(id) = mLength;
+		mEntityToIndex->at(id) = mLength++;
 		mIndexToEntity->push_back(id);
-
-		return &(mData->at(mLength++ * mElementSize));
+		mData->resize(mData->size() + mElementSize);
+		return &(mData->at(mEntityToIndex->at(id) * mElementSize));
 	}
 
 	void ComponentPack::Remove(const EntityID& id)
 	{
-		size_t entityIndex{ mEntityToIndex->at(id) };
+		if (mEntityToIndex->at(id) > gMaxEntities)
+		{
+			AXT_WARN("EntityID not used in pack");
+			return;
+		}
+
+		PackIndex entityIndex{ mEntityToIndex->at(id) };
 		EntityID lastEntity{ mIndexToEntity->back() };
 
-		if (entityIndex == gMaxEntitiesOOB)
+		if ((mLength > 1) && (entityIndex < (mLength - 1)))
 		{
-			AXT_WARN("OOB {0}", entityIndex);
-			return;
-		}
-
-		if (lastEntity != id)
-		{
-			std::vector<char>::iterator startRange{ mData->begin() + (entityIndex * mElementSize) };
-			std::vector<char>::iterator endRange{ startRange + mElementSize };
-			std::vector<char>::iterator endStart{ mData->end() - mElementSize };
-			std::swap_ranges(startRange, endRange, endStart);
-
+			DataIterator rangeStart{ mData->begin() + (entityIndex * mElementSize) };
+			DataIterator rangeEnd{ rangeStart + mElementSize };
+			DataIterator replaceStart{ mData->end() - mElementSize };
+			std::swap_ranges(rangeStart, rangeEnd, replaceStart);
 			mEntityToIndex->at(lastEntity) = entityIndex;
+			mIndexToEntity->at(entityIndex) = lastEntity;
 		}
 
-		std::vector<char>::iterator it{ std::find(mData->begin(), mData->end(), entityIndex) };
-		if (it != mData->end())
-		{
-			mData->erase(it);
-		}
-
+		mData->resize(mElementSize * --mLength);
 		mEntityToIndex->at(id) = gMaxEntitiesOOB;
-		mData->resize(mLength-- * mElementSize);
+		mIndexToEntity->pop_back();
+		return;
 
 		/*
-		size_t replacementIndex{ mEntityToIndex->at(id) };
-
-		if (replacementIndex > gMaxEntities)
-		{
-			return;
-		}
-
-		EntityID lastEntity{ mIndexToEntity->at(mLength - 1) };
-
-		if (lastEntity != id)
-		{
-			size_t offset{ mEntityToIndex->at(id) * mElementSize };
-			std::vector<char>::iterator start{ mData->begin() + offset };
-			std::swap_ranges(start, start + mElementSize, mData->end() - mElementSize);
-			mEntityToIndex->at(lastEntity) = replacementIndex;
-			mIndexToEntity->at(replacementIndex) = lastEntity;
-		}
-
-		// pushes the index past the max available to invalidate the ID
-		mEntityToIndex->at(id) = gMaxEntitiesOOB;
-
-		mLength--;
-		mData->resize(mLength * mElementSize);
+		KNOWN BUG:
+		[fixed] Add 3 items, delete last 2, add 1, delete last, delete first - error
+			also forgot to set mIndexToEntity to new EntityID lol
 		*/
 	}
 

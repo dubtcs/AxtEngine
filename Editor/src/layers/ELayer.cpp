@@ -17,11 +17,17 @@ static std::vector<axt::ecs::EntityID> gEntityIds;
 struct Transform
 {
 	glm::vec3 Position;
+	Transform() = default;
+	Transform(float value) : Position{ value } {}
+	Transform(float x, float y, float z) : Position{ x,y,z } {};
 };
 
 struct Color
 {
-	glm::vec4 Color;
+	glm::vec4 Value;
+	Color(float c) : Value{ c, c, c, 1.f } {};
+	Color(float r, float g, float b) : Value{ r, g, b, 1.f } {}
+	Color(float r, float g, float b, float a) : Value{ r,g,b,a } {}
 };
 
 namespace axt
@@ -279,7 +285,7 @@ namespace axt
 		{
 			Transform& t{ mScene->GetComponent<Transform>(i) };
 			Color& c{ mScene->GetComponent<Color>(i) };
-			Render2D::DrawQuad(Render2D::QuadProperties{ .position{t.Position}, .size{1.f, 1.f}, .color{c.Color} });
+			Render2D::DrawQuad(Render2D::QuadProperties{ .position{t.Position}, .size{1.f, 1.f}, .color{c.Value} });
 		}
 
 		//Transform& T{ mScene->GetComponent<Transform>(o1ID) };
@@ -399,14 +405,7 @@ namespace axt
 			ecs::EntityID id{ mScene->CreateEntity() };
 			gEntityIds.push_back(id);
 			mScene->Attach<Transform>(id);
-			mScene->Attach<Color>(id);
-			AXT_TRACE(id);
-		}
-		if (ImGui::Button("Delete"))
-		{
-			ecs::EntityID id{ gEntityIds.back() };
-			mScene->DestroyEntity(id);
-			gEntityIds.pop_back();
+			mScene->Attach<Color>(id, { 0.25f, 0.25f, 0.25f });
 		}
 		for (ecs::EntityID& i : gEntityIds)
 		{
@@ -415,13 +414,12 @@ namespace axt
 			ImGui::PushID(static_cast<int>(i));
 			ImGui::Text("Object: %i", i);
 			ImGui::DragFloat3("Rotation", glm::value_ptr(t.Position), 0.05f);
-			ImGui::ColorEdit4("Color", glm::value_ptr(c.Color));
-			/*if (ImGui::Button("Delete"))
+			ImGui::ColorEdit4("Color", glm::value_ptr(c.Value));
+			if (ImGui::Button("Delete"))
 			{
-				AXT_WARN(i);
 				mScene->DestroyEntity(i);
 				gEntityIds.erase(std::find(gEntityIds.begin(), gEntityIds.end(), i));
-			}*/
+			}
 			ImGui::PopID();
 		}
 		ImGui::End();
