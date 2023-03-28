@@ -14,6 +14,7 @@ namespace axt::ecs
 	public:
 		EntityID Create();
 		void Remove(const EntityID& id);
+		bool IsUsed(const EntityID& id) const;
 		IDManager();
 	public:
 		const std::vector<EntityID>::const_iterator begin() const { return mIdsUsed.begin(); }

@@ -44,7 +44,7 @@ namespace axt {
 
 }
 
-#define AXT_PROFILING_ENABLED true
+#define AXT_PROFILING_ENABLED false
 #if AXT_PROFILING_ENABLED
 	#define AXT_PROFILE_NEW_SESSION(name, filepath) axt::profiling::ProfileSession::Begin(name, filepath)
 	#define AXT_PROFILE_END_SESSION() axt::profiling::ProfileSession::End()

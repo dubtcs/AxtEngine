@@ -41,25 +41,6 @@ namespace axt::ecs
 			mEntityInfo->at(id).Mask.set(cid);
 			return *static_cast<T*>(mPacks->at(cid).Add(id));
 		}
-		//template<typename T, typename... Ar>
-		//T& Attach(const EntityID& id, Ar&&...)
-		//{
-		//	ComponentTypeID cid{ GetComponentTypeID<T>() };
-		//	for (uint32_t i{ 0 }; i < sizeof...(Ar); i++)
-		//	{
-		//		AXT_TRACE(sizeof...(Ar));
-		//		//AXT_TRACE(sizeof(Ar[i]));
-		//	}
-		//	// make a ComponentPack for this attachment if none exists
-		//	if (mPacks->size() <= cid)
-		//	{
-		//		mPacks->resize(cid); // resize it to the ComponentID, that way we can use push_back to just poop one out at the end
-		//		mPacks->push_back({ sizeof(T) });
-		//	}
-
-		//	mEntityInfo->at(id).Mask.set(cid);
-		//	return *static_cast<T*>(mPacks->at(cid).Add(id));
-		//}
 		template<typename T>
 		void Detach(const EntityID& id)
 		{

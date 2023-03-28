@@ -15,11 +15,12 @@
 #include "axt/core/Keycodes.h"
 #include "axt/core/MousebuttonCodes.h"
 
-#include "axt/ecs/Typedef.h"
-#include "axt/ecs/ComponentPack.h"
-#include "axt/ecs/Components.h"
-#include "axt/ecs/IDManager.h"
-#include "axt/ecs/Scene.h"
+#include "axt/ecs/nECS.h"
+//#include "axt/ecs/Typedef.h"
+//#include "axt/ecs/ComponentPack.h"
+//#include "axt/ecs/Components.h"
+//#include "axt/ecs/IDManager.h"
+//#include "axt/ecs/Scene.h"
 
 #include "axt/render/Camera.h"
 #include "axt/render/Renderer.h"

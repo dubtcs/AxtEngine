@@ -35,7 +35,7 @@ namespace axt::ecs
 	{
 		// expanding buffer size to fit another element
 		mData->resize(mData->size() + mElementSize);
-		
+
 		mEntityToIndex->at(id) = mLength;
 		mIndexToEntity->push_back(id);
 
@@ -44,12 +44,39 @@ namespace axt::ecs
 
 	void ComponentPack::Remove(const EntityID& id)
 	{
+		size_t entityIndex{ mEntityToIndex->at(id) };
+		EntityID lastEntity{ mIndexToEntity->back() };
 
+		if (entityIndex == gMaxEntitiesOOB)
+		{
+			AXT_WARN("OOB {0}", entityIndex);
+			return;
+		}
+
+		if (lastEntity != id)
+		{
+			std::vector<char>::iterator startRange{ mData->begin() + (entityIndex * mElementSize) };
+			std::vector<char>::iterator endRange{ startRange + mElementSize };
+			std::vector<char>::iterator endStart{ mData->end() - mElementSize };
+			std::swap_ranges(startRange, endRange, endStart);
+
+			mEntityToIndex->at(lastEntity) = entityIndex;
+		}
+
+		std::vector<char>::iterator it{ std::find(mData->begin(), mData->end(), entityIndex) };
+		if (it != mData->end())
+		{
+			mData->erase(it);
+		}
+
+		mEntityToIndex->at(id) = gMaxEntitiesOOB;
+		mData->resize(mLength-- * mElementSize);
+
+		/*
 		size_t replacementIndex{ mEntityToIndex->at(id) };
 
-		if (replacementIndex > gMaxComponents)
+		if (replacementIndex > gMaxEntities)
 		{
-			AXT_WARN("Pack index {0} invalid. Element size: {1}", id, mElementSize);
 			return;
 		}
 
@@ -69,7 +96,7 @@ namespace axt::ecs
 
 		mLength--;
 		mData->resize(mLength * mElementSize);
-
+		*/
 	}
 
 }

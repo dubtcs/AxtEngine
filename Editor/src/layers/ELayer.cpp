@@ -6,25 +6,29 @@
 #include <imgui.h>
 #include <glm/gtc/type_ptr.hpp>
 
-#include <axt/ecs/SceneView.h>
-
 #include <entt/entt.hpp>
 
 static int gFps{ 0 };
 static bool gDrawBulk{ true };
 static float gTexRotate{ 0.f };
 
+static std::vector<axt::ecs::EntityID> gEntityIds;
+
 struct Transform
 {
 	glm::vec3 Position;
+};
+
+struct Color
+{
+	glm::vec4 Color;
 };
 
 namespace axt
 {
 
 	ELayer::ELayer() :
-		mScene{ NewRef<ecs::Scene>() },
-		OBJ{ mScene }
+		mScene{ NewRef<ecs::Scene>() }
 	{
 #if 0
 		constexpr uint32_t EAMOUNT{ 1'000'000 };
@@ -229,8 +233,6 @@ namespace axt
 		Render2D::Init();
 		mTexture = Texture2D::Create("textures/si.png");
 		mFrameBuffer = FrameBuffer::Create(FrameBufferData{ .width{1920}, .height{1080} });
-
-		OBJ.Attach<Transform>();
 	}
 
 	void ELayer::OnDetach()
@@ -260,7 +262,7 @@ namespace axt
 
 		Render2D::SceneStart(mCameraController.GetCamera());
 
-		Render2D::DrawQuad(Render2D::QuadProperties{ .position{0.f,0.f,-0.5f}, .size{50.f, 50.f}, .color{0.1f, 0.1f, 0.1f, 1.f}, .texName{"Check"}, .textureTiling{50.f} });
+		//Render2D::DrawQuad(Render2D::QuadProperties{ .position{0.f,0.f,-0.5f}, .size{50.f, 50.f}, .color{0.1f, 0.1f, 0.1f, 1.f}, .texName{"Check"}, .textureTiling{50.f} });
 
 #if 1 // bulk testing
 		if (gDrawBulk) {
@@ -272,9 +274,17 @@ namespace axt
 		}
 #endif
 
+		ecs::SceneView<Transform, Color> view{ mScene };
+		for (ecs::EntityID i : view)
+		{
+			Transform& t{ mScene->GetComponent<Transform>(i) };
+			Color& c{ mScene->GetComponent<Color>(i) };
+			Render2D::DrawQuad(Render2D::QuadProperties{ .position{t.Position}, .size{1.f, 1.f}, .color{c.Color} });
+		}
+
 		//Transform& T{ mScene->GetComponent<Transform>(o1ID) };
-		Transform& T{ OBJ.GetComponent<Transform>() };
-		Render2D::DrawQuad(Render2D::QuadProperties{ .position{T.Position}, .size{obj1.size}, .color{obj1.color}, .rotation{obj1.rotation} });
+		//Transform& T{ OBJ.GetComponent<Transform>() };
+		//Render2D::DrawQuad(Render2D::QuadProperties{ .position{T.Position}, .size{obj1.size}, .color{obj1.color}, .rotation{obj1.rotation} });
 		//Render2D::DrawQuad(Render2D::QuadProperties{ .position{obj2.position}, .size{obj2.size}, .color{obj2.color}, .texName{"Bruh"}, .rotation{obj2.rotation} });
 		Render2D::DrawQuad(Render2D::QuadProperties{ .position{-2.25f, 0.f, 0.f}, .size{obj2.size}, .color{obj2.color}, .texName{"Check"}, .rotation{gTexRotate} });
 
@@ -347,8 +357,8 @@ namespace axt
 		ImGui::ColorEdit4("Object Color", glm::value_ptr(obj1.color));
 
 		//Transform& T{ mScene->GetComponent<Transform>(o1ID) };
-		Transform& T{ OBJ.GetComponent<Transform>() };
-		ImGui::DragFloat3("Object Position", glm::value_ptr(T.Position), 0.1f);
+		//Transform& T{ OBJ.GetComponent<Transform>() };
+		//ImGui::DragFloat3("Object Position", glm::value_ptr(T.Position), 0.1f);
 
 		ImGui::DragFloat2("Object Scale", glm::value_ptr(obj1.size), 0.1f);
 		ImGui::DragFloat("Object Rotation", &obj1.rotation, 0.05f);
@@ -381,6 +391,39 @@ namespace axt
 
 		ImGui::Begin("Output");
 		ImGui::Text(">>");
+		ImGui::End();
+
+		ImGui::Begin("Instances");
+		if (ImGui::Button("Add Square"))
+		{
+			ecs::EntityID id{ mScene->CreateEntity() };
+			gEntityIds.push_back(id);
+			mScene->Attach<Transform>(id);
+			mScene->Attach<Color>(id);
+			AXT_TRACE(id);
+		}
+		if (ImGui::Button("Delete"))
+		{
+			ecs::EntityID id{ gEntityIds.back() };
+			mScene->DestroyEntity(id);
+			gEntityIds.pop_back();
+		}
+		for (ecs::EntityID& i : gEntityIds)
+		{
+			Transform& t{ mScene->GetComponent<Transform>(i) };
+			Color& c{ mScene->GetComponent<Color>(i) };
+			ImGui::PushID(static_cast<int>(i));
+			ImGui::Text("Object: %i", i);
+			ImGui::DragFloat3("Rotation", glm::value_ptr(t.Position), 0.05f);
+			ImGui::ColorEdit4("Color", glm::value_ptr(c.Color));
+			/*if (ImGui::Button("Delete"))
+			{
+				AXT_WARN(i);
+				mScene->DestroyEntity(i);
+				gEntityIds.erase(std::find(gEntityIds.begin(), gEntityIds.end(), i));
+			}*/
+			ImGui::PopID();
+		}
 		ImGui::End();
 
 		ImGui::Begin("Properties");

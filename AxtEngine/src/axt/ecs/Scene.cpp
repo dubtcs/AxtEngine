@@ -22,12 +22,16 @@ namespace axt::ecs
 	{
 		// remove the data from each pack it belongs to
 		// reset the mask
-		for (ComponentPack& pack : *mPacks)
+		if (mIDManager.IsUsed(id))
 		{
-			pack.Remove(id);
+			for (ComponentPack& pack : *mPacks)
+			{
+				pack.Remove(id);
+			}
+			mEntityInfo->at(id).Mask.reset();
+			mIDManager.Remove(id);
 		}
-		mEntityInfo->at(id).Mask.reset();
-		mIDManager.Remove(id);
+		
 	}
 
 	Ref<std::array<Scene::EntityInfo, gMaxEntities>> Scene::GetEntityInfo()
