@@ -10,7 +10,7 @@
 
 #include "axt/render/Renderer.h"
 
-#include "axt/render/Camera.h"
+#include "axt/render/OrthoCamera.h"
 
 // TEMP
 #include <GLFW/glfw3.h>

@@ -3,8 +3,10 @@
 #include "axt/Core.h"
 
 #include "RenderCommand.h"
-#include "Camera.h"
+#include "OrthoCamera.h"
 #include "Shader.h"
+
+#include "axt/world/Components.h"
 
 #include "axt/render/Texture.h"
 
@@ -29,6 +31,7 @@ namespace axt {
 		static void Init();
 		static void Shutdown();
 		static void SceneStart(const OrthoCamera& camera);
+		static void SceneStart(const Camera& camera, const glm::mat4& viewProjection);
 		static void SceneEnd();
 
 		// draws data loaded on gpu

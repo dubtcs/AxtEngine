@@ -150,6 +150,31 @@ namespace axt {
 		gData->mTextureArray[0] = gData->mWhiteTexture; // always set 0 to default texture
 	}
 
+	void Render2D::SceneStart(const Camera& camera, const glm::mat4& viewProjection)
+	{
+		AXT_PROFILE_FUNCTION();
+		gData->mCurrentQuadVertex = gData->mQuadStart;
+		gData->mIndexCount = 0;
+		gData->mVertexCount = 0;
+
+		// reset stats
+		gStats.drawCalls = 0;
+		gStats.quads = 0;
+		gStats.textures = 0;
+
+		gData->mShader->Bind();
+		gData->mShader->SetValue("uViewProjection", viewProjection);
+
+		int fShaderSampler2D[MAX_TEXTURE_UNITS];
+		for (int i{ 0 }; i < MAX_TEXTURE_UNITS; i++) {
+			fShaderSampler2D[i] = i;
+		}
+		gData->mShader->SetValue("uTextures", fShaderSampler2D, MAX_TEXTURE_UNITS);
+
+		gData->mTexturesUsed = 1;
+		gData->mTextureArray[0] = gData->mWhiteTexture; // always set 0 to default texture
+	}
+
 	// push data to gpu
 	void Render2D::SceneEnd() {
 		AXT_PROFILE_FUNCTION();

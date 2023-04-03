@@ -16,7 +16,7 @@
 #include "axt/render/Buffers.h"
 #include "axt/render/Shader.h"
 #include "axt/render/VertexArray.h"
-#include "axt/render/Camera.h"
+#include "axt/render/OrthoCamera.h"
 
 namespace axt {
 

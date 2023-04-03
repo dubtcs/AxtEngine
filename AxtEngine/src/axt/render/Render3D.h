@@ -3,7 +3,7 @@
 #include "axt/Core.h"
 
 #include "RenderCommand.h"
-#include "Camera.h"
+#include "OrthoCamera.h"
 #include "Shader.h"
 
 namespace axt {

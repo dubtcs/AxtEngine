@@ -1,27 +1,19 @@
 #include <pch.h>
 
-#include "Camera.h"
+#include "OrthoCamera.h"
 
 #include <glm/gtc/matrix_transform.hpp>
 
 namespace axt {
 
-	Camera::Camera(const glm::vec3& origin = glm::vec3{ 0.f,0.f,0.f }, const glm::vec3& direction = glm::vec3{ 1.f,0.f,0.f }) : position{ origin }, direction{ direction } {
-		AXT_CORE_INFO("Bruh");
-	}
-
-	Camera::~Camera() {
-
-	}
-
 	// placeholder basic idea
-	void Camera::Translate(const glm::vec3& translation) {
+	/*void Camera::Translate(const glm::vec3& translation) {
 		position += translation;
 	}
 
 	void Camera::Rotate(const glm::vec3& rotation) {
 		direction += rotation;
-	}
+	}*/
 
 	// Ortho
 	OrthoCamera::OrthoCamera(const float& left, const float& right, const float& bottom, const float& top) : projection{ glm::ortho(left, right, bottom, top, -1.f, 1.f) }, view{ 1.f }, position{ 0.f } {

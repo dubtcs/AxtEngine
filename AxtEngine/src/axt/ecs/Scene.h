@@ -11,6 +11,9 @@
 namespace axt::ecs
 {
 
+	/*template<typename T>
+	using DataPack = Ref<std::vector<T>>;*/
+
 	class AXT_API Scene
 	{
 	public:
@@ -98,6 +101,18 @@ namespace axt::ecs
 			return *(static_cast<T*>(mPacks->at(cid).Get(id)));
 		}
 
+		//template<typename T>
+		//DataPack<T>& GetComponentPack()
+		//{
+		//	ComponentTypeID cid{ GetComponentTypeID<T>() };
+		//	if (mPacks->size() <= cid)
+		//	{
+		//		assert(false && "No component pack found");
+		//		//std::quick_exit(EXIT_FAILURE);
+		//	}
+		//	return 
+		//}
+
 		Scene();
 	protected:
 		IDManager mIDManager;
@@ -112,11 +127,23 @@ namespace axt::ecs
 		Entity(Ref<Scene>& s);
 		~Entity();
 		void Destroy();
+
 		template<typename T>
 		T& Attach()
 		{
 			return mScene->Attach<T>(mID);
 		}
+		template<typename T, typename... Ar>
+		T& Attach(const Ar&... paramaters)
+		{
+			return mScene->Attach<T>(mID, std::forward<const Ar&>(paramaters...));
+		}
+		template<typename T>
+		T& Attach(const T& copycat)
+		{
+			return mScene->Attach<T>(mID, std::forward<const T&>(copycat));
+		}
+
 		template<typename T>
 		void Detach()
 		{

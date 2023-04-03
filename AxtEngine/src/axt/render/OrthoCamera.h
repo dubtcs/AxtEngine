@@ -7,18 +7,6 @@
 
 namespace axt {
 
-	class AXT_API Camera {
-	public:
-		Camera(const glm::vec3& origin, const glm::vec3& direction);
-		~Camera();
-	public:
-		void Translate(const glm::vec3& translation);
-		void Rotate(const glm::vec3& rotation);
-	protected:
-		glm::vec3 position;
-		glm::vec3 direction;
-	};
-
 	class AXT_API OrthoCamera {
 	public:
 		OrthoCamera(const float& left, const float& right, const float& bottom, const float& top);

@@ -22,7 +22,7 @@
 //#include "axt/ecs/IDManager.h"
 //#include "axt/ecs/Scene.h"
 
-#include "axt/render/Camera.h"
+#include "axt/render/OrthoCamera.h"
 #include "axt/render/Renderer.h"
 #include "axt/render/RenderCommand.h"
 #include "axt/render/VertexArray.h"

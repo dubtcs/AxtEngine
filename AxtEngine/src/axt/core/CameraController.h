@@ -2,7 +2,7 @@
 
 #include "axt/Core.h"
 
-#include "axt/render/Camera.h"
+#include "axt/render/OrthoCamera.h"
 #include "axt/events/WindowEvent.h"
 #include "axt/events/MouseEvent.h"
 
