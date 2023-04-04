@@ -12,6 +12,7 @@ namespace axt {
 	class AXT_API CameraControlSystem : public System {
 	public:
 		void OnUpdate(float dt, ecs::EntityID cameraID);
+		bool OnEvent(Event& ev);
 		bool OnMouseScroll(MouseScrollEvent& ev);
 		CameraControlSystem(Ref<ecs::Scene>& scene);
 	};

@@ -8,12 +8,12 @@
 namespace axt
 {
 
-	class AXT_API RenderSystem
+	class AXT_API RenderSystem : protected System
 	{
 	public:
-		bool OnUpdate(float dt, const Ref<ecs::Scene>& scene);
+		bool OnUpdate(float dt);
 		void SetActiveCamera(const ecs::EntityID& id);
-		//RenderSystem(Ref<Scene>& scene);
+		RenderSystem(Ref<ecs::Scene>& scene);
 	protected:
 		ecs::EntityID mCameraID;
 	};

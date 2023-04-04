@@ -47,6 +47,8 @@ struct Sprite
 struct Camera
 {
 	float Zoom{ 1.f };
+	float AspectRatio;
 	glm::mat4 Projection;
-	Camera(float left, float right, float bottom, float top) : Projection{ glm::ortho(left, right, bottom, top, -1.f, 1.f) } {};
+	Camera(float aspectRatio) : AspectRatio{ aspectRatio }, Projection{ glm::ortho( - AspectRatio * Zoom, AspectRatio * Zoom, -Zoom, Zoom, -1.f, 1.f) } {}
+	//Camera(float left, float right, float bottom, float top) : Projection{ glm::ortho(left, right, bottom, top, -1.f, 1.f) }, AspectRatio{  } {};
 };

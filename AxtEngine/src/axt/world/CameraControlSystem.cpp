@@ -10,6 +10,10 @@
 using namespace axt::ecs;
 
 static constexpr float gMovementSpeed{ 1.f };
+static constexpr float gZoomSpeed{ 0.1f };
+
+static constexpr double gMaxZoom{ 25.f };
+static constexpr double gMinZoom{ 0.25f };
 
 namespace axt {
 
@@ -32,13 +36,24 @@ namespace axt {
 		else if (input::IsKeyPressed(AXT_KEY_S)) {
 			position.Value.y -= gMovementSpeed * dt * (camera.Zoom);
 		}
-		camera.Projection = glm::ortho(-1.78f, 1.78f, -1.f, 1.f);
+
+		float lrbound{ camera.AspectRatio * camera.Zoom };
+		camera.Projection = glm::ortho( -lrbound, lrbound, -camera.Zoom, camera.Zoom);
+	}
+
+	bool CameraControlSystem::OnEvent(Event& ev) {
+		EventHandler handler{ ev };
+		handler.Fire<MouseScrollEvent>(AXT_BIND_EVENT(CameraControlSystem::OnMouseScroll));
+
+		return true;
 	}
 
 	bool CameraControlSystem::OnMouseScroll(MouseScrollEvent& ev) {
-		//myZoomLevel = (float)std::max(0.25, std::min(25.0, myZoomLevel - (event.GetY() * (double)myZoomSpeed)));
-		//myCamera.SetProjection(-myAspectRatio * myZoomLevel, myAspectRatio * myZoomLevel, -myZoomLevel, myZoomLevel);
-
+		SceneView<Camera> view{ mScene };
+		for (EntityID id : view) {
+			Camera& camera{ mScene->GetComponent<Camera>(id) };
+			camera.Zoom = static_cast<float>(std::max(gMinZoom, std::min(gMaxZoom, camera.Zoom - (ev.GetY() * gZoomSpeed ))));
+		}
 		return false;
 	}
 

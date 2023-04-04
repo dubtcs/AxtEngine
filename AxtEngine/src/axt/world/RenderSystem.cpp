@@ -15,11 +15,13 @@ namespace axt
 
 	using namespace ecs;
 
-	bool RenderSystem::OnUpdate(float dt, const Ref<Scene>& scene)
+	RenderSystem::RenderSystem(Ref<Scene>& scene) : System{ scene } {}
+
+	bool RenderSystem::OnUpdate(float dt)
 	{
 
-		Camera& camera{ scene->GetComponent<Camera>(mCameraID) };
-		Position& cameraPosition{ scene->GetComponent<Position>(mCameraID) };
+		Camera& camera{ mScene->GetComponent<Camera>(mCameraID) };
+		Position& cameraPosition{ mScene->GetComponent<Position>(mCameraID) };
 
 		glm::mat4 ones{ 1.f };
 		glm::mat4 transformMatrix{ glm::translate(ones, cameraPosition.Value) * glm::rotate(ones, glm::radians(0.f), glm::vec3{0,0,1.f}) };
@@ -33,11 +35,11 @@ namespace axt
 
 		// 2D
 		{
-			SceneView<Renderable, Position, Color> view{ scene };
+			SceneView<Renderable, Position, Color> view{ mScene };
 			for (EntityID id : view)
 			{
-				Position& position{ scene->GetComponent<Position>(id) };
-				Color& color{ scene->GetComponent<Color>(id) };
+				Position& position{ mScene->GetComponent<Position>(id) };
+				Color& color{ mScene->GetComponent<Color>(id) };
 				Render2D::DrawQuad(Render2D::QuadProperties{ .position{position.Value}, .size{1.f, 1.f}, .color{color.Value} });
 			}
 		}

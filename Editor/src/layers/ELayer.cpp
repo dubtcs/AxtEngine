@@ -22,10 +22,10 @@ namespace axt
 	ELayer::ELayer() :
 		mScene{ NewRef<ecs::Scene>() },
 		mCamera{ mScene->CreateEntity() },
-		mRenderSystem{},
+		mRenderSystem{ mScene },
 		mCameraControl{ mScene }
 	{
-		mScene->Attach<Camera>(mCamera, { -1.78f, 1.78f, -1.f, 1.f });
+		mScene->Attach<Camera>(mCamera, { 1920.f / 1080.f });
 		mScene->Attach<Position>(mCamera);
 		mRenderSystem.SetActiveCamera(mCamera);
 
@@ -53,6 +53,7 @@ namespace axt
 	void ELayer::OnEvent(Event& ev)
 	{
 		mCameraController.OnEvent(ev);
+		mCameraControl.OnEvent(ev);
 	}
 
 	void ELayer::OnUpdate(float dt)
@@ -66,7 +67,7 @@ namespace axt
 		gFps = (static_cast<int>(60.f / dt));
 
 		mCameraControl.OnUpdate(dt, mCamera);
-		mRenderSystem.OnUpdate(dt, mScene);
+		mRenderSystem.OnUpdate(dt);
 
 		mFrameBuffer->Unbind();
 	}
@@ -178,6 +179,7 @@ namespace axt
 			gEntityIds.push_back(id);
 			mScene->Attach<Position>(id);
 			mScene->Attach<Color>(id, { 0.25f, 0.25f, 0.25f });
+			mScene->Attach<Renderable>(id);
 		}
 		for (ecs::EntityID& i : gEntityIds)
 		{
