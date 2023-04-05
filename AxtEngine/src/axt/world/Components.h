@@ -3,6 +3,12 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
+struct Description
+{
+	std::string Name;
+	Description(const std::string& name) : Name{ name } {}
+};
+
 // 3D space coordinates
 struct Position
 {

@@ -39,7 +39,7 @@ namespace axt::ecs
 	{
 		if (mEntityToIndex->at(id) > gMaxEntities)
 		{
-			AXT_WARN("EntityID not used in pack");
+			//AXT_WARN("EntityID not used in pack");
 			return;
 		}
 

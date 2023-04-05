@@ -57,4 +57,14 @@ namespace axt {
 		return false;
 	}
 
+	void CameraControlSystem::Resize(float x, float y) {
+		float ratio{ x / y };
+		// currently resizing every camera, might need a "resizable" flag
+		SceneView<Camera> view{ mScene };
+		for (EntityID id : view) {
+			Camera& camera{ mScene->GetComponent<Camera>(id) };
+			camera.AspectRatio = ratio;
+		}
+	}
+
 }

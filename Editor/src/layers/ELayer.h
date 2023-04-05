@@ -7,6 +7,8 @@
 #include <axt/world/RenderSystem.h>
 #include <axt/world/CameraControlSystem.h>
 
+#include "windows/SceneOverview.h"
+
 namespace axt
 {
 
@@ -50,6 +52,10 @@ namespace axt
 
 		RenderSystem mRenderSystem;
 		CameraControlSystem mCameraControl;
+
+		// Windows/Panels
+		SceneOverviewPanel mScenePanel;
+
 		//Ref<World> mWorld;
 	};
 

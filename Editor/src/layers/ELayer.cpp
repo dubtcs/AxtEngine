@@ -23,7 +23,8 @@ namespace axt
 		mScene{ NewRef<ecs::Scene>() },
 		mCamera{ mScene->CreateEntity() },
 		mRenderSystem{ mScene },
-		mCameraControl{ mScene }
+		mCameraControl{ mScene },
+		mScenePanel{ mScene }
 	{
 		mScene->Attach<Camera>(mCamera, { 1920.f / 1080.f });
 		mScene->Attach<Position>(mCamera);
@@ -163,6 +164,7 @@ namespace axt
 			mViewportSize = fNewSize;
 			mFrameBuffer->Resize(static_cast<uint32_t>(mViewportSize.x), static_cast<uint32_t>(mViewportSize.y));
 			mCameraController.Resize(mViewportSize.x, mViewportSize.y);
+			mCameraControl.Resize(mViewportSize.x, mViewportSize.y);
 		}
 		ImGui::Image((void*)(mFrameBuffer->GetColorTextureID()), ImVec2{ mViewportSize.x, mViewportSize.y }, { 0.f, 1.f }, { 1.f, 0.f });
 		ImGui::End();
@@ -172,7 +174,7 @@ namespace axt
 		ImGui::Text(">>");
 		ImGui::End();
 
-		ImGui::Begin("Instances");
+		ImGui::Begin("Scene");
 		if (ImGui::Button("Add Square"))
 		{
 			ecs::EntityID id{ mScene->CreateEntity() };
@@ -180,6 +182,7 @@ namespace axt
 			mScene->Attach<Position>(id);
 			mScene->Attach<Color>(id, { 0.25f, 0.25f, 0.25f });
 			mScene->Attach<Renderable>(id);
+			mScene->Attach<Description>(id, { "Bruh" });
 		}
 		for (ecs::EntityID& i : gEntityIds)
 		{
@@ -197,6 +200,8 @@ namespace axt
 			ImGui::PopID();
 		}
 		ImGui::End();
+
+		mScenePanel.OnImGuiRender();
 
 		ImGui::Begin("Properties");
 		ImGui::Text(">>");

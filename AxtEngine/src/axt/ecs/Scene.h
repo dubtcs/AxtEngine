@@ -86,6 +86,13 @@ namespace axt::ecs
 			mPacks->at(cid).Remove(id);
 		}
 
+		template<typename T>
+		bool HasComponent(const EntityID& id)
+		{
+			ComponentTypeID cid{ GetComponentTypeID<T>() };
+			return mEntityInfo->at(id).Mask.test(cid);
+		}
+
 		// returns a pointer to the data block
 		template<typename T>
 		T& GetComponent(const EntityID& id)
