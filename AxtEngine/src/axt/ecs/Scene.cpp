@@ -5,7 +5,8 @@
 namespace axt::ecs
 {
 
-	Scene::Scene()
+	Scene::Scene() :
+		mIDManager{}
 	{
 		mPacks = NewRef<std::vector<ComponentPack>>();
 		mEntityInfo = NewRef<std::array<EntityInfo, gMaxEntities>>();

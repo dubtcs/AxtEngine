@@ -9,7 +9,9 @@ namespace axt::ecs
 		mCount{ 0 }
 	{
 		for (EntityID i{ gMaxEntities }; i > 0; i--)
+		{
 			mStack.push(i - 1);
+		}
 	}
 
 	EntityID IDManager::Create()

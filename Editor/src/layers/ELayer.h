@@ -8,6 +8,7 @@
 #include <axt/world/CameraControlSystem.h>
 
 #include "windows/SceneOverview.h"
+#include "windows/Properties.h"
 
 namespace axt
 {
@@ -47,14 +48,15 @@ namespace axt
 		Ref<Texture2D> mTexture;
 		Ref<FrameBuffer> mFrameBuffer;
 
-		Ref<ecs::Scene> mScene;
-		ecs::EntityID mCamera;
+		//Ref<ecs::Scene> mScene;
+		Ref<World> mWorld;
 
 		RenderSystem mRenderSystem;
 		CameraControlSystem mCameraControl;
 
 		// Windows/Panels
-		SceneOverviewPanel mScenePanel;
+		WorldOverviewPanel mWorldPanel;
+		PropertiesPanel mEntityPanel;
 
 		//Ref<World> mWorld;
 	};

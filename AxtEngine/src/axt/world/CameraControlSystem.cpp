@@ -17,11 +17,11 @@ static constexpr double gMinZoom{ 0.25f };
 
 namespace axt {
 
-	CameraControlSystem::CameraControlSystem(Ref<Scene>& s) : System{ s } {}
+	CameraControlSystem::CameraControlSystem(Ref<World>& w) : System{ w } {}
 
 	void CameraControlSystem::OnUpdate(float dt, EntityID id) {
-		Position& position{ mScene->GetComponent<Position>(id) };
-		Camera& camera{ mScene->GetComponent<Camera>(id) };
+		Position& position{ mWorld->GetComponent<Position>(id) };
+		Camera& camera{ mWorld->GetComponent<Camera>(id) };
 
 		// Translation
 		if (input::IsKeyPressed(AXT_KEY_D)) {
@@ -49,9 +49,9 @@ namespace axt {
 	}
 
 	bool CameraControlSystem::OnMouseScroll(MouseScrollEvent& ev) {
-		SceneView<Camera> view{ mScene };
+		SceneView<Camera> view{ mWorld->GetScene() };
 		for (EntityID id : view) {
-			Camera& camera{ mScene->GetComponent<Camera>(id) };
+			Camera& camera{ mWorld->GetComponent<Camera>(id) };
 			camera.Zoom = static_cast<float>(std::max(gMinZoom, std::min(gMaxZoom, camera.Zoom - (ev.GetY() * gZoomSpeed ))));
 		}
 		return false;
@@ -60,9 +60,9 @@ namespace axt {
 	void CameraControlSystem::Resize(float x, float y) {
 		float ratio{ x / y };
 		// currently resizing every camera, might need a "resizable" flag
-		SceneView<Camera> view{ mScene };
+		SceneView<Camera> view{ mWorld->GetScene() };
 		for (EntityID id : view) {
-			Camera& camera{ mScene->GetComponent<Camera>(id) };
+			Camera& camera{ mWorld->GetComponent<Camera>(id) };
 			camera.AspectRatio = ratio;
 		}
 	}

@@ -20,20 +20,18 @@ namespace axt
 {
 
 	ELayer::ELayer() :
-		mScene{ NewRef<ecs::Scene>() },
-		mCamera{ mScene->CreateEntity() },
-		mRenderSystem{ mScene },
-		mCameraControl{ mScene },
-		mScenePanel{ mScene }
+		mWorld{ NewRef<World>() },
+		mRenderSystem{ mWorld },
+		mCameraControl{ mWorld },
+		mWorldPanel{ mWorld },
+		mEntityPanel{ mWorld }
 	{
-		mScene->Attach<Camera>(mCamera, { 1920.f / 1080.f });
-		mScene->Attach<Position>(mCamera);
-		mRenderSystem.SetActiveCamera(mCamera);
+		mRenderSystem.SetActiveCamera(mWorld->mActiveCamera);
 
-		static ecs::EntityID bruh{ mScene->CreateEntity() };
-		mScene->Attach<Position>(bruh, { 0.f, -0.5f, 0.f });
-		mScene->Attach<Color>(bruh, {0.25f, 0.5f, 1.f, 1.f});
-		mScene->Attach<Renderable>(bruh);
+		static ecs::EntityID bruh{ mWorld->CreateEntity() };
+		mWorld->Attach<Position>(bruh, 0.f, 0.f, 0.f);
+		mWorld->Attach<Color>(bruh, 0.5f, 0.5f, 1.f, 1.f);
+		mWorld->Attach<Renderable>(bruh);
 	}
 
 	void ELayer::OnAttach()
@@ -67,7 +65,7 @@ namespace axt
 
 		gFps = (static_cast<int>(60.f / dt));
 
-		mCameraControl.OnUpdate(dt, mCamera);
+		mCameraControl.OnUpdate(dt, mWorld->mActiveCamera);
 		mRenderSystem.OnUpdate(dt);
 
 		mFrameBuffer->Unbind();
@@ -132,30 +130,6 @@ namespace axt
 
 		// end dockspace
 
-		ImGui::Begin("Control");
-		ImGui::Text("Opaque Object");
-		ImGui::ColorEdit4("Object Color", glm::value_ptr(obj1.color));
-
-		//Transform& T{ mScene->GetComponent<Transform>(o1ID) };
-		//Transform& T{ OBJ.GetComponent<Transform>() };
-		//ImGui::DragFloat3("Object Position", glm::value_ptr(T.Position), 0.1f);
-
-		ImGui::DragFloat2("Object Scale", glm::value_ptr(obj1.size), 0.1f);
-		ImGui::DragFloat("Object Rotation", &obj1.rotation, 0.05f);
-		ImGui::Text("Textured Object");
-		ImGui::ColorEdit4("Object2 Color", glm::value_ptr(obj2.color));
-		ImGui::DragFloat3("Object2 Position", glm::value_ptr(obj2.position), 0.1f);
-		ImGui::DragFloat2("Object2 Scale", glm::value_ptr(obj2.size), 0.1f);
-		ImGui::DragFloat("Object2 Rotation", &obj2.rotation, 0.05f);
-		ImGui::Text("Object 3");
-		ImGui::DragFloat("Object3 Rotation", &gTexRotate, 0.05f);
-		ImGui::Text("FPS: %i", gFps);
-		ImGui::Text("Draw Calls: %i", fStats.drawCalls);
-		ImGui::Text("Quads: %i", fStats.quads);
-		ImGui::Text("Textures: %i", fStats.textures);
-		ImGui::Checkbox("Draw 400 extra quads", &gDrawBulk);
-		ImGui::End();
-
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0.f,0.f });
 		ImGui::Begin("Viewport");
 		ImVec2 fNewSize{ ImGui::GetContentRegionAvail() };
@@ -174,38 +148,9 @@ namespace axt
 		ImGui::Text(">>");
 		ImGui::End();
 
-		ImGui::Begin("Scene");
-		if (ImGui::Button("Add Square"))
-		{
-			ecs::EntityID id{ mScene->CreateEntity() };
-			gEntityIds.push_back(id);
-			mScene->Attach<Position>(id);
-			mScene->Attach<Color>(id, { 0.25f, 0.25f, 0.25f });
-			mScene->Attach<Renderable>(id);
-			mScene->Attach<Description>(id, { "Bruh" });
-		}
-		for (ecs::EntityID& i : gEntityIds)
-		{
-			Position& t{ mScene->GetComponent<Position>(i) };
-			Color& c{ mScene->GetComponent<Color>(i) };
-			ImGui::PushID(static_cast<int>(i));
-			ImGui::Text("Object: %i", i);
-			ImGui::DragFloat3("Rotation", glm::value_ptr(t.Value), 0.05f);
-			ImGui::ColorEdit4("Color", glm::value_ptr(c.Value));
-			if (ImGui::Button("Delete"))
-			{
-				mScene->DestroyEntity(i);
-				gEntityIds.erase(std::find(gEntityIds.begin(), gEntityIds.end(), i));
-			}
-			ImGui::PopID();
-		}
-		ImGui::End();
-
-		mScenePanel.OnImGuiRender();
-
-		ImGui::Begin("Properties");
-		ImGui::Text(">>");
-		ImGui::End();
+		//ecs::EntityID selectedEntity{ mWorldPanel.OnImGuiRender(mWorld->GetRoot()) };
+		//mEntityPanel.OnImGuiRender(selectedEntity);
+		mEntityPanel.OnImGuiRender(mWorldPanel.OnImGuiRender());
 
 		ImGui::End(); // dockspace end
 	}

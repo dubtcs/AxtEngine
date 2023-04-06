@@ -11,42 +11,134 @@ namespace axt
 
 	using namespace ecs;
 
-	SceneOverviewPanel::SceneOverviewPanel(const Ref<Scene>& scene) :
-		mScene{ scene }
+	using HeirarchyIterator = std::vector<EntityID>::iterator;
+
+	WorldOverviewPanel::WorldOverviewPanel(const Ref<World>& scene) :
+		mWorld{ scene }
 	{
 		// bruh;
 	}
 
-	void SceneOverviewPanel::SetScene(const Ref<Scene>& scene)
+	void WorldOverviewPanel::SetWorld(const Ref<World>& scene)
 	{
-		mScene = scene;
+		mWorld = scene;
 	}
 
-	void SceneOverviewPanel::OnImGuiRender()
+	EntityID WorldOverviewPanel::OnImGuiRender()
 	{
-		ImGui::Begin("Scene Overview");
+		ImGui::ShowDemoWindow();
+		ImGui::Begin("World Overview");
 
-		SceneView<Description> view{ mScene };
-		for (EntityID id : view)
+		if (ImGui::Button("Add Item"))
 		{
-			Description& desc{ mScene->GetComponent<Description>(id) };
-			ImGuiTreeNodeFlags flags{ ImGuiTreeNodeFlags_OpenOnArrow | ((mSelectedEntity == id) ? ImGuiTreeNodeFlags_Selected : 0) };
-			bool open{ ImGui::TreeNodeEx((void*)id, flags, desc.Name.c_str()) };
-			if (ImGui::IsItemClicked())
+			EntityID id{ AddItem() }; // this will add to the world root
+		}
+
+		ImGui::Separator();
+
+		DrawChildTree(mWorld->GetRoot());
+
+		ImGui::End();
+		return mSelectedEntity;
+	}
+
+	EntityID WorldOverviewPanel::AddItem()
+	{
+		return AddItem(mWorld->GetRoot());
+	}
+
+	EntityID WorldOverviewPanel::AddItem(const EntityID& parent)
+	{
+		ecs::EntityID id{ mWorld->CreateEntity(parent) };
+		mWorld->Attach<Position>(id, 0.25f, 0.25f, 0.5f);
+		mWorld->Attach<Color>(id, 0.25f, 0.25f, 0.25f);
+		mWorld->Attach<Renderable>(id);
+		mWorld->Attach<Description>(id, { "Bruh" });
+		return id;
+	}
+
+	void WorldOverviewPanel::DrawChildTree(const EntityID& parent)
+	{
+		for (EntityID id : mWorld->GetChildren(parent))
+		{
+			if (mWorld->HasComponent<Description>(id))
 			{
-				mSelectedEntity = id;
-			}
-			if (open)
-			{
-				if (mScene->HasComponent<Description>(id))
+				Description& d{ mWorld->GetComponent<Description>(id) };
+
+				ImGuiTreeNodeFlags flags{ ImGuiTreeNodeFlags_OpenOnArrow | ((mSelectedEntity == id) ? ImGuiTreeNodeFlags_Selected : 0) };
+				bool open{ ImGui::TreeNodeEx((void*)id, flags, d.Name) };
+
+				if (ImGui::IsItemClicked())
 				{
-					ImGui::Text("Foing");
+					mSelectedEntity = id;
 				}
-				ImGui::TreePop();
+
+				if (ImGui::BeginPopupContextItem())
+				{
+					if (ImGui::Button("Add Child"))
+					{
+						EntityID newID{ AddItem(id) };
+						ImGui::CloseCurrentPopup();
+					}
+					if (ImGui::Button("Delete"))
+					{
+						mWorld->DestroyEntity(id);
+						mSelectedEntity = gMaxEntitiesOOB;
+						ImGui::CloseCurrentPopup();
+					}
+					ImGui::EndPopup();
+				}
+
+				if (open)
+				{
+					DrawChildTree(id);
+					ImGui::TreePop();
+				}
+
 			}
 		}
 
-		ImGui::End();
 	}
 
 }
+
+//for (EntityID id : *h.Children)
+		//{
+		//	//EntityID id{ *i };
+		//	if (mWorld->HasComponent<Description>(id) && mWorld->HasComponent<Heirarchy>(id))
+		//	{
+		//		Description& desc{ mWorld->GetComponent<Description>(id) };
+		//		//Heirarchy& h{ mWorld->GetComponent<Heirarchy>(id) };
+
+		//		ImGuiTreeNodeFlags flags{ ImGuiTreeNodeFlags_OpenOnArrow | ((mSelectedEntity == id) ? ImGuiTreeNodeFlags_Selected : 0) };
+		//		bool open{ ImGui::TreeNodeEx((void*)id, flags, desc.Name) };
+		//		if (ImGui::IsItemClicked())
+		//		{
+		//			mSelectedEntity = id;
+		//		}
+		//		if (ImGui::BeginPopupContextItem())
+		//		{
+		//			if (ImGui::Button("Add Child"))
+		//			{
+		//				EntityID newID{ AddItem(id) };
+		//				//h.Children->push_back(newID);
+		//				ImGui::CloseCurrentPopup();
+		//			}
+		//			if (ImGui::Button("Delete"))
+		//			{
+		//				mWorld->DestroyEntity(id);
+		//				mSelectedEntity = gMaxEntitiesOOB;
+		//				ImGui::CloseCurrentPopup();
+		//			}
+		//			ImGui::EndPopup();
+		//		}
+		//		if (open)
+		//		{
+		//			/*for (EntityID id : *h.Children)
+		//			{
+		//				ImGui::Text("CHILD");
+		//			}*/
+		//			ImGui::TreePop();
+		//		}
+		//	}
+		//}

@@ -13,7 +13,7 @@ namespace axt
 	public:
 		bool OnUpdate(float dt);
 		void SetActiveCamera(const ecs::EntityID& id);
-		RenderSystem(Ref<ecs::Scene>& scene);
+		RenderSystem(Ref<World>& world);
 	protected:
 		ecs::EntityID mCameraID;
 	};
