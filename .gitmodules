@@ -13,6 +13,6 @@
 [submodule "AxtEngine/vendor/entt"]
 	path = AxtEngine/vendor/entt
 	url = https://github.com/skypjack/entt.git
-[submodule "AxtEngine/vendor/nECS"]
-	path = AxtEngine/vendor/nECS
+[submodule "AxtEngine/vendor/necs3"]
+	path = AxtEngine/vendor/necs3
 	url = https://github.com/dubtcs/nECS.git

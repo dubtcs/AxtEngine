@@ -20,11 +20,13 @@ _includeDirs.imgui = "AxtEngine/vendor/imgui"
 _includeDirs.glm = "AxtEngine/vendor/glm"
 _includeDirs.stb = "AxtEngine/vendor/stb"
 _includeDirs.entt = "AxtEngine/vendor/entt/single_include"
+_includeDirs.necs = "AxtEngine/vendor/necs3/necs"
 
 group "Vendors"
     include "AxtEngine/vendor/glfw"
     include "AxtEngine/vendor/glad"
     include "AxtEngine/vendor/imgui"
+    include "AxtEngine/vendor/necs3"
 group ""
 
 project "AxtEngine"
@@ -66,12 +68,14 @@ project "AxtEngine"
         "%{_includeDirs.glm}",
         "%{_includeDirs.stb}",
         "%{_includeDirs.entt}",
+        "%{_includeDirs.necs}",
     }
     
     links {
         "GLFW",
         "glad",
         "imgui",
+        "necs",
         "opengl32.lib",
     }
 
@@ -129,6 +133,7 @@ project "Sandbox"
         "%{_includeDirs.glm}",
         "%{_includeDirs.imgui}",
         "%{_includeDirs.glad}",
+        "%{_includeDirs.necs}",
 
     }
 
@@ -182,6 +187,8 @@ project "Editor"
         "%{_includeDirs.imgui}",
         "%{_includeDirs.glad}",
         "%{_includeDirs.entt}",
+        "%{_includeDirs.necs}",
+
     }
 
     links {
