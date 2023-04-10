@@ -25,6 +25,8 @@
 
 #define AXT_BIND_EVENT(f) std::bind(&f, this, std::placeholders::_1)
 
+//#define AXT_BIND(f) [this](auto&&... ar) -> declytype(auto) { return this->f(std::forward<decltype(ar)>(ar)...) }
+
 namespace axt {
 
 	template<typename T>

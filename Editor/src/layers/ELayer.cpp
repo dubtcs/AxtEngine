@@ -6,32 +6,36 @@
 #include <imgui.h>
 #include <glm/gtc/type_ptr.hpp>
 
-#include <entt/entt.hpp>
-
-#include <axt/world/Components.h>
+#include <axt/world/components/Transform.h>
+#include <axt/world/components/Camera.h>
+#include <axt/world/components/Heirarchy.h>
 
 static int gFps{ 0 };
 static bool gDrawBulk{ true };
 static float gTexRotate{ 0.f };
 
-static std::vector<axt::ecs::EntityID> gEntityIds;
+//static std::vector<axt::ecs::EntityID> gEntityIds;
 
 namespace axt
 {
 
 	ELayer::ELayer() :
-		mWorld{ NewRef<World>() },
-		mRenderSystem{ mWorld },
-		mCameraControl{ mWorld },
-		mWorldPanel{ mWorld },
-		mEntityPanel{ mWorld }
+		mScene{ NewRef<necs::Scene>() },
+		mSceneOverview{ mScene },
+		mRenderSystem{ mScene },
+		mCameraControlSystem{ mScene },
+		mPropertiesWindow{ mScene }
 	{
-		mRenderSystem.SetActiveCamera(mWorld->mActiveCamera);
+		//static necs::Entity bruh{ mScene->CreateEntity() };
+		mWorldRoot = mScene->CreateEntity();
 
-		static ecs::EntityID bruh{ mWorld->CreateEntity() };
-		mWorld->Attach<Position>(bruh, 0.f, 0.f, 0.f);
-		mWorld->Attach<Color>(bruh, 0.5f, 0.5f, 1.f, 1.f);
-		mWorld->Attach<Renderable>(bruh);
+		mCamera = mScene->CreateEntity();
+		mScene->Attach<Camera>(mCamera, (1920.f / 1080.f));
+		mScene->Attach<Transform>(mCamera);
+
+		mScene->Attach<Heirarchy>(mWorldRoot, necs::nil);
+
+		mRenderSystem.SetActiveCamera(mCamera);
 	}
 
 	void ELayer::OnAttach()
@@ -52,7 +56,7 @@ namespace axt
 	void ELayer::OnEvent(Event& ev)
 	{
 		mCameraController.OnEvent(ev);
-		mCameraControl.OnEvent(ev);
+		mCameraControlSystem.OnEvent(ev);
 	}
 
 	void ELayer::OnUpdate(float dt)
@@ -65,8 +69,8 @@ namespace axt
 
 		gFps = (static_cast<int>(60.f / dt));
 
-		mCameraControl.OnUpdate(dt, mWorld->mActiveCamera);
 		mRenderSystem.OnUpdate(dt);
+		mCameraControlSystem.OnUpdate(dt, mCamera);
 
 		mFrameBuffer->Unbind();
 	}
@@ -137,8 +141,7 @@ namespace axt
 		{
 			mViewportSize = fNewSize;
 			mFrameBuffer->Resize(static_cast<uint32_t>(mViewportSize.x), static_cast<uint32_t>(mViewportSize.y));
-			mCameraController.Resize(mViewportSize.x, mViewportSize.y);
-			mCameraControl.Resize(mViewportSize.x, mViewportSize.y);
+			mCameraControlSystem.OnResize(fNewSize.x, fNewSize.y);
 		}
 		ImGui::Image((void*)(mFrameBuffer->GetColorTextureID()), ImVec2{ mViewportSize.x, mViewportSize.y }, { 0.f, 1.f }, { 1.f, 0.f });
 		ImGui::End();
@@ -150,7 +153,12 @@ namespace axt
 
 		//ecs::EntityID selectedEntity{ mWorldPanel.OnImGuiRender(mWorld->GetRoot()) };
 		//mEntityPanel.OnImGuiRender(selectedEntity);
-		mEntityPanel.OnImGuiRender(mWorldPanel.OnImGuiRender());
+		//mEntityPanel.OnImGuiRender(mWorldPanel.OnImGuiRender());
+
+		/*necs::Entity selected{ mSceneOverview.OnImGuiRender(mWorldRoot) };
+		mPropertiesWindow.OnImGuiRender(selected);*/
+
+		mPropertiesWindow.OnImGuiRender(mSceneOverview.OnImGuiRender(mWorldRoot));
 
 		ImGui::End(); // dockspace end
 	}

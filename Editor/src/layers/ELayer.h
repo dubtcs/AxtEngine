@@ -3,12 +3,13 @@
 #include <AxtEngine.h>
 #include <imgui.h>
 
-#include <axt/world/World.h>
-#include <axt/world/RenderSystem.h>
-#include <axt/world/CameraControlSystem.h>
+#include "windows/SceneWindow.h"
+#include "windows/PropertiesWindow.h"
 
-#include "windows/SceneOverview.h"
-#include "windows/Properties.h"
+#include <necs/include.h>
+
+#include <axt/world/CameraControlSystem.h>
+#include <axt/world/RenderSystem.h>
 
 namespace axt
 {
@@ -48,17 +49,16 @@ namespace axt
 		Ref<Texture2D> mTexture;
 		Ref<FrameBuffer> mFrameBuffer;
 
-		//Ref<ecs::Scene> mScene;
-		Ref<World> mWorld;
+		Ref<necs::Scene> mScene;
+		necs::Entity mCamera;
+		necs::Entity mWorldRoot;
 
 		RenderSystem mRenderSystem;
-		CameraControlSystem mCameraControl;
+		CameraControlSystem mCameraControlSystem;
 
-		// Windows/Panels
-		WorldOverviewPanel mWorldPanel;
-		PropertiesPanel mEntityPanel;
+		SceneOverviewWindow mSceneOverview;
+		PropertiesWindow mPropertiesWindow;
 
-		//Ref<World> mWorld;
 	};
 
 }

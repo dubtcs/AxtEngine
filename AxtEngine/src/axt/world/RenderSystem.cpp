@@ -2,44 +2,48 @@
 
 #include "RenderSystem.h"
 
-#include "axt/ecs/nECS.h"
-#include "Components.h"
+#include "components/Camera.h"
+#include "components/Transform.h"
 
-#include "axt/render/RenderCommand.h"
-#include "axt/render/Render2D.h"
+#include <axt/render/Render2D.h>
+#include <axt/render/RenderCommand.h>
 
-static glm::vec4 mClearColor{ 0.1f, 0.1f, 0.1f, 1.f };
+#include "components/all.h"
+
+static glm::vec4 gClearColor{ 0.1f, 0.1f, 0.1f, 1.f };
 
 namespace axt
 {
 
-	using namespace ecs;
+	using namespace necs;
 
-	RenderSystem::RenderSystem(Ref<World>& world) : System{ world } {}
+	RenderSystem::RenderSystem(Ref<Scene>& scene) : System{ scene }
+	{
+
+	}
 
 	bool RenderSystem::OnUpdate(float dt)
 	{
-		Camera& camera{ mWorld->GetComponent<Camera>(mCameraID) };
-		Position& cameraPosition{ mWorld->GetComponent<Position>(mCameraID) };
+		Camera& camera{ mScene->GetComponent<Camera>(mCamera) };
+		Transform& t{ mScene->GetComponent<Transform>(mCamera) };
 
 		glm::mat4 ones{ 1.f };
-		glm::mat4 transformMatrix{ glm::translate(ones, cameraPosition.Value) * glm::rotate(ones, glm::radians(0.f), glm::vec3{0,0,1.f}) };
+		glm::mat4 transformMatrix{ glm::translate(ones, t.Position) * glm::rotate(ones, glm::radians(t.Rotation.x), glm::vec3{0,0,1.f}) };
 		glm::mat4 viewProjection{ glm::inverse(transformMatrix) };
 		viewProjection = camera.Projection * viewProjection;
 
-		RenderCommand::SetClearColor(mClearColor);
+		RenderCommand::SetClearColor(gClearColor);
 		RenderCommand::Clear();
 
 		Render2D::SceneStart(camera, viewProjection);
 
-		// 2D
 		{
-			SceneView<Renderable, Position, Color> view{ mWorld->GetScene() };
-			for (EntityID id : view)
+			SceneView<Sprite, Transform> view{ mScene };
+			for (Entity id : view)
 			{
-				Position& position{ mWorld->GetComponent<Position>(id) };
-				Color& color{ mWorld->GetComponent<Color>(id) };
-				Render2D::DrawQuad(Render2D::QuadProperties{ .position{position.Value}, .size{1.f, 1.f}, .color{color.Value} });
+				Transform& t{ mScene->GetComponent<Transform>(id) };
+				Sprite& s{ mScene->GetComponent<Sprite>(id) };
+				Render2D::DrawQuad(Render2D::QuadProperties{ .position{t.Position}, .size{s.Size}, .color{s.Color} });
 			}
 		}
 
@@ -48,9 +52,9 @@ namespace axt
 		return true;
 	}
 
-	void RenderSystem::SetActiveCamera(const EntityID& id)
+	void RenderSystem::SetActiveCamera(const Entity& id)
 	{
-		mCameraID = id;
+		mCamera = id;
 	}
 
 }

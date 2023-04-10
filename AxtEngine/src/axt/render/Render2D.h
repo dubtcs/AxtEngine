@@ -6,7 +6,7 @@
 #include "OrthoCamera.h"
 #include "Shader.h"
 
-#include "axt/world/Components.h"
+#include <axt/world/components/Camera.h>
 
 #include "axt/render/Texture.h"
 

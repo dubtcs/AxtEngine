@@ -3,19 +3,24 @@
 #include <axt/Core.h>
 
 #include "System.h"
-
-#include "axt/ecs/nECS.h"
+#include "axt/events/Event.h"
+#include "axt/events/WindowEvent.h"
 #include "axt/events/MouseEvent.h"
 
-namespace axt {
+#include <necs/include.h>
 
-	class AXT_API CameraControlSystem : public System {
+namespace axt
+{
+
+	class AXT_API CameraControlSystem : protected System
+	{
 	public:
-		void OnUpdate(float dt, ecs::EntityID cameraID);
-		void Resize(float x, float y);
+		CameraControlSystem(Ref<necs::Scene>& scene);
+		void OnUpdate(float dt, const necs::Entity& cameraEntity);
+		void OnResize(float x, float y);
 		bool OnEvent(Event& ev);
+	protected:
 		bool OnMouseScroll(MouseScrollEvent& ev);
-		CameraControlSystem(Ref<World>& world);
 	};
 
 }

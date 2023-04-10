@@ -1,15 +1,18 @@
 #pragma once
 
 #include <axt/Core.h>
-#include <axt/ecs/nECS.h>
 
-#include "World.h"
+#include<necs/include.h>
 
-namespace axt {
-	class AXT_API System {
-	public:
-		System(Ref<World>& world) : mWorld{ world } {}
+namespace axt
+{
+
+	class AXT_API System
+	{
 	protected:
-		Ref<World> mWorld;
+		Ref<necs::Scene> mScene;
+		System(Ref<necs::Scene>& scene) : mScene{ scene } {};
+		~System() = default;
 	};
+
 }

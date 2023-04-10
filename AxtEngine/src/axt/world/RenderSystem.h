@@ -2,8 +2,8 @@
 
 #include <axt/Core.h>
 
-#include "axt/ecs/nECS.h"
 #include "System.h"
+#include <necs/include.h>
 
 namespace axt
 {
@@ -12,10 +12,10 @@ namespace axt
 	{
 	public:
 		bool OnUpdate(float dt);
-		void SetActiveCamera(const ecs::EntityID& id);
-		RenderSystem(Ref<World>& world);
+		void SetActiveCamera(const necs::Entity& id);
+		RenderSystem(Ref<necs::Scene>& scene);
 	protected:
-		ecs::EntityID mCameraID;
+		necs::Entity mCamera;
 	};
 
 }
