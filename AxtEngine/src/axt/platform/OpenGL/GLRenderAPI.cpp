@@ -21,7 +21,7 @@ namespace axt {
 	}
 
 	void GLRenderAPI::DrawIndexed(const Ref<VertexArray>& vertexArray, uint32_t count) const {
-		count = (count == 0) ? vertexArray->GetIndexBuffer()->GetCount() : count;
+		//count = (count == 0) ? vertexArray->GetIndexBuffer()->GetCount() : count; // why was I forcing this to draw everything??
 		//AXT_CORE_TRACE("{0} -> Drawing: {1} verts", __FUNCTION__, count);
 		glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, nullptr);
 	}

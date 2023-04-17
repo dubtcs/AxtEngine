@@ -2,9 +2,11 @@
 
 #include "axt/Core.h"
 
-namespace axt {
+namespace axt 
+{
 
-	namespace input {
+	namespace input 
+	{
 		bool IsKeyPressed(int keycode);
 		bool IsMouseButtonPressed(int keycode);
 		std::pair<float, float> GetMousePosition();

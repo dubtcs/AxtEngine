@@ -10,7 +10,7 @@
 
 #include "components/all.h"
 
-static glm::vec4 gClearColor{ 0.1f, 0.1f, 0.1f, 1.f };
+static glm::vec4 gClearColor{ 0.f, 0.f, 0.f, 1.f };
 
 namespace axt
 {

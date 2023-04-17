@@ -122,8 +122,11 @@ namespace axt
 		}
 
 		if (ImGui::BeginMenuBar()) {
-			if (ImGui::BeginMenu("AXT")) {
-
+			ImGui::Text("Axt Studio");
+			if (ImGui::BeginMenu("File")) {
+				ImGui::Text("New Project...");
+				ImGui::Text("Save");
+				ImGui::Text("Save As...");
 				ImGui::EndMenu();
 			}
 

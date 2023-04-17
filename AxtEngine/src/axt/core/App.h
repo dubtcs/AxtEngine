@@ -20,7 +20,8 @@
 
 namespace axt {
 
-	class AXT_API App {
+	class AXT_API App 
+	{
 	public:
 		App();
 		virtual ~App();

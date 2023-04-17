@@ -29,16 +29,20 @@ namespace axt
 		Transform& t{ mScene->GetComponent<Transform>(id) };
 
 		// Translation
-		if (input::IsKeyPressed(AXT_KEY_D)) {
+		if (input::IsKeyPressed(AXT_KEY_D)) 
+		{
 			t.Position.x += gMovementSpeed * dt * (camera.Zoom);
 		}
-		else if (input::IsKeyPressed(AXT_KEY_A)) {
+		else if (input::IsKeyPressed(AXT_KEY_A)) 
+		{
 			t.Position.x -= gMovementSpeed * dt * (camera.Zoom);
 		}
-		if (input::IsKeyPressed(AXT_KEY_W)) {
+		if (input::IsKeyPressed(AXT_KEY_W)) 
+		{
 			t.Position.y += gMovementSpeed * dt * (camera.Zoom);
 		}
-		else if (input::IsKeyPressed(AXT_KEY_S)) {
+		else if (input::IsKeyPressed(AXT_KEY_S)) 
+		{
 			t.Position.y -= gMovementSpeed * dt * (camera.Zoom);
 		}
 

@@ -5,9 +5,8 @@
 
 #include "layers/ELayer.h"
 
-#include <axt/ecs/nECS.h>
 #include <necs/include.h>
-#include <entt/entt.hpp>
+//#include <entt/entt.hpp>
 
 #include <glm/gtx/string_cast.hpp>
 
@@ -15,11 +14,6 @@
 
 namespace axt
 {
-
-	struct bruh
-	{
-		glm::vec3 Position;
-	};
 
 	App* axt::CreateApp()
 	{
