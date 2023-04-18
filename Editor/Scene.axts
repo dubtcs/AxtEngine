@@ -1,0 +1,40 @@
+Scene: SCENE_NAME
+Entities:
+  - Entity: GUID_PLACEHOLDER
+    Heirarchy:
+      Parent: 0
+      Children:
+        - 3
+  - Entity: GUID_PLACEHOLDER
+    Camera:
+      AspectRatio: 1.50493968
+      Zoom: 1
+    Transform:
+      Position: [0, 0, 0]
+      Rotation: [0, 0, 0]
+  - Entity: GUID_PLACEHOLDER
+    Description:
+      Name: Entity
+    Transform:
+      Position: [0, 0, 0]
+      Rotation: [0, 0, 0]
+    Sprite:
+      Color: [0.5, 0.5, 0.5, 1]
+      Size: [1, 1]
+    Heirarchy:
+      Parent: 1
+      Children:
+        - 4
+  - Entity: GUID_PLACEHOLDER
+    Description:
+      Name: Entity
+    Transform:
+      Position: [0, 0, 0]
+      Rotation: [0, 0, 0]
+    Sprite:
+      Color: [0.5, 0.5, 0.5, 1]
+      Size: [1, 1]
+    Heirarchy:
+      Parent: 3
+      Children:
+        []

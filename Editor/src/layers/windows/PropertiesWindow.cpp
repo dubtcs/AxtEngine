@@ -38,7 +38,6 @@ namespace axt
 
 		if (id != necs::nil)
 		{
-			//ImGui::Text("%i", id);
 			if (mScene->HasComponent<Description>(id))
 			{
 				ImGui::Text("Description");
@@ -59,8 +58,6 @@ namespace axt
 			{
 				ImGui::Text("Transform");
 				Transform& t{ mScene->GetComponent<Transform>(id) };
-				//ImGui::DragFloat3("Position", glm::value_ptr(t.Position), 0.05f);
-				//ImGui::DragFloat3("Rotation", glm::value_ptr(t.Rotation), 0.05f);
 				DrawVec3Edit("Position", t.Position);
 				DrawVec3Edit("Rotation", t.Rotation);
 				ImGui::Separator();
@@ -70,8 +67,9 @@ namespace axt
 			{
 				ImGui::Text("Sprite");
 				Sprite& sp{ mScene->GetComponent<Sprite>(id) };
-				ImGui::ColorEdit4("Color", glm::value_ptr(sp.Color), 0.1f);
-				//ImGui::DragFloat2("Size", glm::value_ptr(sp.Size), 0.1f);
+				ImGui::Text("Color");
+				ImGui::SameLine();
+				ImGui::ColorEdit4("##Color", glm::value_ptr(sp.Color), 0.1f);
 				DrawVec2Edit("Size", sp.Size);
 				ImGui::Separator();
 			}

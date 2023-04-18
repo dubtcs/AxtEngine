@@ -21,9 +21,14 @@ namespace axt
 	{
 		ImGui::Begin("Scene Overview");
 
-		if (ImGui::Button("New Item"))
+		if (ImGui::BeginPopupContextWindow(0, ImGuiPopupFlags_NoOpenOverItems | ImGuiPopupFlags_MouseButtonRight))
 		{
-			AddItem(root);
+			if (ImGui::Button("Add Entity"))
+			{
+				AddItem(root);
+				ImGui::CloseCurrentPopup();
+			}
+			ImGui::EndPopup();
 		}
 
 		DrawEntityTree(root);

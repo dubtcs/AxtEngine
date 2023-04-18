@@ -10,6 +10,8 @@
 #include <axt/world/components/Camera.h>
 #include <axt/world/components/Heirarchy.h>
 
+#include "axt/serial/Serial.h"
+
 static int gFps{ 0 };
 static bool gDrawBulk{ true };
 static float gTexRotate{ 0.f };
@@ -24,7 +26,8 @@ namespace axt
 		mSceneOverview{ mScene },
 		mRenderSystem{ mScene },
 		mCameraControlSystem{ mScene },
-		mPropertiesWindow{ mScene }
+		mPropertiesWindow{ mScene },
+		mToolsWindow{ mScene }
 	{
 		//static necs::Entity bruh{ mScene->CreateEntity() };
 		mWorldRoot = mScene->CreateEntity();
@@ -49,7 +52,7 @@ namespace axt
 	void ELayer::OnDetach()
 	{
 		AXT_PROFILE_FUNCTION();
-
+		serial::Pack("Scene.axts", mScene);
 		Render2D::Shutdown();
 	}
 
@@ -162,6 +165,7 @@ namespace axt
 		mPropertiesWindow.OnImGuiRender(selected);*/
 
 		mPropertiesWindow.OnImGuiRender(mSceneOverview.OnImGuiRender(mWorldRoot));
+		mToolsWindow.OnImGuiRender(mWorldRoot);
 
 		ImGui::End(); // dockspace end
 	}

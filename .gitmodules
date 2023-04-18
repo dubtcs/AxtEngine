@@ -16,6 +16,7 @@
 [submodule "AxtEngine/vendor/necs3"]
 	path = AxtEngine/vendor/necs3
 	url = https://github.com/dubtcs/nECS.git
+	branch = axt-engine
 [submodule "AxtEngine/vendor/yaml"]
 	path = AxtEngine/vendor/yaml
 	url = https://github.com/dubtcs/yaml-cpp.git

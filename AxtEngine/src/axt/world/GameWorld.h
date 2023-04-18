@@ -2,6 +2,9 @@
 
 #include <axt/Core.h>
 
+#include "RenderSystem.h"
+#include "CameraControlSystem.h"
+
 #include <necs/include.h>
 
 namespace axt
@@ -14,36 +17,71 @@ namespace axt
 	public:
 		necs::Entity CreateEntity(const necs::Entity& parent);
 		void DestroyEntity(const necs::Entity& id);
-		bool ChangeParent(const necs::Entity& id, const necs::Entity& newParent);
-		bool AddChild(const necs::Entity& parent, const necs::Entity& child);
 		Ref<necs::Scene> GetScene() { return mScene; }
 	public:
 		GameWorld();
 	protected:
 		Ref<necs::Scene> mScene;
 		necs::Entity mWorldRoot;
-
 	public:
 
-		// dont use these for now
+		// Attach a component to an entity
 		template<typename T>
-		T& Attach(const necs::Entity& id, const T& other)
+		T& Attach(const necs::Entity& entity)
 		{
-			return mScene->Attach<T>(id, other);
+			return mScene->Attach<T>(entity);
 		}
 
-		// dont use these for now
-		template<typename T, typename... Ar>
-		T& Attach(const necs::Entity& id, Ar... params)
+		/*
+		@brief Attach a component to an entity
+		@param entity: Entity id
+		@param other: object of type T to set as initial value
+		*/
+		template<typename T>
+		T& Attach(const necs::Entity& entity, const T& other)
 		{
-			return mScene->Attach<T>(id, params...);
+			return mScene->Attach<T>(entity, other);
 		}
 
-		// dont use these for now
+		/*
+		@brief Attach a component to an entity
+		@param entity: Entity id
+		@param initializer_list: Initializer list of type T to set as initial value
+		*/
 		template<typename T>
-		void Detach(const necs::Entity& id)
+		T& Attach(const necs::Entity& entity, std::initializer_list<T>&& initializer_list)
 		{
-			return mScene->Detach<T>(id);
+			return mScene->Attach<T>(entity, std::forward<std::initializer_list<T>>(initializer_list));
+		}
+
+
+
+		// Removes a component instance from the entity
+		template<typename T>
+		void Detach(const necs::Entity& entity)
+		{
+			return mScene->Detach<T>(entity);
+		}
+
+
+
+		// Check if an entity has a component attached
+		template<typename T>
+		bool HasComponent(const necs::Entity& entity)
+		{
+			return mScene->HasComponent<T>(entity);
+		}
+
+
+
+		/*
+		@brief Get the component data attached to the entity
+		@brief Does *NOT* check if component is attached. Use HasComponent<T>(entity) before calling this
+		*/
+		template<typename T>
+		T& GetComponent(const necs::Entity& entity)
+		{
+			return mScene->GetComponent<T>(entity);
 		}
 
 	};

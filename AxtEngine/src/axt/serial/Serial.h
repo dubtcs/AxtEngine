@@ -14,16 +14,20 @@ Gonna have to have specific serialize functions each time
 namespace axt::serial
 {
 
-	bool Pack(std::string& filepath, GameWorld& world)
-	{
-
-		return true;
-	}
-
-	bool Unpack(std::string& filepath)
-	{
-
-		return false;
-	}
+	bool Pack(const std::string& filepath, Ref<necs::Scene>& scene);
+	bool Unpack(const std::string& filepath);
 	
 }
+
+//bool Pack(std::string& filepath, GameWorld& world)
+	//{
+	//	// Not until GameWorld is ready
+	//	assert(false);
+	//	return true;
+	//}
+
+	//bool Unpack(std::string& filepath)
+	//{
+
+	//	return false;
+	//}

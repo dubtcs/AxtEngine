@@ -5,6 +5,7 @@
 
 #include "windows/SceneWindow.h"
 #include "windows/PropertiesWindow.h"
+#include "windows/ToolsWindow.h"
 
 #include <necs/include.h>
 
@@ -58,6 +59,7 @@ namespace axt
 
 		SceneOverviewWindow mSceneOverview;
 		PropertiesWindow mPropertiesWindow;
+		ToolsWindow mToolsWindow;
 
 	};
 

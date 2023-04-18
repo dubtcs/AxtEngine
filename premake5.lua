@@ -78,6 +78,7 @@ workspace "AxtEngine"
             "imgui",
             "necs",
             "opengl32.lib",
+            "yaml"
         }
 
         filter "system:windows"
@@ -87,6 +88,7 @@ workspace "AxtEngine"
                 "AXT_BUILD_DLL";
                 --"AXT_PROFILING_ENABLED";
                 "GLFW_INCLUDE_NONE";
+                "YAML_CPP_STATIC_DEFINE"
             }
 
             -- postbuildcommands{

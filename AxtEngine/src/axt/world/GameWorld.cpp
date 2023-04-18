@@ -28,7 +28,7 @@ namespace axt
 		mScene->DestroyEntity(e);
 	}
 
-	bool GameWorld::ChangeParent(const Entity& e, const Entity& newParent)
+	/*bool GameWorld::ChangeParent(const Entity& e, const Entity& newParent)
 	{
 		Heirarchy& h1{ mScene->GetComponent<Heirarchy>(e) };
 		Heirarchy& rh{ mScene->GetComponent<Heirarchy>(h1.Parent) };
@@ -43,12 +43,6 @@ namespace axt
 		Heirarchy& h2{ mScene->GetComponent<Heirarchy>(newParent) };
 		h2.Children.push_back(e);
 		return true;
-	}
-
-	bool GameWorld::AddChild(const Entity& parent, const Entity& child)
-	{
-
-		return true;
-	}
+	}*/
 
 }
