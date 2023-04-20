@@ -1,0 +1,65 @@
+Scene: SCENE_NAME
+WorldRoot: 6033677677161242508
+Entities:
+  - Entity: 2596642020014877697
+    Description:
+      Name: StarterCamera
+    Camera:
+      AspectRatio: 1.35562015
+      Zoom: 2.29999995
+    Transform:
+      Position: [1.44902956, 1.11934519, 0]
+      Rotation: [0, 0, 0]
+    GraphData:
+      ID: 2596642020014877697
+      Parent: 6033677677161242508
+  - Entity: 9109813784293851313
+    Description:
+      Name: BottomLeft
+    Transform:
+      Position: [-1, 0, 0]
+      Rotation: [0, 0, 0]
+    Sprite:
+      Color: [0.100000001, 0.699999988, 0.699999988, 1]
+      Size: [1, 1]
+    GraphData:
+      ID: 9109813784293851313
+      Parent: 6033677677161242508
+      Children:
+        - Entity: 8096062113019374597
+          Description:
+            Name: TopRight
+          Transform:
+            Position: [1, 1, 0]
+            Rotation: [0, 0, 0]
+          Sprite:
+            Color: [1, 0.513513505, 0.513513505, 1]
+            Size: [1, 1]
+          GraphData:
+            ID: 8096062113019374597
+            Parent: 9109813784293851313
+            Children:
+              - Entity: 10678800266439156290
+                Description:
+                  Name: BottomRight
+                Transform:
+                  Position: [1.10000002, -1, 0]
+                  Rotation: [0, 0, 0]
+                Sprite:
+                  Color: [0.631372571, 0.631372571, 0.631372571, 1]
+                  Size: [1, 1]
+                GraphData:
+                  ID: 10678800266439156290
+                  Parent: 8096062113019374597
+  - Entity: 3846017767484965821
+    Description:
+      Name: TopLeft
+    Transform:
+      Position: [-1.25, 1.46599996, 0]
+      Rotation: [0, 0, 0]
+    Sprite:
+      Color: [0.331837624, 0.818532825, 0.339354157, 1]
+      Size: [1, 1]
+    GraphData:
+      ID: 3846017767484965821
+      Parent: 6033677677161242508

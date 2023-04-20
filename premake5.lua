@@ -12,7 +12,7 @@ workspace "AxtEngine"
     output = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
     _includeDirs = {};
-    _includeDirs.glfw = "AxtEngine/vendor/glfw/include"
+    _includeDirs.glfw = "AxtEngine/vendor/glfw2/include"
     _includeDirs.glad = "AxtEngine/vendor/glad/include"
     _includeDirs.imgui = "AxtEngine/vendor/imgui"
     _includeDirs.glm = "AxtEngine/vendor/glm"
@@ -22,7 +22,7 @@ workspace "AxtEngine"
     _includeDirs.yaml = "AxtEngine/vendor/yaml/include"
 
     group "Vendors"
-        include "AxtEngine/vendor/glfw"
+        include "AxtEngine/vendor/glfw2"
         include "AxtEngine/vendor/glad"
         include "AxtEngine/vendor/imgui"
         include "AxtEngine/vendor/necs3"

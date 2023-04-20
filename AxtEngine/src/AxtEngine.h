@@ -25,5 +25,10 @@
 #include "axt/render/RenderContext.h"
 #include "axt/render/Texture.h"
 
+#include "axt/world/UUID.h"
+#include "axt/world/GameWorld.h"
+#include "axt/world/RenderSystem.h"
+#include "axt/world/CameraControlSystem.h"
+
 // not needed. Include at main
 //#include "axt/EntryPoint.h"

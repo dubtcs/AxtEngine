@@ -63,6 +63,18 @@ namespace axt
 				ImGui::Separator();
 			}
 
+			if (world->HasComponent<Camera>(id))
+			{
+				ImGui::Text("Camera");
+				Camera& cam{ world->GetComponent<Camera>(id) };
+				ImGui::Text("Aspect Ratio: %f", cam.AspectRatio);
+				ImGui::Text("Zoom");
+				ImGui::SameLine();
+				ImGui::DragFloat("##Zoom", &cam.Zoom, 0.1f, 0.25f, 25.f);
+				//ImGui::RadioButton("Projection", &cam.Perspective);
+				ImGui::Separator();
+			}
+
 		}
 
 		ImGui::End();

@@ -215,6 +215,7 @@ namespace axt::serial
 		if (cam)
 		{
 			Camera& cmp{ world->Attach<Camera>(entity, cam["AspectRatio"].as<float>()) };
+			cmp.Zoom = cam["Zoom"].as<float>();
 			world->SetActiveCamera(entity);
 		}
 

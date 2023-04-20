@@ -20,3 +20,6 @@
 [submodule "AxtEngine/vendor/yaml"]
 	path = AxtEngine/vendor/yaml
 	url = https://github.com/dubtcs/yaml-cpp.git
+[submodule "AxtEngine/vendor/glfw2"]
+	path = AxtEngine/vendor/glfw2
+	url = https://github.com/dubtcs/glfw.git

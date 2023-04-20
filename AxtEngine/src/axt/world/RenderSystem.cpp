@@ -21,7 +21,13 @@ namespace axt
 
 	bool RenderSystem::OnUpdate(float dt, Ref<GameWorld> world)
 	{
+
+		RenderCommand::SetClearColor(gClearColor);
+		RenderCommand::Clear();
+
 		Entity cameraEntity{ world->GetActiveCamera() };
+		if (cameraEntity == nil)
+			return false;
 		Camera& camera{ world->GetComponent<Camera>(cameraEntity) };
 		Transform& transform{ world->GetComponent<Transform>(cameraEntity) };
 
@@ -29,9 +35,6 @@ namespace axt
 		glm::mat4 transformMatrix{ glm::translate(ones, transform.Position) * glm::rotate(ones, glm::radians(transform.Rotation.x), glm::vec3{0,0,1.f}) };
 		glm::mat4 viewProjection{ glm::inverse(transformMatrix) };
 		viewProjection = camera.Projection * viewProjection;
-
-		RenderCommand::SetClearColor(gClearColor);
-		RenderCommand::Clear();
 
 		Render2D::SceneStart(camera, viewProjection);
 

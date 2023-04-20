@@ -23,6 +23,8 @@ namespace axt
 	void CameraControlSystem::OnUpdate(float dt, Ref<GameWorld> world)
 	{
 		Entity cameraID{ world->GetActiveCamera() };
+		if (cameraID == nil)
+			return;
 		Camera& camera{ world->GetComponent<Camera>(cameraID) };
 		Transform& transform{ world->GetComponent<Transform>(cameraID) };
 

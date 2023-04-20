@@ -1,8 +1,8 @@
 # Axt Engine
 
-Axt Engine = Abstract Engine. It's the best I coukd come up with.
+Axt Engine = Abstract Engine. It's the best I could come up with.
 
-An early rendering platform for Windows.
+An in development game engine/rendering platform for Windows.
 
 ## Getting Started
 
@@ -17,12 +17,13 @@ Visual Studio 2022 is recommended, as that's the IDE I use to make it in. Premak
 
 AxtEngine is being created as an excersise in graphics programming and game engine development.
 
-In this project I'd like to learn more about:
+### Current Features 
+   - [Custom ECS](https://github.com/dubtcs/nECS)
+   - 2D Rendering
+   - Scene Graph / Game World instancing
+      - Separates runtime and editor views
+   - Project saving/loading
 
- - 2D Rendering
-    - UI
- - 3D Rendering
-    - Model loading
-    - PBR
- - [ECS](https://github.com/dubtcs/nECS)
-    - Custom ECS
+### Long term goals
+   - 2D Physics
+   - 3D Rendering

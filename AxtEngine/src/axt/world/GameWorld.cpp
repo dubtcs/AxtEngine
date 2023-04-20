@@ -35,6 +35,7 @@ namespace axt
 		Entity camera{ CreateEntity() };
 		mScene->Attach<Camera>(camera, (1920.f/1080.f));
 		mScene->Attach<Transform>(camera);
+		mScene->Attach<Description>(camera, { "StarterCamera" });
 		mActiveCamera = camera;
 
 		Entity cube{ CreateEntity() };
@@ -91,8 +92,12 @@ namespace axt
 
 	void GameWorld::DestroyEntity(const Entity& e)
 	{
-		GraphData& gdata{ mScene->GetComponent<GraphData>(e) };
+		if (mActiveCamera == e)
+		{
+			mActiveCamera = nil;
+		}
 
+		GraphData& gdata{ mScene->GetComponent<GraphData>(e) };
 		for (axt::UUID& id : gdata.Children)
 		{
 			DestroyEntity(GetEntityFromUUID(id));
