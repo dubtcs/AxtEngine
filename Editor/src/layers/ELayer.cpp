@@ -11,6 +11,7 @@
 #include <axt/world/components/Heirarchy.h>
 
 #include "axt/serial/Serial.h"
+#include "axt/serial/Explorer.h"
 
 static int gFps{ 0 };
 static bool gDrawBulk{ true };
@@ -46,6 +47,9 @@ namespace axt
 	{
 		mCameraController.OnEvent(ev);
 		//mCameraControlSystem.OnEvent(ev);
+		EventHandler handler{ ev };
+		handler.Fire<KeyPressedEvent>(AXT_BIND_EVENT(ELayer::OnKeyPressed));
+		//handler.Fire<KeyPressedEvent>([this]() -> bool {return this->OnKeyPressed(std::forward<KeyPressedEvent>(e))});//([this]() -> bool { return this->fn(std::forward<decltype(args)>(args)...); });
 	}
 
 	void ELayer::OnUpdate(float dt)
@@ -64,6 +68,89 @@ namespace axt
 		RenderSystem::OnUpdate(dt, mWorld);
 
 		mFrameBuffer->Unbind();
+	}
+
+	bool ELayer::OnKeyPressed(KeyPressedEvent& e)
+	{
+		bool controlPressed{ input::IsKeyPressed(AXT_KEY_LEFT_CONTROL) || input::IsKeyPressed(AXT_KEY_RIGHT_CONTROL) };
+		bool shiftPressed{ input::IsKeyPressed(AXT_KEY_LEFT_SHIFT) || input::IsKeyPressed(AXT_KEY_RIGHT_SHIFT) };
+
+		switch (e.GetKeycode())
+		{
+			case(AXT_KEY_S) :
+			{
+				if (controlPressed)
+				{
+					if (shiftPressed)
+					{
+						SaveProjectAs();
+						break;
+					}
+					else
+					{
+						SaveProject();
+						break;
+					}
+				}
+			}
+			case(AXT_KEY_O):
+			{
+				if (controlPressed)
+				{
+					OpenProject();
+					break;
+				}
+			}
+			case(AXT_KEY_N):
+			{
+				if (controlPressed)
+				{
+					NewProject();
+				}
+			}
+		}
+		return false;
+	}
+
+	bool ELayer::NewProject()
+	{
+		mCurrentProjectFilepath.clear();
+		mWorld = NewRef<GameWorld>();
+		return true;
+	}
+
+	bool ELayer::OpenProject()
+	{
+		std::string file{ explorer::OpenFile("Axt Project (.axtp)\0*.axtp") };
+		if (!file.empty())
+		{
+			mCurrentProjectFilepath = file;
+			mWorld = serial::Unpack(file);
+			return true;
+		}
+		return false;
+	}
+
+	bool ELayer::SaveProject()
+	{
+		if (!mCurrentProjectFilepath.empty())
+		{
+			serial::Pack(mCurrentProjectFilepath, mWorld);
+			return true;
+		}
+		return false;
+	}
+
+	bool ELayer::SaveProjectAs()
+	{
+		std::string fileName{ explorer::SaveFile("Axt Project (.axtp)\0*.axtp") };
+		if (!fileName.empty())
+		{
+			serial::Pack(fileName + AXT_FILE_EXTENSION, mWorld);
+			mCurrentProjectFilepath = fileName;
+			return true;
+		}
+		return false;
 	}
 
 	void ELayer::OnImGuiRender()
@@ -113,18 +200,31 @@ namespace axt
 		}
 
 		if (ImGui::BeginMenuBar()) {
+
+			//static std::string fileFormatHint{ std::format("Axt Project ({})\0*{}\0", AXT_FILE_EXTENSION, AXT_FILE_EXTENSION) };
+
 			ImGui::Text("Axt Studio");
 			if (ImGui::BeginMenu("File")) {
-				ImGui::Text("New Project...");
-				if (ImGui::Button("Open"))
+				if (ImGui::MenuItem("New Project", "Ctrl+N"))
 				{
-					mWorld = serial::Unpack("TEST_SCENE.axts");
+					NewProject();
+					ImGui::CloseCurrentPopup();
 				}
-				if (ImGui::Button("Save"))
+				if (ImGui::MenuItem("Open Project...", "Ctrl+O"))
 				{
-					serial::Pack("TEST_SCENE.axts", mWorld);
+					OpenProject();
+					ImGui::CloseCurrentPopup();
 				}
-				ImGui::Text("Save As...");
+				if (ImGui::MenuItem("Save", "Ctrl+S"))
+				{
+					SaveProject();
+					ImGui::CloseCurrentPopup();
+				}
+				if (ImGui::MenuItem("Save As...", "Ctrl+Shift+S"))
+				{
+					SaveProjectAs();
+					ImGui::CloseCurrentPopup();
+				}
 				ImGui::EndMenu();
 			}
 

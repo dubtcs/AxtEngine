@@ -9,7 +9,7 @@
 namespace axt
 {
 
-	// All game objects have a heirarchy REQUIRED
+	// All game objects have a GraphData REQUIRED
 
 	struct AXT_API EntityData
 	{

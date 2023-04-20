@@ -92,11 +92,10 @@ namespace axt
 	void GameWorld::DestroyEntity(const Entity& e)
 	{
 		GraphData& gdata{ mScene->GetComponent<GraphData>(e) };
-		AXT_TRACE("DESTROYING: {0}", gdata.ID);
 
 		for (axt::UUID& id : gdata.Children)
 		{
-			mScene->DestroyEntity(GetEntityFromUUID(id));
+			DestroyEntity(GetEntityFromUUID(id));
 		}
 		mMap.erase(gdata.ID);
 

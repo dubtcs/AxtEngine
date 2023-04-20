@@ -1,0 +1,75 @@
+Scene: SCENE_NAME
+WorldRoot: 6482242439279102424
+Entities:
+  - Entity: 11966792277763456688
+    Camera:
+      AspectRatio: 1.35562015
+      Zoom: 1
+    Transform:
+      Position: [0.0521039963, -0.520667076, 0]
+      Rotation: [0, 0, 0]
+    GraphData:
+      ID: 11966792277763456688
+      Parent: 6482242439279102424
+  - Entity: 3314197938654648940
+    Description:
+      Name: TheFirst
+    Transform:
+      Position: [0, 0, 0]
+      Rotation: [0, 0, 0]
+    Sprite:
+      Color: [0.100000001, 0.699999988, 0.699999988, 1]
+      Size: [1, 1]
+    GraphData:
+      ID: 3314197938654648940
+      Parent: 6482242439279102424
+      Children:
+        - Entity: 4990213471875312359
+          Description:
+            Name: TheSecond
+          Transform:
+            Position: [-1, 1, 0]
+            Rotation: [0, 0, 0]
+          Sprite:
+            Color: [1, 0.555984557, 0.555984557, 1]
+            Size: [1, 1]
+          GraphData:
+            ID: 4990213471875312359
+            Parent: 3314197938654648940
+  - Entity: 18399846589942243598
+    Description:
+      Name: TheThird
+    Transform:
+      Position: [1, 1, 0]
+      Rotation: [0, 0, 0]
+    Sprite:
+      Color: [0.536396325, 1, 0.471042454, 1]
+      Size: [1, 1]
+    GraphData:
+      ID: 18399846589942243598
+      Parent: 6482242439279102424
+      Children:
+        - Entity: 11552670989403247566
+          Description:
+            Name: Entity
+          Transform:
+            Position: [-1, -1, 0]
+            Rotation: [0, 0, 0]
+          Sprite:
+            Color: [0.225801647, 0.501966476, 0.590733588, 1]
+            Size: [1, 1]
+          GraphData:
+            ID: 11552670989403247566
+            Parent: 18399846589942243598
+  - Entity: 15660788779322442901
+    Description:
+      Name: Entity
+    Transform:
+      Position: [1.25, -1.25, 0]
+      Rotation: [0, 0, 0]
+    Sprite:
+      Color: [0.0386100411, 0.0386100411, 0.0386100411, 1]
+      Size: [1, 1]
+    GraphData:
+      ID: 15660788779322442901
+      Parent: 6482242439279102424

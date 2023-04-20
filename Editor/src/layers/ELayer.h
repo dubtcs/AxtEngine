@@ -25,6 +25,12 @@ namespace axt
 		virtual void OnUpdate(float dt) override;
 		virtual void OnEvent(Event& ev) override;
 		virtual void OnImGuiRender() override;
+	protected:
+		bool OnKeyPressed(KeyPressedEvent& e);
+		bool NewProject();
+		bool OpenProject();
+		bool SaveProject();
+		bool SaveProjectAs();
 	public:
 		ELayer();
 		virtual ~ELayer() override = default;
@@ -54,6 +60,8 @@ namespace axt
 
 		Ref<GameWorld> mWorld;
 		necs::Entity mCamera;
+
+		std::string mCurrentProjectFilepath{};
 
 		SceneOverviewWindow mSceneOverview{};
 		PropertiesWindow mPropertiesWindow{};

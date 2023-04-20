@@ -32,7 +32,7 @@ namespace axt
 
 		if (ImGui::BeginPopupContextWindow(0, ImGuiPopupFlags_NoOpenOverItems | ImGuiPopupFlags_MouseButtonRight))
 		{
-			if (ImGui::Button("Add Entity"))
+			if (ImGui::MenuItem("Add Entity"))
 			{
 				AddCubeEntity(world);
 				ImGui::CloseCurrentPopup();
@@ -69,12 +69,12 @@ namespace axt
 
 					if (ImGui::BeginPopupContextItem())
 					{
-						if (ImGui::Button("Add Child"))
+						if (ImGui::MenuItem("Add Child"))
 						{
 							AddCubeEntity(world, i);
 							ImGui::CloseCurrentPopup();
 						}
-						if (ImGui::Button("Delete"))
+						if (ImGui::MenuItem("Delete"))
 						{
 							world->DestroyEntity(i);
 							ImGui::CloseCurrentPopup();

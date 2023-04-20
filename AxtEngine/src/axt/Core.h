@@ -29,6 +29,8 @@
 
 namespace axt {
 
+	inline const char* AXT_FILE_EXTENSION{ ".axtp" };
+
 	template<typename T>
 	using Ref = std::shared_ptr<T>;
 

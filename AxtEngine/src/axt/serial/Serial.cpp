@@ -150,7 +150,6 @@ namespace axt::serial
 		std::ofstream write{ filepath };
 		write << out.c_str();
 
-
 		gWorld = nullptr;
 		return true;
 	}
