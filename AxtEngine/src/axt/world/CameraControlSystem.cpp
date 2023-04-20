@@ -18,32 +18,31 @@ namespace axt
 
 	using namespace necs;
 
-	CameraControlSystem::CameraControlSystem(Ref<Scene>& scene) : System{ scene }
+	static float gAspectRatio;
+
+	void CameraControlSystem::OnUpdate(float dt, Ref<GameWorld> world)
 	{
+		Entity cameraID{ world->GetActiveCamera() };
+		Camera& camera{ world->GetComponent<Camera>(cameraID) };
+		Transform& transform{ world->GetComponent<Transform>(cameraID) };
 
-	}
+		camera.AspectRatio = gAspectRatio;
 
-	void CameraControlSystem::OnUpdate(float dt, const Entity& id)
-	{
-		Camera& camera{ mScene->GetComponent<Camera>(id) };
-		Transform& t{ mScene->GetComponent<Transform>(id) };
-
-		// Translation
-		if (input::IsKeyPressed(AXT_KEY_D)) 
+		if (input::IsKeyPressed(AXT_KEY_D))
 		{
-			t.Position.x += gMovementSpeed * dt * (camera.Zoom);
+			transform.Position.x += gMovementSpeed * dt * (camera.Zoom);
 		}
 		else if (input::IsKeyPressed(AXT_KEY_A)) 
 		{
-			t.Position.x -= gMovementSpeed * dt * (camera.Zoom);
+			transform.Position.x -= gMovementSpeed * dt * (camera.Zoom);
 		}
 		if (input::IsKeyPressed(AXT_KEY_W)) 
 		{
-			t.Position.y += gMovementSpeed * dt * (camera.Zoom);
+			transform.Position.y += gMovementSpeed * dt * (camera.Zoom);
 		}
 		else if (input::IsKeyPressed(AXT_KEY_S)) 
 		{
-			t.Position.y -= gMovementSpeed * dt * (camera.Zoom);
+			transform.Position.y -= gMovementSpeed * dt * (camera.Zoom);
 		}
 
 		float lrbound{ camera.AspectRatio * camera.Zoom };
@@ -52,31 +51,25 @@ namespace axt
 
 	void CameraControlSystem::OnResize(float x, float y)
 	{
-		float ratio{ x / y };
-		SceneView<Camera> view{ mScene };
-		for (Entity i : view)
-		{
-			Camera& c{ mScene->GetComponent<Camera>(i) };
-			c.AspectRatio = ratio;
-		}
+		gAspectRatio = x / y;
 	}
 
-	bool CameraControlSystem::OnEvent(Event& ev)
-	{
-		EventHandler handler{ ev };
-		handler.Fire<MouseScrollEvent>(AXT_BIND_EVENT(CameraControlSystem::OnMouseScroll));
+	//bool CameraControlSystem::OnEvent(Event& ev)
+	//{
+	//	EventHandler handler{ ev };
+	//	handler.Fire<MouseScrollEvent>(AXT_BIND_EVENT(CameraControlSystem::OnMouseScroll));
 
-		return false;
-	}
+	//	return false;
+	//}
 
-	bool CameraControlSystem::OnMouseScroll(MouseScrollEvent& ev)
-	{
-		SceneView<Camera> view{ mScene };
-		for (Entity id : view) {
-			Camera& camera{ mScene->GetComponent<Camera>(id) };
-			camera.Zoom = static_cast<float>(std::max(gMinZoom, std::min(gMaxZoom, camera.Zoom - (ev.GetY() * gZoomSpeed))));
-		}
-		return false;
-	}
+	//bool CameraControlSystem::OnMouseScroll(MouseScrollEvent& ev)
+	//{
+	//	SceneView<Camera> view{ mScene };
+	//	for (Entity id : view) {
+	//		Camera& camera{ mScene->GetComponent<Camera>(id) };
+	//		camera.Zoom = static_cast<float>(std::max(gMinZoom, std::min(gMaxZoom, camera.Zoom - (ev.GetY() * gZoomSpeed))));
+	//	}
+	//	return false;
+	//}
 
 }

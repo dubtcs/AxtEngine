@@ -2,13 +2,25 @@
 
 #include <axt/Core.h>
 
-#include "System.h"
+#include "GameWorld.h"
+
 #include <necs/include.h>
 
 namespace axt
 {
 
-	class AXT_API RenderSystem : protected System
+	namespace RenderSystem
+	{
+		bool OnUpdate(float dt, Ref<GameWorld> world);
+	}
+
+	/*class AXT_API RenderSystem
+	{
+	public:
+		bool OnUpdate(float dt, Ref<GameWorld> world);
+	};*/
+
+	/*class AXT_API RenderSystem : protected System
 	{
 	public:
 		bool OnUpdate(float dt);
@@ -16,6 +28,6 @@ namespace axt
 		RenderSystem(Ref<necs::Scene>& scene);
 	protected:
 		necs::Entity mCamera;
-	};
+	};*/
 
 }

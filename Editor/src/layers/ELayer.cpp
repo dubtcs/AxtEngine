@@ -22,23 +22,9 @@ namespace axt
 {
 
 	ELayer::ELayer() :
-		mScene{ NewRef<necs::Scene>() },
-		mSceneOverview{ mScene },
-		mRenderSystem{ mScene },
-		mCameraControlSystem{ mScene },
-		mPropertiesWindow{ mScene },
-		mToolsWindow{ mScene }
+		mWorld{ NewRef<GameWorld>() }
 	{
-		//static necs::Entity bruh{ mScene->CreateEntity() };
-		mWorldRoot = mScene->CreateEntity();
 
-		mCamera = mScene->CreateEntity();
-		mScene->Attach<Camera>(mCamera, (1920.f / 1080.f));
-		mScene->Attach<Transform>(mCamera);
-
-		mScene->Attach<Heirarchy>(mWorldRoot, necs::nil);
-
-		mRenderSystem.SetActiveCamera(mCamera);
 	}
 
 	void ELayer::OnAttach()
@@ -52,14 +38,14 @@ namespace axt
 	void ELayer::OnDetach()
 	{
 		AXT_PROFILE_FUNCTION();
-		serial::Pack("Scene.axts", mScene);
+
 		Render2D::Shutdown();
 	}
 
 	void ELayer::OnEvent(Event& ev)
 	{
 		mCameraController.OnEvent(ev);
-		mCameraControlSystem.OnEvent(ev);
+		//mCameraControlSystem.OnEvent(ev);
 	}
 
 	void ELayer::OnUpdate(float dt)
@@ -72,8 +58,10 @@ namespace axt
 
 		gFps = (static_cast<int>(60.f / dt));
 
-		mRenderSystem.OnUpdate(dt);
-		mCameraControlSystem.OnUpdate(dt, mCamera);
+		//mRenderSystem.OnUpdate(dt);
+		//mCameraControlSystem.OnUpdate(dt, mCamera);
+		CameraControlSystem::OnUpdate(dt, mWorld);
+		RenderSystem::OnUpdate(dt, mWorld);
 
 		mFrameBuffer->Unbind();
 	}
@@ -128,7 +116,14 @@ namespace axt
 			ImGui::Text("Axt Studio");
 			if (ImGui::BeginMenu("File")) {
 				ImGui::Text("New Project...");
-				ImGui::Text("Save");
+				if (ImGui::Button("Open"))
+				{
+					mWorld = serial::Unpack("TEST_SCENE.axts");
+				}
+				if (ImGui::Button("Save"))
+				{
+					serial::Pack("TEST_SCENE.axts", mWorld);
+				}
 				ImGui::Text("Save As...");
 				ImGui::EndMenu();
 			}
@@ -147,7 +142,7 @@ namespace axt
 		{
 			mViewportSize = fNewSize;
 			mFrameBuffer->Resize(static_cast<uint32_t>(mViewportSize.x), static_cast<uint32_t>(mViewportSize.y));
-			mCameraControlSystem.OnResize(fNewSize.x, fNewSize.y);
+			CameraControlSystem::OnResize(fNewSize.x, fNewSize.y);
 		}
 		ImGui::Image((void*)(mFrameBuffer->GetColorTextureID()), ImVec2{ mViewportSize.x, mViewportSize.y }, { 0.f, 1.f }, { 1.f, 0.f });
 		ImGui::End();
@@ -157,15 +152,8 @@ namespace axt
 		ImGui::Text(">>");
 		ImGui::End();
 
-		//ecs::EntityID selectedEntity{ mWorldPanel.OnImGuiRender(mWorld->GetRoot()) };
-		//mEntityPanel.OnImGuiRender(selectedEntity);
-		//mEntityPanel.OnImGuiRender(mWorldPanel.OnImGuiRender());
-
-		/*necs::Entity selected{ mSceneOverview.OnImGuiRender(mWorldRoot) };
-		mPropertiesWindow.OnImGuiRender(selected);*/
-
-		mPropertiesWindow.OnImGuiRender(mSceneOverview.OnImGuiRender(mWorldRoot));
-		mToolsWindow.OnImGuiRender(mWorldRoot);
+		necs::Entity selected{ mSceneOverview.OnImGuiRender(mWorld) };
+		mPropertiesWindow.OnImGuiRender(mWorld, selected);
 
 		ImGui::End(); // dockspace end
 	}

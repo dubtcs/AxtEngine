@@ -9,40 +9,113 @@ namespace axt
 
 	using namespace necs;
 
+	void GameWorld::CreateRootNode(const axt::UUID& worldRootID)
+	{
+		if (!mRootCreated)
+		{
+			mRootCreated = true;
+			mWorldRoot = mScene->CreateEntity();
+			GraphData& gdata{ mScene->Attach<GraphData>(mWorldRoot) };
+			gdata.ID = worldRootID;
+			mMap.emplace(worldRootID, mWorldRoot);
+		}
+		else
+		{
+			AXT_WARN("Root node already created for this world");
+		}
+	}
+
 	GameWorld::GameWorld() :
 		mScene{ NewRef<Scene>() }
 	{
-		mWorldRoot = mScene->CreateEntity();
+		axt::UUID rootID{ identify::GenerateUUID() };
+		CreateRootNode(rootID);
+
+		// Create a basic camera
+		Entity camera{ CreateEntity() };
+		mScene->Attach<Camera>(camera, (1920.f/1080.f));
+		mScene->Attach<Transform>(camera);
+		mActiveCamera = camera;
+
+		Entity cube{ CreateEntity() };
+		Attach<Sprite>(cube, { { 0.1f, 0.7f, 0.7f, 1.f } });
+		Attach<Transform>(cube);
+		Attach<Description>(cube, { "StarterCube" });
+	}
+
+	GameWorld::GameWorld(const axt::UUID& worldRootID) :
+		mScene{ NewRef<Scene>() }
+	{
+		CreateRootNode(worldRootID);
+	}
+
+	Entity GameWorld::CreateEntity()
+	{
+		return CreateEntity(mWorldRoot);
 	}
 
 	Entity GameWorld::CreateEntity(const Entity& parent)
 	{
+		axt::UUID id{ identify::GenerateUUID() };
+		return CreateEntityWithUUID(parent, id);
+	}
+
+	Entity GameWorld::CreateEntityWithUUID(const Entity& parent, const axt::UUID& id)
+	{
 		Entity e{ mScene->CreateEntity() };
-		Heirarchy& h{ mScene->Attach<Heirarchy>(e) };
-		h.Parent = parent;
+
+		mMap.emplace(id, e);
+		GraphData& pdata{ mScene->GetComponent<GraphData>(parent) };
+		pdata.Children.push_back(id);
+
+		mScene->Attach<GraphData>(e, GraphData{ pdata.ID, id });
+
+		return e;
+	}
+
+	Entity GameWorld::LoadEntity(const axt::UUID& parent, const axt::UUID& id)
+	{
+		Entity e{ mScene->CreateEntity() };
+
+		const Entity& pid{ GetEntityFromUUID(parent) };
+
+		GraphData& pdata{ mScene->GetComponent<GraphData>(pid) };
+		pdata.Children.push_back(id);
+
+		mScene->Attach<GraphData>(e, GraphData{ parent, id });
+
+		mMap.emplace(id, e);
+
 		return e;
 	}
 
 	void GameWorld::DestroyEntity(const Entity& e)
 	{
+		GraphData& gdata{ mScene->GetComponent<GraphData>(e) };
+		AXT_TRACE("DESTROYING: {0}", gdata.ID);
+
+		for (axt::UUID& id : gdata.Children)
+		{
+			mScene->DestroyEntity(GetEntityFromUUID(id));
+		}
+		mMap.erase(gdata.ID);
+
+		Entity pid{ GetEntityFromUUID(gdata.Parent) };
+		GraphData& parent{ mScene->GetComponent<GraphData>(pid) };
+		
+		std::vector<axt::UUID>::iterator position{ std::find(parent.Children.begin(), parent.Children.end(), gdata.ID) };
+		if (position != parent.Children.end())
+		{
+			parent.Children.erase(position);
+		}
+		
 		mScene->DestroyEntity(e);
 	}
 
-	/*bool GameWorld::ChangeParent(const Entity& e, const Entity& newParent)
+	// Used for editor deletions where the iterator is known before the call
+	/*void GameWorld::DestroyEntity(const Entity& e, const std::vector<Entity>::iterator& position)
 	{
-		Heirarchy& h1{ mScene->GetComponent<Heirarchy>(e) };
-		Heirarchy& rh{ mScene->GetComponent<Heirarchy>(h1.Parent) };
 
-		std::vector<Entity>::iterator index{ std::find(rh.Children.begin(), rh.Children.end(), e) };
-		if (index != rh.Children.end())
-		{
-			rh.Children.erase(index);
-		}
-
-		h1.Parent = newParent;
-		Heirarchy& h2{ mScene->GetComponent<Heirarchy>(newParent) };
-		h2.Children.push_back(e);
-		return true;
 	}*/
 
 }

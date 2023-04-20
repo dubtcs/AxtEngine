@@ -2,6 +2,8 @@
 
 #include <axt/Core.h>
 
+#include "GameWorld.h"
+
 #include "System.h"
 #include "axt/events/Event.h"
 #include "axt/events/WindowEvent.h"
@@ -12,7 +14,15 @@
 namespace axt
 {
 
-	class AXT_API CameraControlSystem : protected System
+	namespace CameraControlSystem
+	{
+
+		void OnUpdate(float dt, Ref<GameWorld> world);
+		void OnResize(float x, float y);
+
+	}
+
+	/*class AXT_API CameraControlSystem : protected System
 	{
 	public:
 		CameraControlSystem(Ref<necs::Scene>& scene);
@@ -21,6 +31,6 @@ namespace axt
 		bool OnEvent(Event& ev);
 	protected:
 		bool OnMouseScroll(MouseScrollEvent& ev);
-	};
+	};*/
 
 }

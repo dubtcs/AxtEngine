@@ -4,37 +4,47 @@ Entities:
     Heirarchy:
       Parent: 0
       Children:
-        - 3
+        []
   - Entity: GUID_PLACEHOLDER
     Camera:
       AspectRatio: 1.50493968
-      Zoom: 1
+      Zoom: 2.59999967
     Transform:
       Position: [0, 0, 0]
+      Rotation: [0, 0, 0]
+  - Entity: GUID_PLACEHOLDER
+    Heirarchy:
+      Parent: 0
+      Children:
+        - 3
+        - 4
+  - Entity: GUID_PLACEHOLDER
+    Transform:
+      Position: [0.385332078, 0, 0]
       Rotation: [0, 0, 0]
   - Entity: GUID_PLACEHOLDER
     Description:
       Name: Entity
     Transform:
-      Position: [0, 0, 0]
+      Position: [-1, -1, 0]
       Rotation: [0, 0, 0]
     Sprite:
-      Color: [0.5, 0.5, 0.5, 1]
+      Color: [0.563706577, 0.306882709, 0.306882709, 1]
       Size: [1, 1]
     Heirarchy:
       Parent: 1
       Children:
-        - 4
+        []
   - Entity: GUID_PLACEHOLDER
     Description:
       Name: Entity
     Transform:
-      Position: [0, 0, 0]
+      Position: [1, 1, 0]
       Rotation: [0, 0, 0]
     Sprite:
-      Color: [0.5, 0.5, 0.5, 1]
+      Color: [0.0623872541, 0.359073341, 0.335017681, 1]
       Size: [1, 1]
     Heirarchy:
-      Parent: 3
+      Parent: 1
       Children:
         []

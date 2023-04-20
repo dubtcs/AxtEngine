@@ -5,3 +5,5 @@
 #include "Heirarchy.h"
 #include "Sprite.h"
 #include "Transform.h"
+
+#include "GraphData.h"

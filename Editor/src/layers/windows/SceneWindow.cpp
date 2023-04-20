@@ -10,14 +10,23 @@ namespace axt
 
 	using namespace necs;
 
-	SceneOverviewWindow::SceneOverviewWindow(const Ref<Scene>& scene) :
-		mScene{ scene },
-		mEntity{ nil }
+	static void AddCubeEntity(const Ref<GameWorld>& world, const Entity& parent)
 	{
-
+		Entity newEntity{ world->CreateEntity(parent) };
+		world->Attach<Description>(newEntity, { "Entity" });
+		world->Attach<Transform>(newEntity);
+		world->Attach<Sprite>(newEntity);
 	}
 
-	Entity SceneOverviewWindow::OnImGuiRender(const Entity& root)
+	static void AddCubeEntity(const Ref<GameWorld>& world)
+	{
+		Entity newEntity{ world->CreateEntity() };
+		world->Attach<Description>(newEntity, { "Entity" });
+		world->Attach<Transform>(newEntity);
+		world->Attach<Sprite>(newEntity);
+	}
+
+	Entity SceneOverviewWindow::OnImGuiRender(Ref<GameWorld>& world)
 	{
 		ImGui::Begin("Scene Overview");
 
@@ -25,183 +34,64 @@ namespace axt
 		{
 			if (ImGui::Button("Add Entity"))
 			{
-				AddItem(root);
+				AddCubeEntity(world);
 				ImGui::CloseCurrentPopup();
 			}
 			ImGui::EndPopup();
 		}
 
-		DrawEntityTree(root);
+		DrawEntityTree(world, world->GetWorldRoot());
 
 		ImGui::End();
 
 		return mEntity;
 	}
 
-	void SceneOverviewWindow::SetScene(const Ref<Scene>& scene)
+	void SceneOverviewWindow::DrawEntityTree(Ref<GameWorld>& world, const necs::Entity& entity)
 	{
-		mScene = scene;
-	}
-
-	Entity SceneOverviewWindow::AddItem(const Entity& parent)
-	{
-		if (mScene->HasComponent<Heirarchy>(parent))
+		if (world->HasComponent<GraphData>(entity))
 		{
-
-			Entity e{ mScene->CreateEntity() };
-
-			Heirarchy& ph{ mScene->GetComponent<Heirarchy>(parent) };
-			ph.Children.push_back(e);
-
-			mScene->Attach<Description>(e, {"Entity"});
-			mScene->Attach<Transform>(e);
-			mScene->Attach<Sprite>(e);
-			mScene->Attach<Heirarchy>(e, parent);
-
-			return e;
-		}
-		else
-		{
-			// No heirarchy component for parent
-			std::quick_exit(EXIT_FAILURE);
-		}
-	}
-
-	void SceneOverviewWindow::DrawEntityTree(const Entity& parent)
-	{
-		if (mScene->HasComponent<Heirarchy>(parent))
-		{
-			Heirarchy& h{ mScene->GetComponent<Heirarchy>(parent) };
-			if (h.Children.size() > 0)
+			GraphData& gdata{ world->GetComponent<GraphData>(entity) };
+			for (axt::UUID& id : gdata.Children)
 			{
-				for (int32_t b{ 0 }; b < h.Children.size();)
+				Entity i{ world->GetEntityFromUUID(id) };
+				if (world->HasComponent<Description>(i))
 				{
-					bool isDeleted{ false };
+					ImGuiTreeNodeFlags flags{ ImGuiTreeNodeFlags_OpenOnArrow | ((mEntity == i) ? ImGuiTreeNodeFlags_Selected : 0) | ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_DefaultOpen };
 
-					std::vector<Entity>::iterator it{ h.Children.begin() + b };
-					Entity& i{ *it };
-					if (mScene->HasComponent<Description>(i))
+					Description& d{ world->GetComponent<Description>(i) };
+					bool open{ ImGui::TreeNodeEx((void*)i, flags, d.Name.c_str()) };
+
+					if (ImGui::IsItemClicked())
 					{
-						ImGuiTreeNodeFlags flags{ ImGuiTreeNodeFlags_OpenOnArrow | ((mEntity == i) ? ImGuiTreeNodeFlags_Selected : 0) | ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_DefaultOpen };
-
-						Description& d{ mScene->GetComponent<Description>(i) };
-						bool open{ ImGui::TreeNodeEx((void*)i, flags, d.Name.c_str()) };
-
-						if (ImGui::IsItemClicked())
-						{
-							mEntity = i;
-						}
-
-						if (ImGui::BeginPopupContextItem())
-						{
-							if (ImGui::Button("Add Child"))
-							{
-								Entity newID{ AddItem(i) };
-								ImGui::CloseCurrentPopup();
-							}
-							if (ImGui::Button("Delete"))
-							{
-								Heirarchy& h2{ mScene->GetComponent<Heirarchy>(i) };
-								if (h2.Children.size() > 0)
-								{
-									std::vector<Entity> children{ h2.Children };
-									for (Entity& i2 : children)
-									{
-										mScene->DestroyEntity(i2);
-									}
-								}
-
-								mScene->DestroyEntity(i);
-								mEntity = nil;
-
-								isDeleted = true;
-
-								ImGui::CloseCurrentPopup();
-							}
-							ImGui::EndPopup();
-						}
-
-						if (open)
-						{
-							DrawEntityTree(i);
-							ImGui::TreePop();
-						}
-
+						mEntity = i;
 					}
 
-					if (isDeleted)
+					if (ImGui::BeginPopupContextItem())
 					{
-						h.Children.erase(it);
-					}
-					else
-					{
-						b++;
-					}
-				}
-
-				/*
-				for (std::vector<Entity>::iterator it{ h.Children.begin() }; it < h.Children.end();)
-				{
-					bool isDeleted{ false };
-					Entity& i{ *it };
-					if (mScene->HasComponent<Description>(i))
-					{
-						ImGuiTreeNodeFlags flags{ ImGuiTreeNodeFlags_OpenOnArrow | ((mEntity == i) ? ImGuiTreeNodeFlags_Selected : 0) | ImGuiTreeNodeFlags_SpanAvailWidth };
-
-						Description& d{ mScene->GetComponent<Description>(i) };
-						bool open{ ImGui::TreeNodeEx((void*)i, flags, d.Name.c_str()) };
-
-						if (ImGui::IsItemClicked())
+						if (ImGui::Button("Add Child"))
 						{
-							mEntity = i;
+							AddCubeEntity(world, i);
+							ImGui::CloseCurrentPopup();
 						}
-
-						if (ImGui::BeginPopupContextItem())
+						if (ImGui::Button("Delete"))
 						{
-							if (ImGui::Button("Add Child"))
-							{
-								Entity newID{ AddItem(i) };
-								ImGui::CloseCurrentPopup();
-							}
-							if (ImGui::Button("Delete"))
-							{
-								Heirarchy& h2{ mScene->GetComponent<Heirarchy>(i) };
-								for (Entity& i2 : h2.Children)
-								{
-									mScene->DestroyEntity(i2);
-								}
-
-								mScene->DestroyEntity(i);
-								mEntity = nil;
-
-								isDeleted = true;
-
-								ImGui::CloseCurrentPopup();
-							}
-							ImGui::EndPopup();
+							world->DestroyEntity(i);
+							ImGui::CloseCurrentPopup();
 						}
-
-						if (open)
-						{
-							DrawEntityTree(i);
-							ImGui::TreePop();
-						}
-
+						ImGui::EndPopup();
 					}
 
-					if (isDeleted)
+					if (open)
 					{
-						h.Children.erase(it);
-					}
-					else
-					{
-						it++;
+						DrawEntityTree(world, i);
+						ImGui::TreePop();
 					}
 
 				}
-				*/
 			}
 		}
+
 	}
 
 }

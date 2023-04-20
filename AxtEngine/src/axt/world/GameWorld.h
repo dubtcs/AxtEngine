@@ -2,8 +2,7 @@
 
 #include <axt/Core.h>
 
-#include "RenderSystem.h"
-#include "CameraControlSystem.h"
+#include "UUID.h"
 
 #include <necs/include.h>
 
@@ -12,17 +11,44 @@ namespace axt
 
 	// All game objects have a heirarchy REQUIRED
 
+	struct AXT_API EntityData
+	{
+		necs::Entity entity;
+		axt::UUID id;
+	};
+
 	class AXT_API GameWorld
 	{
 	public:
-		necs::Entity CreateEntity(const necs::Entity& parent);
-		void DestroyEntity(const necs::Entity& id);
-		Ref<necs::Scene> GetScene() { return mScene; }
-	public:
 		GameWorld();
+		GameWorld(const axt::UUID& worldRootID);
+	protected:
+		void CreateRootNode(const axt::UUID& id);
+	public:
+		necs::Entity CreateEntity();
+		necs::Entity CreateEntity(const necs::Entity& parent);
+		necs::Entity CreateEntityWithUUID(const necs::Entity& parent, const axt::UUID& id);
+
+		// Load an existing entity from an axt scene file
+		necs::Entity LoadEntity(const axt::UUID& parent, const axt::UUID& id);
+
+		void DestroyEntity(const necs::Entity& id);
+
+		void SetActiveCamera(const necs::Entity& id) { mActiveCamera = id; }
+
+		necs::Entity GetEntityFromUUID(const axt::UUID& id) { return mMap[id]; }
+		necs::Entity GetActiveCamera() const { return mActiveCamera; }
+		const necs::Entity& GetWorldRoot() { return mWorldRoot; }
+		Ref<necs::Scene>& GetScene() { return mScene; }
 	protected:
 		Ref<necs::Scene> mScene;
 		necs::Entity mWorldRoot;
+		necs::Entity mActiveCamera;
+
+		bool mRootCreated{ false };
+
+		using UUIDMap = std::unordered_map<UUID, necs::Entity>;
+		UUIDMap mMap{};
 	public:
 
 		// Attach a component to an entity

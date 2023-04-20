@@ -9,6 +9,8 @@
 
 #include <necs/include.h>
 
+#include <axt/world/GameWorld.h>
+
 #include <axt/world/CameraControlSystem.h>
 #include <axt/world/RenderSystem.h>
 
@@ -50,7 +52,13 @@ namespace axt
 		Ref<Texture2D> mTexture;
 		Ref<FrameBuffer> mFrameBuffer;
 
-		Ref<necs::Scene> mScene;
+		Ref<GameWorld> mWorld;
+		necs::Entity mCamera;
+
+		SceneOverviewWindow mSceneOverview{};
+		PropertiesWindow mPropertiesWindow{};
+
+		/*Ref<necs::Scene> mScene;
 		necs::Entity mCamera;
 		necs::Entity mWorldRoot;
 
@@ -59,7 +67,7 @@ namespace axt
 
 		SceneOverviewWindow mSceneOverview;
 		PropertiesWindow mPropertiesWindow;
-		ToolsWindow mToolsWindow;
+		ToolsWindow mToolsWindow;*/
 
 	};
 

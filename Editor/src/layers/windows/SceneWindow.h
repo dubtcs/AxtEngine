@@ -2,6 +2,8 @@
 
 #include <axt/Core.h>
 
+#include "axt/world/GameWorld.h"
+
 #include <necs/include.h>
 
 namespace axt
@@ -11,16 +13,11 @@ namespace axt
 	{
 	public:
 		SceneOverviewWindow() = default;
-		SceneOverviewWindow(const Ref<necs::Scene>& scene);
-		void SetScene(const Ref<necs::Scene>& scene);
-		necs::Entity OnImGuiRender(const necs::Entity& world_root);
+		necs::Entity OnImGuiRender(Ref<GameWorld>& world);
 	protected:
-		void DrawEntityTree(const necs::Entity& id);
-		necs::Entity AddItem();
-		necs::Entity AddItem(const necs::Entity& id);
+		void DrawEntityTree(Ref<GameWorld>& world, const necs::Entity& entity);
 	protected:
-		Ref<necs::Scene> mScene;
-		necs::Entity mEntity;
+		necs::Entity mEntity{ necs::nil };
 	};
 
 }

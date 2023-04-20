@@ -19,18 +19,7 @@ namespace axt
 	void DrawVec2Edit(const std::string& title, glm::vec2& vector);
 	void DrawVec3Edit(const std::string& title, glm::vec3& vector);
 
-	PropertiesWindow::PropertiesWindow(const Ref<Scene>& scene) :
-		mScene{ scene }
-	{
-
-	}
-
-	void PropertiesWindow::SetScene(const Ref<Scene>& scene)
-	{
-		mScene = scene;
-	}
-
-	void PropertiesWindow::OnImGuiRender(const Entity& id)
+	void PropertiesWindow::OnImGuiRender(Ref<GameWorld>& world, const Entity& id)
 	{
 		//ImGui::ShowDemoWindow();
 
@@ -38,11 +27,11 @@ namespace axt
 
 		if (id != necs::nil)
 		{
-			if (mScene->HasComponent<Description>(id))
+			if (world->HasComponent<Description>(id))
 			{
 				ImGui::Text("Description");
 				ImGui::Text("Name: ");
-				Description& d{ mScene->GetComponent<Description>(id) };
+				Description& d{ world->GetComponent<Description>(id) };
 				char buffer[256];
 				strcpy_s(buffer, sizeof(buffer), d.Name.c_str());
 				ImGui::SameLine();
@@ -54,19 +43,19 @@ namespace axt
 				ImGui::Separator();
 			}
 
-			if (mScene->HasComponent<Transform>(id))
+			if (world->HasComponent<Transform>(id))
 			{
 				ImGui::Text("Transform");
-				Transform& t{ mScene->GetComponent<Transform>(id) };
+				Transform& t{ world->GetComponent<Transform>(id) };
 				DrawVec3Edit("Position", t.Position);
 				DrawVec3Edit("Rotation", t.Rotation);
 				ImGui::Separator();
 			}
 
-			if (mScene->HasComponent<Sprite>(id))
+			if (world->HasComponent<Sprite>(id))
 			{
 				ImGui::Text("Sprite");
-				Sprite& sp{ mScene->GetComponent<Sprite>(id) };
+				Sprite& sp{ world->GetComponent<Sprite>(id) };
 				ImGui::Text("Color");
 				ImGui::SameLine();
 				ImGui::ColorEdit4("##Color", glm::value_ptr(sp.Color), 0.1f);
@@ -77,11 +66,6 @@ namespace axt
 		}
 
 		ImGui::End();
-	}
-
-	void PropertiesWindow::DrawEntityInfo(const Entity& id)
-	{
-		
 	}
 
 	void DrawVec2Edit(const std::string& title, glm::vec2& vector)
