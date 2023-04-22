@@ -4,6 +4,13 @@ Axt Engine = Abstract Engine. It's the best I could come up with.
 
 An in development game engine/rendering platform for Windows.
 
+Progress screenshots can be found in the [media folder.](https://github.com/dubtcs/AxtEngine/tree/main/media)
+
+<details>
+<summary>Screenshot</summary>
+![Latest Screenshot](https://raw.githubusercontent.com/dubtcs/AxtEngine/main/media/Screenshot%202023-04-21.png)
+</details>
+
 ## Getting Started
 
 Visual Studio 2022 is recommended, as that's the IDE I use to make it in. Premake is used to generate project files.
