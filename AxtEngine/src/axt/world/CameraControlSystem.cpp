@@ -56,22 +56,22 @@ namespace axt
 		gAspectRatio = x / y;
 	}
 
-	//bool CameraControlSystem::OnEvent(Event& ev)
-	//{
-	//	EventHandler handler{ ev };
-	//	handler.Fire<MouseScrollEvent>(AXT_BIND_EVENT(CameraControlSystem::OnMouseScroll));
+	/*bool CameraControlSystem::OnEvent(Event& ev)
+	{
+		EventHandler handler{ ev };
+		handler.Fire<MouseScrollEvent>(CameraControlSystem::OnMouseScroll);
 
-	//	return false;
-	//}
+		return false;
+	}
 
-	//bool CameraControlSystem::OnMouseScroll(MouseScrollEvent& ev)
-	//{
-	//	SceneView<Camera> view{ mScene };
-	//	for (Entity id : view) {
-	//		Camera& camera{ mScene->GetComponent<Camera>(id) };
-	//		camera.Zoom = static_cast<float>(std::max(gMinZoom, std::min(gMaxZoom, camera.Zoom - (ev.GetY() * gZoomSpeed))));
-	//	}
-	//	return false;
-	//}
+	bool CameraControlSystem::OnMouseScroll(MouseScrollEvent& ev)
+	{
+		SceneView<Camera> view{ mScene };
+		for (Entity id : view) {
+			Camera& camera{ mScene->GetComponent<Camera>(id) };
+			camera.Zoom = static_cast<float>(std::max(gMinZoom, std::min(gMaxZoom, camera.Zoom - (ev.GetY() * gZoomSpeed))));
+		}
+		return false;
+	}*/
 
 }

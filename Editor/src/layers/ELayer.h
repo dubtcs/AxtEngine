@@ -1,18 +1,19 @@
 #pragma once
 
 #include <AxtEngine.h>
-#include <imgui.h>
 
 #include "windows/SceneWindow.h"
 #include "windows/PropertiesWindow.h"
-#include "windows/ToolsWindow.h"
-
-#include <necs/include.h>
 
 #include <axt/world/GameWorld.h>
 
 #include <axt/world/CameraControlSystem.h>
 #include <axt/world/RenderSystem.h>
+
+#include <necs/include.h>
+
+#include <imgui.h>
+#include <ImGuizmo.h>
 
 namespace axt
 {
@@ -65,6 +66,12 @@ namespace axt
 
 		SceneOverviewWindow mSceneOverview{};
 		PropertiesWindow mPropertiesWindow{};
+
+		ImGuizmo::OPERATION mGizmoMode{ ImGuizmo::OPERATION::TRANSLATE };
+		float mTranslationSnap{ 0.1f };
+		float mRotationSnap{ 10.f };
+		float mScaleSnap{ 0.25f };
+		bool mSnapToggle{ false };
 
 		/*Ref<necs::Scene> mScene;
 		necs::Entity mCamera;

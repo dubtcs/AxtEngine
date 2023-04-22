@@ -17,12 +17,14 @@ namespace axt
 	using namespace necs;
 
 	void DrawVec2Edit(const std::string& title, glm::vec2& vector);
+	void DrawVec2Edit(const std::string& title, glm::vec3& vector);
 	void DrawVec3Edit(const std::string& title, glm::vec3& vector);
 
 	void PropertiesWindow::OnImGuiRender(Ref<GameWorld>& world, const Entity& id)
 	{
 		//ImGui::ShowDemoWindow();
 
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 6.f, 4.f });
 		ImGui::Begin("Properties");
 
 		if (id != necs::nil)
@@ -49,6 +51,7 @@ namespace axt
 				Transform& t{ world->GetComponent<Transform>(id) };
 				DrawVec3Edit("Position", t.Position);
 				DrawVec3Edit("Rotation", t.Rotation);
+				DrawVec2Edit("Scale", t.Scale);
 				ImGui::Separator();
 			}
 
@@ -59,7 +62,7 @@ namespace axt
 				ImGui::Text("Color");
 				ImGui::SameLine();
 				ImGui::ColorEdit4("##Color", glm::value_ptr(sp.Color), 0.1f);
-				DrawVec2Edit("Size", sp.Size);
+				//DrawVec2Edit("Size", sp.Size);
 				ImGui::Separator();
 			}
 
@@ -78,9 +81,54 @@ namespace axt
 		}
 
 		ImGui::End();
+		ImGui::PopStyleVar();
 	}
 
 	void DrawVec2Edit(const std::string& title, glm::vec2& vector)
+	{
+
+		ImGuiIO& io{ ImGui::GetIO() };
+		ImFont*& bold{ io.Fonts->Fonts[1] };
+
+		ImGuiTableFlags flags{ ImGuiTableFlags_NoBordersInBody | ImGuiTableFlags_NoPadInnerX };
+
+		ImGui::BeginTable(title.c_str(), 3, flags);
+
+		ImGui::TableNextRow();
+		ImGui::TableSetColumnIndex(0);
+		ImGui::Text(title.c_str());
+
+		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{ 0.f, 0.f });
+
+		ImGui::TableSetColumnIndex(1);
+		ImGui::PushStyleColor(ImGuiCol_Button, gSalmon);
+		ImGui::PushFont(bold);
+		if (ImGui::Button("X"))
+		{
+			vector.x = 1.f;
+		}
+		ImGui::PopFont();
+		ImGui::SameLine();
+		ImGui::PopStyleColor();
+		ImGui::InputFloat("##X", &vector.x);
+
+		ImGui::TableSetColumnIndex(2);
+		ImGui::PushStyleColor(ImGuiCol_Button, gGreen);
+		ImGui::PushFont(bold);
+		if (ImGui::Button("Y"))
+		{
+			vector.y = 1.f;
+		}
+		ImGui::PopFont();
+		ImGui::SameLine();
+		ImGui::PopStyleColor();
+		ImGui::InputFloat("##Y", &vector.y);
+
+		ImGui::PopStyleVar();
+		ImGui::EndTable();
+	}
+
+	void DrawVec2Edit(const std::string& title, glm::vec3& vector)
 	{
 
 		ImGuiIO& io{ ImGui::GetIO() };

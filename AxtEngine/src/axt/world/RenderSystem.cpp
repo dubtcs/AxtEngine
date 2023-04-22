@@ -32,7 +32,7 @@ namespace axt
 		Transform& transform{ world->GetComponent<Transform>(cameraEntity) };
 
 		glm::mat4 ones{ 1.f };
-		glm::mat4 transformMatrix{ glm::translate(ones, transform.Position) * glm::rotate(ones, glm::radians(transform.Rotation.x), glm::vec3{0,0,1.f}) };
+		glm::mat4 transformMatrix{ transform.ToMatrix() };
 		glm::mat4 viewProjection{ glm::inverse(transformMatrix) };
 		viewProjection = camera.Projection * viewProjection;
 
@@ -44,7 +44,7 @@ namespace axt
 			{
 				Transform& t{ world->GetComponent<Transform>(id) };
 				Sprite& s{ world->GetComponent<Sprite>(id) };
-				Render2D::DrawQuad(Render2D::QuadProperties{ .position{t.Position}, .size{s.Size}, .color{s.Color} });
+				Render2D::DrawQuad(Render2D::QuadProperties{ .position{t.Position}, .size{t.Scale}, .color{s.Color} });
 			}
 		}
 

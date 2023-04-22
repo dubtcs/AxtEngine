@@ -3,15 +3,16 @@
 
 #include "ELayer.h"
 
-#include <imgui.h>
-#include <glm/gtc/type_ptr.hpp>
-
 #include <axt/world/components/Transform.h>
 #include <axt/world/components/Camera.h>
 #include <axt/world/components/Heirarchy.h>
 
-#include "axt/serial/Serial.h"
-#include "axt/serial/Explorer.h"
+#include <axt/serial/Serial.h>
+#include <axt/serial/Explorer.h>
+
+#include <imgui.h>
+#include <ImGuizmo.h>
+#include <glm/gtc/type_ptr.hpp>
 
 static int gFps{ 0 };
 static bool gDrawBulk{ true };
@@ -108,6 +109,30 @@ namespace axt
 					NewProject();
 				}
 			}
+			case(AXT_KEY_1):
+			{
+				if (controlPressed)
+				{
+					mGizmoMode = ImGuizmo::OPERATION::TRANSLATE;
+				}
+				break;
+			}
+			case(AXT_KEY_2):
+			{
+				if (controlPressed)
+				{
+					mGizmoMode = ImGuizmo::OPERATION::ROTATE;
+				}
+				break;
+			}
+			case(AXT_KEY_3):
+			{
+				if (controlPressed)
+				{
+					mGizmoMode = ImGuizmo::OPERATION::SCALE;
+				}
+				break;
+			}
 		}
 		return false;
 	}
@@ -156,8 +181,14 @@ namespace axt
 	void ELayer::OnImGuiRender()
 	{
 		AXT_PROFILE_FUNCTION();
+		//ImGui::ShowDemoWindow();
 
 		axt::Render2D::RenderStats fStats{ axt::Render2D::GetStats() };
+
+		ImGuiStyle& imStyle{ ImGui::GetStyle() };
+		//imStyle.WindowMenuButtonPosition = -1;
+
+		ImGuiIO& fIO{ ImGui::GetIO() };
 
 		// using imgui dockspace
 
@@ -193,7 +224,6 @@ namespace axt
 			ImGui::PopStyleVar(2);
 		}
 
-		ImGuiIO& fIO{ ImGui::GetIO() };
 		if (fIO.ConfigFlags & ImGuiConfigFlags_DockingEnable) {
 			ImGuiID fDockID{ ImGui::GetID("ADockspace") };
 			ImGui::DockSpace(fDockID, ImVec2(0.f, 0.f), fDockspaceFlags);
@@ -235,25 +265,130 @@ namespace axt
 
 		// end dockspace
 
-		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0.f,0.f });
-		ImGui::Begin("Viewport");
-		ImVec2 fNewSize{ ImGui::GetContentRegionAvail() };
-		if (mViewportSize.x != fNewSize.x || mViewportSize.y != fNewSize.y)
+
 		{
-			mViewportSize = fNewSize;
-			mFrameBuffer->Resize(static_cast<uint32_t>(mViewportSize.x), static_cast<uint32_t>(mViewportSize.y));
-			CameraControlSystem::OnResize(fNewSize.x, fNewSize.y);
+
+			// viewport and world related windows
+
+			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0.f,0.f });
+			ImGui::Begin("Viewport");
+			ImVec2 fNewSize{ ImGui::GetContentRegionAvail() };
+			if (mViewportSize.x != fNewSize.x || mViewportSize.y != fNewSize.y)
+			{
+				mViewportSize = fNewSize;
+				mFrameBuffer->Resize(static_cast<uint32_t>(mViewportSize.x), static_cast<uint32_t>(mViewportSize.y));
+				CameraControlSystem::OnResize(fNewSize.x, fNewSize.y);
+
+				
+				AXT_TRACE("ContenRegion {0} {1}", fNewSize.x, fNewSize.y);
+				ImVec2 window_size{ ImGui::GetWindowSize() };
+				AXT_TRACE("WindowSize {0} {1}", window_size.x, window_size.y);
+			}
+			ImGui::Image((void*)(mFrameBuffer->GetColorTextureID()), ImVec2{ mViewportSize.x, mViewportSize.y }, { 0.f, 1.f }, { 1.f, 0.f });
+
+			necs::Entity selected{ mSceneOverview.OnImGuiRender(mWorld) };
+			mPropertiesWindow.OnImGuiRender(mWorld, selected);
+
+			// Guizmo, move this to a separate window class at some point
+
+			// necs uses nil as 0, so we can just check the value
+			if (selected)
+			{
+				ImGuizmo::SetOrthographic(true);
+				ImGuizmo::SetDrawlist();
+
+				// gizmos
+				ImVec2 viewportPosition{ ImGui::GetWindowPos() };
+				ImGuizmo::SetRect(viewportPosition.x, viewportPosition.y, fNewSize.x, fNewSize.y);
+
+				necs::Entity primaryCamera{ mWorld->GetActiveCamera() };
+				if (primaryCamera && selected != primaryCamera && mWorld->HasComponent<Transform>(selected))
+				{
+					Camera& camera{ mWorld->GetComponent<Camera>(primaryCamera) };
+					Transform& cameraTransform{ mWorld->GetComponent<Transform>(primaryCamera) };
+					glm::mat4 cameraViewMatrix{ glm::inverse(cameraTransform.ToMatrix()) };
+
+					Transform& entityTransform{ mWorld->GetComponent<Transform>(selected) };
+					glm::mat4 manipulationMatrix{ entityTransform.ToMatrix() };
+
+					float currentSnap{ 0.f };
+					if (mSnapToggle || input::IsKeyPressed(AXT_KEY_LEFT_CONTROL))
+					{
+						switch (mGizmoMode)
+						{
+							case(ImGuizmo::OPERATION::TRANSLATE):
+							{
+								currentSnap = mTranslationSnap;
+								break;
+							}
+							case(ImGuizmo::OPERATION::SCALE):
+							{
+								currentSnap = mScaleSnap;
+								break;
+							}
+							case(ImGuizmo::OPERATION::ROTATE):
+							{
+								currentSnap = mRotationSnap;
+								break;
+							}
+						}
+					}
+
+					ImGuizmo::Manipulate(glm::value_ptr(cameraViewMatrix), glm::value_ptr(camera.Projection), mGizmoMode, ImGuizmo::WORLD, glm::value_ptr(manipulationMatrix), 
+						nullptr, &currentSnap);
+
+					if (ImGuizmo::IsUsing())
+					{
+						ImGuizmo::DecomposeMatrixToComponents(glm::value_ptr(manipulationMatrix), glm::value_ptr(entityTransform.Position), glm::value_ptr(entityTransform.Rotation), glm::value_ptr(entityTransform.Scale));
+					}
+				}
+			}
+
+			ImGui::End();
+			ImGui::PopStyleVar();
+
 		}
-		ImGui::Image((void*)(mFrameBuffer->GetColorTextureID()), ImVec2{ mViewportSize.x, mViewportSize.y }, { 0.f, 1.f }, { 1.f, 0.f });
-		ImGui::End();
-		ImGui::PopStyleVar();
+		
+		{
+			ImGui::Begin("Controls");
+			float width{ ImGui::GetContentRegionAvail().x };
+			ImGui::PushTextWrapPos(width);
+			ImGui::Text(" - Right click any empty area inside the Scene View window to open a context menu.");
+			ImGui::Text(" - Right click an entity in the Scene View window to open a context menu");
+			ImGui::Text(" - Ctrl + (1 - 3) : Switch gizmo transform mode between translation, rotation, and scale.");
+			ImGui::End();
+		}
 
-		ImGui::Begin("Output");
-		ImGui::Text(">>");
-		ImGui::End();
+		{
+			ImGui::Begin("Whats New");
+			float width{ ImGui::GetContentRegionAvail().x };
+			ImGui::PushTextWrapPos(width);
+			ImGui::PushFont(fIO.Fonts->Fonts[1]);
+			ImGui::Text("APR 21 2023");
+			ImGui::PopFont();
+			ImGui::Text(" - Help and changelog windows added\n - Gizmos added for entity transform");
+			ImGui::End();
+		}
 
-		necs::Entity selected{ mSceneOverview.OnImGuiRender(mWorld) };
-		mPropertiesWindow.OnImGuiRender(mWorld, selected);
+		ImGui::Begin("Editor Settings");
+
+		ImGui::Text("Snap Toggled");
+		ImGui::SameLine();
+		ImGui::Checkbox("##STTT", &mSnapToggle);
+
+		ImGui::Text("Translation Snap (m)");
+		ImGui::SameLine();
+		ImGui::InputFloat("##ET", &mTranslationSnap);
+
+		ImGui::Text("Rotation Snap (radian)");
+		ImGui::SameLine();
+		ImGui::InputFloat("##ER", &mRotationSnap);
+
+		ImGui::Text("Scale Snap (m)");
+		ImGui::SameLine();
+		ImGui::InputFloat("##ES", &mScaleSnap);
+
+		ImGui::End();
 
 		ImGui::End(); // dockspace end
 	}

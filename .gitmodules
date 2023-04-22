@@ -23,3 +23,6 @@
 [submodule "AxtEngine/vendor/glfw2"]
 	path = AxtEngine/vendor/glfw2
 	url = https://github.com/dubtcs/glfw.git
+[submodule "AxtEngine/vendor/ImGuizmo"]
+	path = AxtEngine/vendor/ImGuizmo
+	url = https://github.com/dubtcs/ImGuizmo.git

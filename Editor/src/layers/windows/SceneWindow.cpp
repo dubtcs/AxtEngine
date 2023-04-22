@@ -76,6 +76,7 @@ namespace axt
 						}
 						if (ImGui::MenuItem("Delete"))
 						{
+							mEntity = nil;
 							world->DestroyEntity(i);
 							ImGui::CloseCurrentPopup();
 						}

@@ -20,6 +20,7 @@ workspace "AxtEngine"
     _includeDirs.entt = "AxtEngine/vendor/entt/single_include"
     _includeDirs.necs = "AxtEngine/vendor/necs3/necs"
     _includeDirs.yaml = "AxtEngine/vendor/yaml/include"
+    _includeDirs.imguizmo = "AxtEngine/vendor/ImGuizmo"
 
     group "Vendors"
         include "AxtEngine/vendor/glfw2"
@@ -49,6 +50,9 @@ workspace "AxtEngine"
             "%{prj.name}/vendor/glm/glm/**.inl",
             "%{prj.name}/vendor/stb/stb_image.cpp",
             "%{prj.name}/vendor/stb/stb_image.h",
+        
+            "%{prj.name}/vendor/ImGuizmo/*.cpp",
+            "%{prj.name}/vendor/ImGuizmo/*.h",
         }
 
         defines {
@@ -70,6 +74,7 @@ workspace "AxtEngine"
             "%{_includeDirs.entt}",
             "%{_includeDirs.necs}",
             "%{_includeDirs.yaml}",
+            "%{_includeDirs.imguizmo}",
         }
         
         links {
@@ -81,19 +86,17 @@ workspace "AxtEngine"
             "yaml"
         }
 
+        filter "files:AxtEngine/vendor/ImGuizmo/*.cpp"
+            flags "NoPCH"
+
         filter "system:windows"
             systemversion "latest"
 
             defines {
                 "AXT_BUILD_DLL";
-                --"AXT_PROFILING_ENABLED";
                 "GLFW_INCLUDE_NONE";
                 "YAML_CPP_STATIC_DEFINE"
             }
-
-            -- postbuildcommands{
-            --     ("{COPY} %{cfg.buildtarget.relpath} ../bin/"..output.."/Sandbox")
-            -- }
 
         filter "configurations:Debug"
             defines {"AXT_DEBUG", "AXT_ENABLE_ASSERTS"}
@@ -193,6 +196,7 @@ workspace "AxtEngine"
             "%{_includeDirs.entt}",
             "%{_includeDirs.necs}",
             "%{_includeDirs.yaml}",
+            "%{_includeDirs.imguizmo}",
 
         }
 

@@ -19,6 +19,8 @@ namespace axt
 
 		void OnUpdate(float dt, Ref<GameWorld> world);
 		void OnResize(float x, float y);
+		//bool OnEvent(Event& ev);
+		//bool OnMouseScroll(MouseScrollEvent& ev);
 
 	}
 

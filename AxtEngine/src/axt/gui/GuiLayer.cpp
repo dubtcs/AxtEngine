@@ -3,19 +3,14 @@
 #include "GuiLayer.h"
 
 #include <imgui.h>
-//#include <backends/imgui_impl_opengl3.h>
-//#include <backends/imgui_impl_glfw.h>
+#include <ImGuizmo.h>
 #include "ImGuiBuilder.cpp"
 
 #include "axt/core/App.h"
 
-// temp
-//#include <GLFW/glfw3.h>
-//#include <glad/glad.h>
-
 namespace axt {
 
-	static void SetCustomTheme();
+	void SetCustomTheme();
 
 	GuiLayer::GuiLayer() : Layer("GuiLayer") {
 		
@@ -40,7 +35,7 @@ namespace axt {
 		io.FontDefault = io.Fonts->AddFontFromFileTTF("data/fonts/poppins/Poppins-Regular.ttf", 18.f);
 		io.Fonts->AddFontFromFileTTF("data/fonts/poppins/Poppins-Bold.ttf", 18.f);
 
-		ImGui::StyleColorsDark();
+		//ImGui::StyleColorsDark();
 		SetCustomTheme();
 		ImGuiStyle& style = ImGui::GetStyle();
 		if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
@@ -69,6 +64,7 @@ namespace axt {
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
+		ImGuizmo::BeginFrame();
 	}
 
 	void GuiLayer::End() {
@@ -104,7 +100,7 @@ namespace axt {
 	//static const ImVec4 gBlackL2OLED{ 0.05f, 0.05f, 0.05f, 1.f };
 	//static const ImVec4 gBlackL3OLED{ 0.1f, 0.1f, 0.1f, 1.f };
 
-	static void SetCustomTheme()
+	void SetCustomTheme()
 	{
 		ImGuiStyle& style{ ImGui::GetStyle() };
 		auto& colors{ style.Colors };
