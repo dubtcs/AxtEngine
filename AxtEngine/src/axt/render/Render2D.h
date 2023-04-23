@@ -31,6 +31,7 @@ namespace axt {
 		static void Init();
 		static void Shutdown();
 		static void SceneStart(const OrthoCamera& camera);
+		static void SceneStart(const glm::mat4& viewProjection);
 		static void SceneStart(const Camera& camera, const glm::mat4& viewProjection);
 		static void SceneEnd();
 

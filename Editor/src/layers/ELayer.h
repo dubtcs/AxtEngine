@@ -5,6 +5,8 @@
 #include "windows/SceneWindow.h"
 #include "windows/PropertiesWindow.h"
 
+#include "../systems/EditorRenderSystem.h"
+
 #include <axt/world/GameWorld.h>
 
 #include <axt/world/CameraControlSystem.h>
@@ -72,6 +74,8 @@ namespace axt
 		float mRotationSnap{ 10.f };
 		float mScaleSnap{ 0.25f };
 		bool mSnapToggle{ false };
+
+		EditorRender mEditorRenderSystem{};
 
 		/*Ref<necs::Scene> mScene;
 		necs::Entity mCamera;

@@ -21,17 +21,17 @@ namespace axt
 		AXT_PROFILE_FUNCTION();
 
 		// Translation
-		if (input::IsKeyPressed(AXT_KEY_D)) 
+		if (input::IsKeyPressed(Key::D)) 
 		{
 			myCameraPosition.x += myCameraMovementSpeed * dt * myZoomLevel;
-		} else if (input::IsKeyPressed(AXT_KEY_A)) 
+		} else if (input::IsKeyPressed(Key::A)) 
 		{
 			myCameraPosition.x -= myCameraMovementSpeed * dt * myZoomLevel;
 		}
-		if (input::IsKeyPressed(AXT_KEY_W)) 
+		if (input::IsKeyPressed(Key::W)) 
 		{
 			myCameraPosition.y += myCameraMovementSpeed * dt * myZoomLevel;
-		} else if (input::IsKeyPressed(AXT_KEY_S)) 
+		} else if (input::IsKeyPressed(Key::S)) 
 		{
 			myCameraPosition.y -= myCameraMovementSpeed * dt * myZoomLevel;
 		}
@@ -39,11 +39,11 @@ namespace axt
 		// Rotation
 		if (myRotationEnabled) 
 		{
-			if (input::IsKeyPressed(AXT_KEY_Q)) 
+			if (input::IsKeyPressed(Key::Q)) 
 			{
 				myCameraRotation += myCameraRotationSpeed * dt;
 			}
-			else if (input::IsKeyPressed(AXT_KEY_E)) 
+			else if (input::IsKeyPressed(Key::E)) 
 			{
 				myCameraRotation -= myCameraRotationSpeed * dt;
 			}

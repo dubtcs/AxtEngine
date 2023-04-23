@@ -30,19 +30,19 @@ namespace axt
 
 		camera.AspectRatio = gAspectRatio;
 
-		if (input::IsKeyPressed(AXT_KEY_D))
+		if (input::IsKeyPressed(Key::D))
 		{
 			transform.Position.x += gMovementSpeed * dt * (camera.Zoom);
 		}
-		else if (input::IsKeyPressed(AXT_KEY_A)) 
+		else if (input::IsKeyPressed(Key::A)) 
 		{
 			transform.Position.x -= gMovementSpeed * dt * (camera.Zoom);
 		}
-		if (input::IsKeyPressed(AXT_KEY_W)) 
+		if (input::IsKeyPressed(Key::W)) 
 		{
 			transform.Position.y += gMovementSpeed * dt * (camera.Zoom);
 		}
-		else if (input::IsKeyPressed(AXT_KEY_S)) 
+		else if (input::IsKeyPressed(Key::S)) 
 		{
 			transform.Position.y -= gMovementSpeed * dt * (camera.Zoom);
 		}

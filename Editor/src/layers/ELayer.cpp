@@ -3,6 +3,8 @@
 
 #include "ELayer.h"
 
+#include "../render/EditorCamera.h"
+
 #include <axt/world/components/Transform.h>
 #include <axt/world/components/Camera.h>
 #include <axt/world/components/Heirarchy.h>
@@ -35,6 +37,8 @@ namespace axt
 		Render2D::Init();
 		mTexture = Texture2D::Create("textures/si.png");
 		mFrameBuffer = FrameBuffer::Create(FrameBufferData{ .width{1920}, .height{1080} });
+		WindowResizeEvent spoof{ 1920, 1080 };
+		mEditorRenderSystem.OnEvent(spoof);
 	}
 
 	void ELayer::OnDetach()
@@ -47,10 +51,10 @@ namespace axt
 	void ELayer::OnEvent(Event& ev)
 	{
 		mCameraController.OnEvent(ev);
-		//mCameraControlSystem.OnEvent(ev);
+		mEditorRenderSystem.OnEvent(ev);
+
 		EventHandler handler{ ev };
 		handler.Fire<KeyPressedEvent>(AXT_BIND_EVENT(ELayer::OnKeyPressed));
-		//handler.Fire<KeyPressedEvent>([this]() -> bool {return this->OnKeyPressed(std::forward<KeyPressedEvent>(e))});//([this]() -> bool { return this->fn(std::forward<decltype(args)>(args)...); });
 	}
 
 	void ELayer::OnUpdate(float dt)
@@ -63,22 +67,19 @@ namespace axt
 
 		gFps = (static_cast<int>(60.f / dt));
 
-		//mRenderSystem.OnUpdate(dt);
-		//mCameraControlSystem.OnUpdate(dt, mCamera);
-		CameraControlSystem::OnUpdate(dt, mWorld);
-		RenderSystem::OnUpdate(dt, mWorld);
+		mEditorRenderSystem.OnUpdate(dt, mWorld);
 
 		mFrameBuffer->Unbind();
 	}
 
 	bool ELayer::OnKeyPressed(KeyPressedEvent& e)
 	{
-		bool controlPressed{ input::IsKeyPressed(AXT_KEY_LEFT_CONTROL) || input::IsKeyPressed(AXT_KEY_RIGHT_CONTROL) };
-		bool shiftPressed{ input::IsKeyPressed(AXT_KEY_LEFT_SHIFT) || input::IsKeyPressed(AXT_KEY_RIGHT_SHIFT) };
+		bool controlPressed{ input::IsKeyPressed(Key::ControlLeft) || input::IsKeyPressed(Key::ControlRight) };
+		bool shiftPressed{ input::IsKeyPressed(Key::ShiftLeft) || input::IsKeyPressed(Key::ShiftRight) };
 
 		switch (e.GetKeycode())
 		{
-			case(AXT_KEY_S) :
+			case(Key::S) :
 			{
 				if (controlPressed)
 				{
@@ -94,7 +95,7 @@ namespace axt
 					}
 				}
 			}
-			case(AXT_KEY_O):
+			case(Key::O):
 			{
 				if (controlPressed)
 				{
@@ -102,14 +103,14 @@ namespace axt
 					break;
 				}
 			}
-			case(AXT_KEY_N):
+			case(Key::N):
 			{
 				if (controlPressed)
 				{
 					NewProject();
 				}
 			}
-			case(AXT_KEY_1):
+			case(Key::N1):
 			{
 				if (controlPressed)
 				{
@@ -117,7 +118,7 @@ namespace axt
 				}
 				break;
 			}
-			case(AXT_KEY_2):
+			case(Key::N2):
 			{
 				if (controlPressed)
 				{
@@ -125,7 +126,7 @@ namespace axt
 				}
 				break;
 			}
-			case(AXT_KEY_3):
+			case(Key::N3):
 			{
 				if (controlPressed)
 				{
@@ -186,7 +187,7 @@ namespace axt
 		axt::Render2D::RenderStats fStats{ axt::Render2D::GetStats() };
 
 		ImGuiStyle& imStyle{ ImGui::GetStyle() };
-		//imStyle.WindowMenuButtonPosition = -1;
+		imStyle.WindowMenuButtonPosition = -1;
 
 		ImGuiIO& fIO{ ImGui::GetIO() };
 
@@ -277,12 +278,14 @@ namespace axt
 			{
 				mViewportSize = fNewSize;
 				mFrameBuffer->Resize(static_cast<uint32_t>(mViewportSize.x), static_cast<uint32_t>(mViewportSize.y));
-				CameraControlSystem::OnResize(fNewSize.x, fNewSize.y);
+				//CameraControlSystem::OnResize(fNewSize.x, fNewSize.y);
 
-				
-				AXT_TRACE("ContenRegion {0} {1}", fNewSize.x, fNewSize.y);
-				ImVec2 window_size{ ImGui::GetWindowSize() };
-				AXT_TRACE("WindowSize {0} {1}", window_size.x, window_size.y);
+				WindowResizeEvent spoof{ static_cast<int>(fNewSize.x), static_cast<int>(fNewSize.y) };
+
+				mEditorRenderSystem.OnEvent(spoof);
+				//AXT_TRACE("ContenRegion {0} {1}", fNewSize.x, fNewSize.y);
+				//ImVec2 window_size{ ImGui::GetWindowSize() };
+				//AXT_TRACE("WindowSize {0} {1}", window_size.x, window_size.y);
 			}
 			ImGui::Image((void*)(mFrameBuffer->GetColorTextureID()), ImVec2{ mViewportSize.x, mViewportSize.y }, { 0.f, 1.f }, { 1.f, 0.f });
 
@@ -294,47 +297,44 @@ namespace axt
 			// necs uses nil as 0, so we can just check the value
 			if (selected)
 			{
-				ImGuizmo::SetOrthographic(true);
+				const EditorCamera& camera{ mEditorRenderSystem.GetCamera() };
+
+				ImGuizmo::SetOrthographic(!camera.IsPerspective());
 				ImGuizmo::SetDrawlist();
 
 				// gizmos
 				ImVec2 viewportPosition{ ImGui::GetWindowPos() };
 				ImGuizmo::SetRect(viewportPosition.x, viewportPosition.y, fNewSize.x, fNewSize.y);
 
-				necs::Entity primaryCamera{ mWorld->GetActiveCamera() };
-				if (primaryCamera && selected != primaryCamera && mWorld->HasComponent<Transform>(selected))
+				float currentSnap{ 0.f };
+				if (mSnapToggle || input::IsKeyPressed(Key::ControlLeft))
 				{
-					Camera& camera{ mWorld->GetComponent<Camera>(primaryCamera) };
-					Transform& cameraTransform{ mWorld->GetComponent<Transform>(primaryCamera) };
-					glm::mat4 cameraViewMatrix{ glm::inverse(cameraTransform.ToMatrix()) };
+					switch (mGizmoMode)
+					{
+						case(ImGuizmo::OPERATION::TRANSLATE):
+						{
+							currentSnap = mTranslationSnap;
+							break;
+						}
+						case(ImGuizmo::OPERATION::SCALE):
+						{
+							currentSnap = mScaleSnap;
+							break;
+						}
+						case(ImGuizmo::OPERATION::ROTATE):
+						{
+							currentSnap = mRotationSnap;
+							break;
+						}
+					}
+				}
 
+				if (mWorld->HasComponent<Transform>(selected))
+				{
 					Transform& entityTransform{ mWorld->GetComponent<Transform>(selected) };
 					glm::mat4 manipulationMatrix{ entityTransform.ToMatrix() };
 
-					float currentSnap{ 0.f };
-					if (mSnapToggle || input::IsKeyPressed(AXT_KEY_LEFT_CONTROL))
-					{
-						switch (mGizmoMode)
-						{
-							case(ImGuizmo::OPERATION::TRANSLATE):
-							{
-								currentSnap = mTranslationSnap;
-								break;
-							}
-							case(ImGuizmo::OPERATION::SCALE):
-							{
-								currentSnap = mScaleSnap;
-								break;
-							}
-							case(ImGuizmo::OPERATION::ROTATE):
-							{
-								currentSnap = mRotationSnap;
-								break;
-							}
-						}
-					}
-
-					ImGuizmo::Manipulate(glm::value_ptr(cameraViewMatrix), glm::value_ptr(camera.Projection), mGizmoMode, ImGuizmo::WORLD, glm::value_ptr(manipulationMatrix), 
+					ImGuizmo::Manipulate(glm::value_ptr(camera.GetViewMatrix()), glm::value_ptr(camera.GetProjectionMatrix()), mGizmoMode, ImGuizmo::WORLD, glm::value_ptr(manipulationMatrix),
 						nullptr, &currentSnap);
 
 					if (ImGuizmo::IsUsing())
@@ -342,6 +342,7 @@ namespace axt
 						ImGuizmo::DecomposeMatrixToComponents(glm::value_ptr(manipulationMatrix), glm::value_ptr(entityTransform.Position), glm::value_ptr(entityTransform.Rotation), glm::value_ptr(entityTransform.Scale));
 					}
 				}
+
 			}
 
 			ImGui::End();
@@ -353,9 +354,23 @@ namespace axt
 			ImGui::Begin("Controls");
 			float width{ ImGui::GetContentRegionAvail().x };
 			ImGui::PushTextWrapPos(width);
+
+			ImGui::PushFont(fIO.Fonts->Fonts[1]);
+			ImGui::Text("Scene View");
+			ImGui::PopFont();
 			ImGui::Text(" - Right click any empty area inside the Scene View window to open a context menu.");
 			ImGui::Text(" - Right click an entity in the Scene View window to open a context menu");
 			ImGui::Text(" - Ctrl + (1 - 3) : Switch gizmo transform mode between translation, rotation, and scale.");
+
+			ImGui::Separator();
+			ImGui::PushFont(fIO.Fonts->Fonts[1]);
+			ImGui::Text("Viewport");
+			ImGui::PopFont();
+			ImGui::Text(" - Hold right click to enable camera movement.");
+			ImGui::Text(" \t- WASD for movement.");
+			ImGui::Text(" \t- Q/E for vertical camera movement.");
+			ImGui::Text(" - Hold left control to enable snapping.");
+
 			ImGui::End();
 		}
 
@@ -387,6 +402,12 @@ namespace axt
 		ImGui::Text("Scale Snap (m)");
 		ImGui::SameLine();
 		ImGui::InputFloat("##ES", &mScaleSnap);
+
+		ImGui::Separator();
+		ImGui::Text("Camera");
+		
+		ImGui::Text("Field of view");
+		ImGui::SameLine();
 
 		ImGui::End();
 

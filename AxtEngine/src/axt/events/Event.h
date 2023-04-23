@@ -2,6 +2,9 @@
 
 #include "axt/Core.h"
 
+#include <functional>
+#include <string>
+
 namespace axt {
 
 	enum class EventType {

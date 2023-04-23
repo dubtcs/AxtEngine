@@ -11,19 +11,19 @@
 namespace axt {
 	namespace input {
 
-		bool IsKeyPressed(int keycode) {
+		bool IsKeyPressed(Keycode keycode) {
 			const auto window = static_cast<GLFWwindow*>(App::GetApp().GetWindow().GetNativeWindow());
 			const int state{ glfwGetKey(window, keycode) };
 			return state == GLFW_PRESS || state == GLFW_REPEAT;
 		}
 
-		bool IsMouseButtonPressed(int keycode) {
+		bool IsMouseButtonPressed(Keycode keycode) {
 			const auto window = static_cast<GLFWwindow*>(App::GetApp().GetWindow().GetNativeWindow());
 			const int state{ glfwGetMouseButton(window, keycode) };
 			return state == GLFW_PRESS;
 		}
 
-		std::pair<float, float> GetMousePosition() {
+		glm::vec2 GetMousePosition() {
 			const auto window = static_cast<GLFWwindow*>(App::GetApp().GetWindow().GetNativeWindow());
 			double x, y;
 			glfwGetCursorPos(window, &x, &y);
@@ -31,13 +31,13 @@ namespace axt {
 		}
 
 		float GetMouseX() {
-			std::pair<float, float> pos{ GetMousePosition() };
-			return pos.first;
+			glm::vec2 pos{ GetMousePosition() };
+			return pos.x;
 		}
 
 		float GetMouseY() {
-			std::pair<float, float> pos{ GetMousePosition() };
-			return pos.second;
+			glm::vec2 pos{ GetMousePosition() };
+			return pos.y;
 		}
 
 	}	
