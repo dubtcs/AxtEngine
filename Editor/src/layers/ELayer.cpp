@@ -36,7 +36,15 @@ namespace axt
 		AXT_PROFILE_FUNCTION();
 		Render2D::Init();
 		mTexture = Texture2D::Create("textures/si.png");
-		mFrameBuffer = FrameBuffer::Create(FrameBufferData{ .width{1920}, .height{1080} });
+
+		FrameBufferData DATA{
+			.Width{1920},
+			.Height{1080},
+			.Textures{ FrameBufferTextureFormat::RGBA8, FrameBufferTextureFormat::RGBA8, FrameBufferTextureFormat::DEPTH24STENCIL8 }
+		};
+
+		mFrameBuffer = FrameBuffer::Create(DATA);
+
 		WindowResizeEvent spoof{ 1920, 1080 };
 		mEditorRenderSystem.OnEvent(spoof);
 	}

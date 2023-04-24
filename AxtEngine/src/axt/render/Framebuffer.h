@@ -2,20 +2,59 @@
 
 #include "axt/Core.h"
 
+#include <vector>
+
 namespace axt {
 
-	struct AXT_API FrameBufferData {
-		uint32_t width{ 1920 }, height{ 1080 };
-		bool existsInSwapChain{ false };
+	// I could possible move these into the FrameBuffer class
+	// so formatting could look like
+	// FrameBuffer::TextureFormat
+	// FrameBuffer::TextureData
+	// FrameBuffer::TextureCollection etc...
+
+	enum class FrameBufferTextureFormat
+	{
+		None = 0,
+
+		RGBA8,
+
+		DEPTH24STENCIL8,
+
+		//Depth = DEPTH24STENCIL8
 	};
 
-	class AXT_API FrameBuffer {
+	struct FrameBufferTextureData
+	{
+		FrameBufferTextureFormat Format{ FrameBufferTextureFormat::None };
+		FrameBufferTextureData() = default;
+		FrameBufferTextureData(const FrameBufferTextureFormat& format) : Format{ format } {}
+	};
+
+	struct FrameBufferTextureCollection
+	{
+		std::vector<FrameBufferTextureData> TextureData;
+		FrameBufferTextureCollection() = default;
+		FrameBufferTextureCollection(const std::initializer_list<FrameBufferTextureData>& textureData) : TextureData{ textureData } {}
+	};
+
+	struct AXT_API FrameBufferData 
+	{
+		uint32_t Width{ 1920 };
+		uint32_t Height{ 1080 };
+
+		FrameBufferTextureCollection Textures;
+
+		//bool ExistsInSwapChain{ false };
+	};
+
+	class AXT_API FrameBuffer 
+	{
 	public:
 		static Ref<FrameBuffer> Create(const FrameBufferData& newData = FrameBufferData{});
 		virtual void Bind() const = 0;
 		virtual void Unbind() const = 0;
 		virtual uint32_t GetBufferID() const = 0;
-		virtual uint32_t GetColorTextureID() const = 0;
+		virtual uint32_t GetColorTextureID(const uint32_t index = 0) const = 0;
 		virtual void Resize(uint32_t x, uint32_t y) = 0;
 		virtual ~FrameBuffer() = default;
 	protected:

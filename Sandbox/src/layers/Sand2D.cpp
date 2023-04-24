@@ -21,7 +21,7 @@ void Sand2D::OnAttach() {
 
 	axt::Render2D::Init();
 	mTexture = axt::Texture2D::Create("textures/si.png");
-	mFrameBuffer = axt::FrameBuffer::Create(axt::FrameBufferData{ .width{1920}, .height{1080} });
+	mFrameBuffer = axt::FrameBuffer::Create(axt::FrameBufferData{ .Width{1920}, .Height{1080} });
 }
 
 void Sand2D::OnDetach() {

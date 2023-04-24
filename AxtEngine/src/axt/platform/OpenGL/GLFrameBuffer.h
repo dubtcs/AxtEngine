@@ -10,7 +10,7 @@ namespace axt {
 		virtual void Bind() const override;
 		virtual void Unbind() const override;
 		virtual uint32_t GetBufferID() const override;
-		virtual uint32_t GetColorTextureID() const override;
+		virtual uint32_t GetColorTextureID(const uint32_t index = 0) const override;
 		virtual void Resize(uint32_t x, uint32_t y) override;
 	public:
 		GLFrameBuffer(const FrameBufferData& newData);
@@ -18,10 +18,13 @@ namespace axt {
 	private:
 		void Allocate();
 		void Release();
+	private:
 		uint32_t mRenderId;
-		uint32_t mColorTexture;
 		uint32_t mDepthTexture;
-		//uint32_t mDepthBuffer;
+		std::vector<uint32_t> mColorTextures;
+
+		std::vector<FrameBufferTextureFormat> mColorTextureFormats;
+		FrameBufferTextureFormat mDepthTextureFormat{ FrameBufferTextureFormat::None };
 	};
 
 }
