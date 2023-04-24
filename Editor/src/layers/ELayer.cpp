@@ -278,11 +278,14 @@ namespace axt
 			{
 				mViewportSize = fNewSize;
 				mFrameBuffer->Resize(static_cast<uint32_t>(mViewportSize.x), static_cast<uint32_t>(mViewportSize.y));
-				//CameraControlSystem::OnResize(fNewSize.x, fNewSize.y);
 
+				/* TODO:
+				/  Fix gizmos being offset when the viewport title bar is shown. 
+				/  Usually a few pixels below where it should be. Y{0} isn't at the top of the viewport, it's in the title bar when visible :\
+				*/
 				WindowResizeEvent spoof{ static_cast<int>(fNewSize.x), static_cast<int>(fNewSize.y) };
-
 				mEditorRenderSystem.OnEvent(spoof);
+
 				//AXT_TRACE("ContenRegion {0} {1}", fNewSize.x, fNewSize.y);
 				//ImVec2 window_size{ ImGui::GetWindowSize() };
 				//AXT_TRACE("WindowSize {0} {1}", window_size.x, window_size.y);
@@ -293,7 +296,6 @@ namespace axt
 			mPropertiesWindow.OnImGuiRender(mWorld, selected);
 
 			// Guizmo, move this to a separate window class at some point
-
 			// necs uses nil as 0, so we can just check the value
 			if (selected)
 			{
@@ -406,8 +408,38 @@ namespace axt
 		ImGui::Separator();
 		ImGui::Text("Camera");
 		
-		ImGui::Text("Field of view");
+		ImGuiInputTextFlags flags{ ImGuiInputTextFlags_EnterReturnsTrue };
+
+		/*
+		TODO:
+		Stop accessing the member variables directly.
+		*/
+
+		ImGui::Text("Field of View");
 		ImGui::SameLine();
+		float sratchfloat{ mEditorRenderSystem.mCamera.mFOV };
+		if (ImGui::InputFloat("##CFOV", &sratchfloat, 0.f, 0.f, nullptr, flags))
+		{
+			mEditorRenderSystem.mCamera.mFOV = sratchfloat;
+			mEditorRenderSystem.mCamera.BuildProjectionMatrix();
+			mEditorRenderSystem.mCamera.BuildMatrices();
+		}
+
+		ImGui::Text("Sensitivity");
+		ImGui::SameLine();
+		sratchfloat = mEditorRenderSystem.mCamera.mSensitivity;
+		if (ImGui::InputFloat("##CSENS", &sratchfloat, 0.f, 0.f, nullptr, flags))
+		{
+			mEditorRenderSystem.mCamera.mSensitivity = sratchfloat;
+		}
+
+		ImGui::Text("Movement Speed");
+		ImGui::SameLine();
+		sratchfloat = mEditorRenderSystem.mCamera.mMovementSpeed;
+		if (ImGui::InputFloat("##CMVM", &sratchfloat, 0.f, 0.f, nullptr, flags))
+		{
+			mEditorRenderSystem.mCamera.mMovementSpeed = sratchfloat;
+		}
 
 		ImGui::End();
 

@@ -20,6 +20,7 @@ namespace axt
 		EditorCamera GetCamera() const { return mCamera; }
 	protected:
 		EditorCamera mCamera{};
+		friend class ELayer;
 	};
 
 }

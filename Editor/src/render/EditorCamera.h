@@ -27,10 +27,17 @@ namespace axt
 	protected:
 		void Translate(float dt);
 		void Rotate(float dt, const glm::vec2& mouseDelta);
+		void BuildProjectionMatrix();
 		void BuildMatrices();
 		bool OnWindowResize(WindowResizeEvent& ev);
 	protected:
 		bool mIsPerspective{ true };
+
+		float mAspectRatio;
+		bool mStart{ true };
+
+		float mSensitivity{ 1.f };
+		float mMovementSpeed{ 1.f };
 
 		float mZoom{ 1.f };
 		float mFOV{ 90.f };
@@ -41,8 +48,6 @@ namespace axt
 
 		float mYaw{ -90.f };
 		float mPitch{ 0.f };
-
-		bool mStart{ true };
 
 		glm::mat4 mView;
 		glm::mat4 mProjection;

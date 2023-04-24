@@ -8,7 +8,7 @@ Progress screenshots can be found in the [media folder.](https://github.com/dubt
 
 <details>
 <summary>Screenshot</summary>
-![Latest Screenshot](https://raw.githubusercontent.com/dubtcs/AxtEngine/main/media/Screenshot%202023-04-21.png)
+![Latest Screenshot](https://raw.githubusercontent.com/dubtcs/AxtEngine/main/media/Screenshot%202023-04-22.png)
 </details>
 
 ## Getting Started

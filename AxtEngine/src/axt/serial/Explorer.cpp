@@ -15,7 +15,11 @@
 namespace axt
 {
 
-	//inline static const char* gErrorFileMsg{ "FILE_NOT_OPENED" };
+	/*
+	TODO:
+	Switch this to Common Item Dialogue
+	OPENFILENAMA is outdated
+	*/
 
 	std::string explorer::OpenFile(const char* filter)
 	{
