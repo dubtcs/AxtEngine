@@ -4,6 +4,8 @@
 
 #include <glad/glad.h>
 
+static constexpr uint32_t gMaxDrawBuffers{ 2 };
+
 namespace axt {
 
 	// FrameBuffer util
@@ -121,7 +123,15 @@ namespace axt {
 		// Depth
 		if (mDepthTextureFormat != FrameBufferTextureFormat::None)
 		{
+			fbutil::ReserveFrameBufferTextures(&mDepthTexture);
 			fbutil::CreateDepthTexture(mDepthTexture, 0, mDepthTextureFormat, mData.Width, mData.Height);
+		}
+
+		if (mColorTextures.size() > 1)
+		{
+			GLenum buffers[gMaxDrawBuffers]{ GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1 };
+			glDrawBuffers(gMaxDrawBuffers, buffers);
+			// this affects global FBO state, don't need to call this every frame
 		}
 
 
@@ -144,8 +154,10 @@ namespace axt {
 		if (!mColorTextures.empty())
 		{
 			glDeleteTextures(mColorTextures.size(), &mColorTextures.front());
+			mColorTextures.clear();
 		}
 		glDeleteTextures(1, &mDepthTexture);
+		mDepthTexture = 0;
 	}
 
 	uint32_t GLFrameBuffer::GetBufferID() const 

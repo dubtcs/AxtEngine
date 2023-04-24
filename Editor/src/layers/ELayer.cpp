@@ -298,7 +298,7 @@ namespace axt
 				//ImVec2 window_size{ ImGui::GetWindowSize() };
 				//AXT_TRACE("WindowSize {0} {1}", window_size.x, window_size.y);
 			}
-			ImGui::Image((void*)(mFrameBuffer->GetColorTextureID()), ImVec2{ mViewportSize.x, mViewportSize.y }, { 0.f, 1.f }, { 1.f, 0.f });
+			ImGui::Image((void*)(mFrameBuffer->GetColorTextureID(1)), ImVec2{ mViewportSize.x, mViewportSize.y }, { 0.f, 1.f }, { 1.f, 0.f });
 
 			necs::Entity selected{ mSceneOverview.OnImGuiRender(mWorld) };
 			mPropertiesWindow.OnImGuiRender(mWorld, selected);

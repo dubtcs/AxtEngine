@@ -27,9 +27,11 @@
     in vec4 fColor;
     in float fTexIndex;
 
-    out vec4 outColor;
+    layout (location = 0) out vec4 outColor;
+    layout (location = 1) out vec4 outColorFBO2;
 
     void main() {
         outColor = texture(uTextures[int(fTexIndex)], fTexPos) * fColor;
+        outColorFBO2 = vec4(0.2,0.2,0.8,1.0);
     }
 #endif
