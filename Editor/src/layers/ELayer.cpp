@@ -1,6 +1,9 @@
 
 #include <pch.h>
 
+// defined to shut errors up
+#define YAML_CPP_API 
+
 #include "ELayer.h"
 
 #include "../render/EditorCamera.h"
@@ -40,7 +43,7 @@ namespace axt
 		FrameBufferData DATA{
 			.Width{1920},
 			.Height{1080},
-			.Textures{ FrameBufferTextureFormat::RGBA8, FrameBufferTextureFormat::RGBA8, FrameBufferTextureFormat::DEPTH24STENCIL8 }
+			.Textures{ FrameBufferTextureFormat::RGBA8, FrameBufferTextureFormat::R_INTEGER, FrameBufferTextureFormat::DEPTH24STENCIL8 }
 		};
 
 		mFrameBuffer = FrameBuffer::Create(DATA);
@@ -293,12 +296,26 @@ namespace axt
 				*/
 				WindowResizeEvent spoof{ static_cast<int>(fNewSize.x), static_cast<int>(fNewSize.y) };
 				mEditorRenderSystem.OnEvent(spoof);
-
-				//AXT_TRACE("ContenRegion {0} {1}", fNewSize.x, fNewSize.y);
-				//ImVec2 window_size{ ImGui::GetWindowSize() };
-				//AXT_TRACE("WindowSize {0} {1}", window_size.x, window_size.y);
 			}
 			ImGui::Image((void*)(mFrameBuffer->GetColorTextureID()), ImVec2{ mViewportSize.x, mViewportSize.y }, { 0.f, 1.f }, { 1.f, 0.f });
+
+			// Mouse Selection
+			ImVec2 windowPosition{ ImGui::GetWindowPos() };
+			ImVec2 windowSize{ ImGui::GetWindowSize() };
+			ImVec2 mousePosition{ ImGui::GetMousePos() };
+
+			// also viewport position
+			ImVec2 mouseDelta{ mousePosition.x - windowPosition.x, mousePosition.y - windowPosition.y };
+			if (mouseDelta.x > 0 && mouseDelta.x <= windowSize.x && mouseDelta.y > 0 && mouseDelta.y <= windowSize.y)
+			{
+				mFrameBuffer->Bind();
+				// flippedY is needed because the texture is flipped
+				int32_t flippedY{ static_cast<int32_t>(windowSize.y) - static_cast<int32_t>(mouseDelta.y) };
+				uint32_t entity{ mFrameBuffer->GetPixelData(1, static_cast<int32_t>(mouseDelta.x), flippedY) };
+				//AXT_TRACE(entity);
+				// we don't even need to clear the buffer bc necs::nil is 0 :)
+				mFrameBuffer->Unbind();
+			}
 
 			necs::Entity selected{ mSceneOverview.OnImGuiRender(mWorld) };
 			mPropertiesWindow.OnImGuiRender(mWorld, selected);

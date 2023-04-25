@@ -17,6 +17,7 @@ namespace axt {
 		None = 0,
 
 		RGBA8,
+		R_INTEGER,
 
 		DEPTH24STENCIL8,
 
@@ -55,6 +56,7 @@ namespace axt {
 		virtual void Unbind() const = 0;
 		virtual uint32_t GetBufferID() const = 0;
 		virtual uint32_t GetColorTextureID(const uint32_t index = 0) const = 0;
+		virtual uint32_t GetPixelData(const uint32_t& textureIndex, int32_t x, int32_t y) const = 0;
 		virtual void Resize(uint32_t x, uint32_t y) = 0;
 		virtual ~FrameBuffer() = default;
 	protected:

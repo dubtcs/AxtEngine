@@ -29,41 +29,6 @@ namespace axt {
 			glGenTextures(amount, startAddress);
 		}
 
-		static void CreateColorTexture(uint32_t& id, uint32_t offset, FrameBufferTextureFormat& format, uint32_t& width, uint32_t& height)
-		{
-			glBindTexture(GL_TEXTURE_2D, id);
-
-			switch (format)
-			{
-				case (FrameBufferTextureFormat::RGBA8) :
-				{
-					glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
-				}
-			}
-
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + offset, GL_TEXTURE_2D, id, 0);
-
-			glBindTexture(GL_TEXTURE_2D, 0);
-		}
-
-		static void CreateDepthTexture(uint32_t& id, uint32_t offset, FrameBufferTextureFormat& format, uint32_t& width, uint32_t& height)
-		{
-			glBindTexture(GL_TEXTURE_2D, id);
-			switch (format)
-			{
-				case (FrameBufferTextureFormat::DEPTH24STENCIL8) : 
-				{
-					glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH24_STENCIL8, width, height, 0, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, nullptr);
-				}
-			}
-
-			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, id, 0);
-
-			glBindTexture(GL_TEXTURE_2D, 0);
-		}
-
 	}
 
 	GLFrameBuffer::GLFrameBuffer(const FrameBufferData& newData) : 
@@ -115,7 +80,7 @@ namespace axt {
 
 				for (uint32_t i{ 0 }; i < mColorTextureFormats.size(); i++)
 				{
-					fbutil::CreateColorTexture(mColorTextures[i], i, mColorTextureFormats[i], mData.Width, mData.Height);
+					CreateColorTexture(mColorTextures[i], i, mColorTextureFormats[i]);
 				}
 			}
 		}
@@ -124,7 +89,7 @@ namespace axt {
 		if (mDepthTextureFormat != FrameBufferTextureFormat::None)
 		{
 			fbutil::ReserveFrameBufferTextures(&mDepthTexture);
-			fbutil::CreateDepthTexture(mDepthTexture, 0, mDepthTextureFormat, mData.Width, mData.Height);
+			CreateDepthTexture(mDepthTexture, 0, mDepthTextureFormat);
 		}
 
 		if (mColorTextures.size() > 1)
@@ -160,6 +125,47 @@ namespace axt {
 		mDepthTexture = 0;
 	}
 
+	void GLFrameBuffer::CreateColorTexture(uint32_t& id, uint32_t offset, FrameBufferTextureFormat& format)
+	{
+		glBindTexture(GL_TEXTURE_2D, id);
+
+		switch (format)
+		{
+			case (FrameBufferTextureFormat::RGBA8):
+			{
+				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, mData.Width, mData.Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+				break;
+			}
+			case (FrameBufferTextureFormat::R_INTEGER):
+			{
+				glTexImage2D(GL_TEXTURE_2D, 0, GL_R32UI, mData.Width, mData.Height, 0, GL_RED_INTEGER, GL_UNSIGNED_INT, nullptr);
+				break;
+			}
+		}
+
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + offset, GL_TEXTURE_2D, id, 0);
+
+		glBindTexture(GL_TEXTURE_2D, 0);
+	}
+
+	void GLFrameBuffer::CreateDepthTexture(uint32_t& id, uint32_t offset, FrameBufferTextureFormat& format)
+	{
+		glBindTexture(GL_TEXTURE_2D, id);
+		switch (format)
+		{
+			case (FrameBufferTextureFormat::DEPTH24STENCIL8):
+			{
+				glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH24_STENCIL8, mData.Width, mData.Height, 0, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, nullptr);
+			}
+		}
+
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, id, 0);
+
+		glBindTexture(GL_TEXTURE_2D, 0);
+	}
+
 	uint32_t GLFrameBuffer::GetBufferID() const 
 	{
 		return mRenderId;
@@ -168,6 +174,14 @@ namespace axt {
 	uint32_t GLFrameBuffer::GetColorTextureID(const uint32_t index) const 
 	{
 		return mColorTextures[index];
+	}
+
+	uint32_t GLFrameBuffer::GetPixelData(const uint32_t& textureIndex, int32_t x, int32_t y) const
+	{
+		glReadBuffer(GL_COLOR_ATTACHMENT0 + textureIndex);
+		uint32_t data{};
+		glReadPixels(x, y, 1, 1, GL_RED_INTEGER, GL_UNSIGNED_INT, &data);
+		return data;
 	}
 
 	void GLFrameBuffer::Bind() const 
