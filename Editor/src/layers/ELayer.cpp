@@ -298,7 +298,7 @@ namespace axt
 				//ImVec2 window_size{ ImGui::GetWindowSize() };
 				//AXT_TRACE("WindowSize {0} {1}", window_size.x, window_size.y);
 			}
-			ImGui::Image((void*)(mFrameBuffer->GetColorTextureID(1)), ImVec2{ mViewportSize.x, mViewportSize.y }, { 0.f, 1.f }, { 1.f, 0.f });
+			ImGui::Image((void*)(mFrameBuffer->GetColorTextureID()), ImVec2{ mViewportSize.x, mViewportSize.y }, { 0.f, 1.f }, { 1.f, 0.f });
 
 			necs::Entity selected{ mSceneOverview.OnImGuiRender(mWorld) };
 			mPropertiesWindow.OnImGuiRender(mWorld, selected);
@@ -316,26 +316,27 @@ namespace axt
 				ImVec2 viewportPosition{ ImGui::GetWindowPos() };
 				ImGuizmo::SetRect(viewportPosition.x, viewportPosition.y, fNewSize.x, fNewSize.y);
 
-				float currentSnap{ 0.f };
+				glm::vec3 currentSnap{ 0.f };
 				if (mSnapToggle || input::IsKeyPressed(Key::ControlLeft))
 				{
 					switch (mGizmoMode)
 					{
 						case(ImGuizmo::OPERATION::TRANSLATE):
 						{
-							currentSnap = mTranslationSnap;
+							currentSnap = { mTranslationSnap, mTranslationSnap, mTranslationSnap };
 							break;
 						}
 						case(ImGuizmo::OPERATION::SCALE):
 						{
-							currentSnap = mScaleSnap;
+							currentSnap = { mScaleSnap, mScaleSnap, mScaleSnap };
 							break;
 						}
 						case(ImGuizmo::OPERATION::ROTATE):
 						{
-							currentSnap = mRotationSnap;
+							currentSnap = { mRotationSnap, mRotationSnap, mRotationSnap };
 							break;
 						}
+						
 					}
 				}
 
@@ -345,7 +346,7 @@ namespace axt
 					glm::mat4 manipulationMatrix{ entityTransform.ToMatrix() };
 
 					ImGuizmo::Manipulate(glm::value_ptr(camera.GetViewMatrix()), glm::value_ptr(camera.GetProjectionMatrix()), mGizmoMode, ImGuizmo::WORLD, glm::value_ptr(manipulationMatrix),
-						nullptr, &currentSnap);
+						nullptr, glm::value_ptr(currentSnap));
 
 					if (ImGuizmo::IsUsing())
 					{
