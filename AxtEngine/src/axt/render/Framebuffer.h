@@ -3,6 +3,7 @@
 #include "axt/Core.h"
 
 #include <vector>
+#include <cstdint>
 
 namespace axt {
 

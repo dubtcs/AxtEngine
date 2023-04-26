@@ -2,7 +2,7 @@
 #include <pch.h>
 
 // defined to shut errors up
-#define YAML_CPP_API 
+#define YAML_CPP_STATIC_DEFINE
 
 #include "ELayer.h"
 
@@ -66,6 +66,7 @@ namespace axt
 
 		EventHandler handler{ ev };
 		handler.Fire<KeyPressedEvent>(AXT_BIND_EVENT(ELayer::OnKeyPressed));
+		handler.Fire<MouseButtonPressed>(AXT_BIND_EVENT(ELayer::OnMouseButtonPressed));
 	}
 
 	void ELayer::OnUpdate(float dt)
@@ -144,6 +145,18 @@ namespace axt
 					mGizmoMode = ImGuizmo::OPERATION::SCALE;
 				}
 				break;
+			}
+		}
+		return false;
+	}
+
+	bool ELayer::OnMouseButtonPressed(MouseButtonPressed& e)
+	{
+		if (e.GetButton() == Key::Mouse1)
+		{
+			if (!ImGuizmo::IsOver())
+			{
+				mSelectedEntity = mHoveredEntity;
 			}
 		}
 		return false;
@@ -299,6 +312,11 @@ namespace axt
 			}
 			ImGui::Image((void*)(mFrameBuffer->GetColorTextureID()), ImVec2{ mViewportSize.x, mViewportSize.y }, { 0.f, 1.f }, { 1.f, 0.f });
 
+			// MOUSE SELECTION
+			// // Can maybe switch to bounding boxes and raycasting.
+			// // I just wanted to get something up and running without over complicating things too early
+
+		
 			// Mouse Selection
 			ImVec2 windowPosition{ ImGui::GetWindowPos() };
 			ImVec2 windowSize{ ImGui::GetWindowSize() };
@@ -312,17 +330,21 @@ namespace axt
 				// flippedY is needed because the texture is flipped
 				int32_t flippedY{ static_cast<int32_t>(windowSize.y) - static_cast<int32_t>(mouseDelta.y) };
 				uint32_t entity{ mFrameBuffer->GetPixelData(1, static_cast<int32_t>(mouseDelta.x), flippedY) };
-				//AXT_TRACE(entity);
+				mHoveredEntity = entity;
 				// we don't even need to clear the buffer bc necs::nil is 0 :)
 				mFrameBuffer->Unbind();
 			}
+			else
+			{
+				mHoveredEntity = necs::nil;
+			}
 
-			necs::Entity selected{ mSceneOverview.OnImGuiRender(mWorld) };
-			mPropertiesWindow.OnImGuiRender(mWorld, selected);
+			mSelectedEntity = mSceneOverview.OnImGuiRender(mWorld, mSelectedEntity);
+			mPropertiesWindow.OnImGuiRender(mWorld, mSelectedEntity);
 
 			// Guizmo, move this to a separate window class at some point
 			// necs uses nil as 0, so we can just check the value
-			if (selected)
+			if (mSelectedEntity)
 			{
 				const EditorCamera& camera{ mEditorRenderSystem.GetCamera() };
 
@@ -357,9 +379,9 @@ namespace axt
 					}
 				}
 
-				if (mWorld->HasComponent<Transform>(selected))
+				if (mWorld->HasComponent<Transform>(mSelectedEntity))
 				{
-					Transform& entityTransform{ mWorld->GetComponent<Transform>(selected) };
+					Transform& entityTransform{ mWorld->GetComponent<Transform>(mSelectedEntity) };
 					glm::mat4 manipulationMatrix{ entityTransform.ToMatrix() };
 
 					ImGuizmo::Manipulate(glm::value_ptr(camera.GetViewMatrix()), glm::value_ptr(camera.GetProjectionMatrix()), mGizmoMode, ImGuizmo::WORLD, glm::value_ptr(manipulationMatrix),
@@ -371,6 +393,10 @@ namespace axt
 					}
 				}
 
+			}
+			else
+			{
+				//AXT_WARN("6. THE DOLLAR");
 			}
 
 			ImGui::End();

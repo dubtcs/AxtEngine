@@ -13,7 +13,7 @@ namespace axt
 	{
 	public:
 		SceneOverviewWindow() = default;
-		necs::Entity OnImGuiRender(Ref<GameWorld>& world);
+		necs::Entity OnImGuiRender(Ref<GameWorld>& world, const necs::Entity& entityOverride); // entity override os for mouse selections
 	protected:
 		void DrawEntityTree(Ref<GameWorld>& world, const necs::Entity& entity);
 	protected:

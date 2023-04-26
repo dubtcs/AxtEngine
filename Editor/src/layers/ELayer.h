@@ -30,6 +30,7 @@ namespace axt
 		virtual void OnImGuiRender() override;
 	protected:
 		bool OnKeyPressed(KeyPressedEvent& e);
+		bool OnMouseButtonPressed(MouseButtonPressed& e);
 		bool NewProject();
 		bool OpenProject();
 		bool SaveProject();
@@ -68,6 +69,8 @@ namespace axt
 
 		SceneOverviewWindow mSceneOverview{};
 		PropertiesWindow mPropertiesWindow{};
+		necs::Entity mSelectedEntity{ necs::nil };
+		necs::Entity mHoveredEntity{ necs::nil };
 
 		ImGuizmo::OPERATION mGizmoMode{ ImGuizmo::OPERATION::TRANSLATE };
 		float mTranslationSnap{ 0.1f };

@@ -26,8 +26,10 @@ namespace axt
 		world->Attach<Sprite>(newEntity);
 	}
 
-	Entity SceneOverviewWindow::OnImGuiRender(Ref<GameWorld>& world)
+	Entity SceneOverviewWindow::OnImGuiRender(Ref<GameWorld>& world, const Entity& override)
 	{
+		//mEntity = override ? override : mEntity;
+		mEntity = override;
 		ImGui::Begin("Scene Overview");
 
 		if (ImGui::BeginPopupContextWindow(0, ImGuiPopupFlags_NoOpenOverItems | ImGuiPopupFlags_MouseButtonRight))

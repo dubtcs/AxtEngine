@@ -15,16 +15,20 @@ Fix batch rendering.. again.
 This doesn't really need a view matrix, I think. Can just use object position and camera position offsets to adjust viewspace.
 */
 
-namespace axt {
+namespace axt 
+{
 
-	struct QuadVert {
+	struct QuadVert 
+	{
 		glm::vec3 position;
 		glm::vec4 color;
 		glm::vec2 textureCoordinate;
 		float textureId = 0;
+		uint32_t entityId{ necs::nil };
 	};
 
-	struct Render2DScene {
+	struct Render2DScene 
+	{
 		Ref<VertexArray> mVertexArray;
 		Ref<VertexBuffer> mVertexBuffer;
 		Ref<Shader> mShader;
@@ -47,7 +51,8 @@ namespace axt {
 
 	static Render2D::RenderStats gStats;
 
-	static const glm::vec4 gQuadPositions[4]{
+	static const glm::vec4 gQuadPositions[4]
+	{
 		glm::vec4{ -0.5f, -0.5f, 0.0f, 1.f },
 		glm::vec4{  0.5f, -0.5f, 0.0f, 1.f },
 		glm::vec4{  0.5f,  0.5f, 0.0f, 1.f },
@@ -71,7 +76,8 @@ namespace axt {
 		need to add an array overload to shader::set();
 	*/
 
-	void Render2D::Init() {
+	void Render2D::Init() 
+	{
 		AXT_PROFILE_FUNCTION();
 
 		gData = new Render2DScene{};
@@ -83,8 +89,11 @@ namespace axt {
 			{axt::ShaderDataType::Float3, "inPos"},
 			{axt::ShaderDataType::Float4, "inColor"},
 			{axt::ShaderDataType::Float2, "inTexPos"},
-			{axt::ShaderDataType::Float, "inTexId"}
+			{axt::ShaderDataType::Float, "inTexId"},
+
+			{axt::ShaderDataType::UInt, "inEntityId"}
 		};
+
 		gData->mVertexBuffer->SetLayout(lBufferLayout);
 		gData->mVertexArray->AddVertexBuffer(gData->mVertexBuffer);
 
@@ -92,7 +101,8 @@ namespace axt {
 
 		Unique<uint32_t[]> fIndexData{ NewUnique<uint32_t[]>(gData->mMaxIndices) };
 		uint32_t fIndexOffset{ 0 };
-		for (uint32_t i{ 0 }; i < gData->mMaxIndices; i += 6) {
+		for (uint32_t i{ 0 }; i < gData->mMaxIndices; i += 6) 
+		{
 			fIndexData[i] = fIndexOffset;
 			fIndexData[i + 1] = fIndexOffset + 1;
 			fIndexData[i + 2] = fIndexOffset + 2;
@@ -103,6 +113,7 @@ namespace axt {
 
 			fIndexOffset += 4;
 		}
+
 		Ref<IndexBuffer> fIndexBuffer{ IndexBuffer::Create(fIndexData.get(), gData->mMaxIndices)};
 		gData->mVertexArray->AddIndexBuffer(fIndexBuffer);
 
@@ -121,12 +132,14 @@ namespace axt {
 		gData->mTextureLibrary.Add("Check", fCheck);
 	}
 
-	void Render2D::Shutdown() {
+	void Render2D::Shutdown() 
+	{
 
 		delete gData;
 	}
 
-	void Render2D::SceneStart(const OrthoCamera& camera) {
+	void Render2D::SceneStart(const OrthoCamera& camera) 
+	{
 		AXT_PROFILE_FUNCTION();
 		gData->mCurrentQuadVertex = gData->mQuadStart;
 		gData->mIndexCount = 0;
@@ -141,7 +154,8 @@ namespace axt {
 		gData->mShader->SetValue("uViewProjection", camera.GetViewProjection());
 
 		int fShaderSampler2D[MAX_TEXTURE_UNITS];
-		for (int i{ 0 }; i < MAX_TEXTURE_UNITS; i++) {
+		for (int i{ 0 }; i < MAX_TEXTURE_UNITS; i++) 
+		{
 			fShaderSampler2D[i] = i;
 		}
 		gData->mShader->SetValue("uTextures", fShaderSampler2D, MAX_TEXTURE_UNITS);
@@ -167,7 +181,8 @@ namespace axt {
 		gData->mShader->SetValue("uViewProjection", viewProjection);
 
 		int fShaderSampler2D[MAX_TEXTURE_UNITS];
-		for (int i{ 0 }; i < MAX_TEXTURE_UNITS; i++) {
+		for (int i{ 0 }; i < MAX_TEXTURE_UNITS; i++) 
+		{
 			fShaderSampler2D[i] = i;
 		}
 		gData->mShader->SetValue("uTextures", fShaderSampler2D, MAX_TEXTURE_UNITS);
@@ -193,7 +208,8 @@ namespace axt {
 		gData->mShader->SetValue("uViewProjection", viewProjection);
 
 		int fShaderSampler2D[MAX_TEXTURE_UNITS];
-		for (int i{ 0 }; i < MAX_TEXTURE_UNITS; i++) {
+		for (int i{ 0 }; i < MAX_TEXTURE_UNITS; i++) 
+		{
 			fShaderSampler2D[i] = i;
 		}
 		gData->mShader->SetValue("uTextures", fShaderSampler2D, MAX_TEXTURE_UNITS);
@@ -203,7 +219,8 @@ namespace axt {
 	}
 
 	// push data to gpu
-	void Render2D::SceneEnd() {
+	void Render2D::SceneEnd() 
+	{
 		AXT_PROFILE_FUNCTION();
 
 		uint32_t fDataSize{ static_cast<uint32_t>((char*)gData->mCurrentQuadVertex - (char*)gData->mQuadStart) };
@@ -213,10 +230,12 @@ namespace axt {
 	}
 
 	// draw data on gpu
-	void Render2D::Stage() {
+	void Render2D::Stage() 
+	{
 
 		// loop through textures, bind them to their slot (0-31)
-		for (uint32_t i{ 0 }; i < gData->mTexturesUsed; i++) {
+		for (uint32_t i{ 0 }; i < gData->mTexturesUsed; i++) 
+		{
 			gData->mTextureArray[i]->Bind(i);
 		}
 
@@ -227,7 +246,8 @@ namespace axt {
 
 	// reset variables
 	// wipe vertex and index data
-	void Render2D::StageForOverflow() {
+	void Render2D::StageForOverflow() 
+	{
 		SceneEnd();
 		//AXT_CORE_TRACE("{0}, {1}, {2}, {3}, {4}", );
 		gData->mTexturesUsed = 1;
@@ -240,29 +260,35 @@ namespace axt {
 	// add the quad to memory
 	// stage the current quads if overflow
 	// increment variables
-	void Render2D::DrawQuad(const QuadProperties&& fQuad) {
+	void Render2D::DrawQuad(const QuadProperties&& fQuad) 
+	{
 		AXT_PROFILE_FUNCTION();
 
-		if (gData->mIndexCount + 6 > gData->mMaxIndices) {
+		if (gData->mIndexCount + 6 > gData->mMaxIndices) 
+		{
 		//if( gData->mVertexCount + 4 > gData->mMaxVertices) {
 			//AXT_CORE_ASSERT(false, "Render2D::DrawQuad QuadAmount limit overflow!");
 			StageForOverflow();
 		}
 
 		float fTexId{ 0 };
-		if (gData->mTextureLibrary.Contains(fQuad.texName)) {
+		if (gData->mTextureLibrary.Contains(fQuad.texName)) 
+		{
 			bool fTexFound{ false };
 			const Ref<Texture>& fTextureRequest{ gData->mTextureLibrary.Get(fQuad.texName) };
 			// check if the texture is in the used textures array
-			for (uint32_t i{ 0 }; i < gData->mTexturesUsed; i++) {
-				if (gData->mTextureArray[i].get() == fTextureRequest.get()) {
+			for (uint32_t i{ 0 }; i < gData->mTexturesUsed; i++) 
+			{
+				if (gData->mTextureArray[i].get() == fTextureRequest.get()) 
+				{
 					fTexId = static_cast<float>(i);
 					fTexFound = true;
 					break;
 				}
 			}
 			// requested texture exists but isn't loaded
-			if (!fTexFound) {
+			if (!fTexFound) 
+			{
 				gData->mTextureArray[gData->mTexturesUsed] = gData->mTextureLibrary.Get(fQuad.texName);
 				fTexId = static_cast<float>(gData->mTexturesUsed++);
 			}
@@ -277,11 +303,17 @@ namespace axt {
 			glm::scale(fIdMat, glm::vec3{fQuad.size.x, fQuad.size.y, 1.f})
 		};
 
-		for (const glm::vec4& fCurrentPosition : gQuadPositions) {
+		for (const glm::vec4& fCurrentPosition : gQuadPositions) 
+		{
 			gData->mCurrentQuadVertex->position = fModelTransform * fCurrentPosition;;
 			gData->mCurrentQuadVertex->color = fQuad.color;
 			gData->mCurrentQuadVertex->textureCoordinate = { (fCurrentPosition.x + 0.5f) * fQuad.textureTiling, (fCurrentPosition.y + 0.5f) * fQuad.textureTiling };
 			gData->mCurrentQuadVertex->textureId = fTexId;
+
+			// EDITOR SHADER ONLY
+			// REMOVE WHEN BETTER MOUSE SELECTION IS ADDED
+			gData->mCurrentQuadVertex->entityId = fQuad.EntityId;
+
 			gData->mCurrentQuadVertex++;
 
 			gData->mVertexCount++;
@@ -292,7 +324,8 @@ namespace axt {
 
 	}
 
-	Render2D::RenderStats Render2D::GetStats() {
+	Render2D::RenderStats Render2D::GetStats() 
+	{
 		return gStats;
 	}
 

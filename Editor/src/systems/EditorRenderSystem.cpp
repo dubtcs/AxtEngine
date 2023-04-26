@@ -37,7 +37,7 @@ namespace axt
 			{
 				Transform& t{ world->GetComponent<Transform>(id) };
 				Sprite& s{ world->GetComponent<Sprite>(id) };
-				Render2D::DrawQuad(Render2D::QuadProperties{ .position{t.Position}, .size{t.Scale}, .color{s.Color} });
+				Render2D::DrawQuad(Render2D::QuadProperties{ .position{t.Position}, .size{t.Scale}, .color{s.Color}, .EntityId{id} });
 			}
 		}
 

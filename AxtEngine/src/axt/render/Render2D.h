@@ -10,22 +10,32 @@
 
 #include "axt/render/Texture.h"
 
-namespace axt {
+#include <necs/etypes.h>
 
-	class AXT_API Render2D {
+namespace axt 
+{
+
+	class AXT_API Render2D 
+	{
 	public:
-		struct RenderStats {
+		struct RenderStats 
+		{
 			int drawCalls{ 0 };
 			int quads{ 0 };
 			int textures{ 0 };
 		};
-		struct AXT_API QuadProperties {
+		struct AXT_API QuadProperties 
+		{
 			glm::vec3 position{ 1.f };
 			glm::vec2 size{ 1.f };
 			glm::vec4 color{ 1.f };
 			std::string texName{ "White" };
 			float rotation{ 0.f };
 			float textureTiling{ 1.f };
+
+			// only really used in editor
+			// use bounding box selection later on
+			necs::Entity EntityId{ necs::nil };
 		};
 	public:
 		static void Init();
