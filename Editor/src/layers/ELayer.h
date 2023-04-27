@@ -31,6 +31,7 @@ namespace axt
 	protected:
 		bool OnKeyPressed(KeyPressedEvent& e);
 		bool OnMouseButtonPressed(MouseButtonPressed& e);
+		bool OnMouseButtonReleased(MouseButtonReleased& e);
 		bool NewProject();
 		bool OpenProject();
 		bool SaveProject();
@@ -77,6 +78,9 @@ namespace axt
 		float mRotationSnap{ 10.f };
 		float mScaleSnap{ 0.25f };
 		bool mSnapToggle{ false };
+
+		bool mHoveringViewport{ false };
+		bool mCursorLocked{ false };
 
 		EditorRender mEditorRenderSystem{};
 

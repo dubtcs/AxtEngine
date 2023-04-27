@@ -21,10 +21,10 @@ namespace axt
 
 	}
 
-	void EditorRender::OnUpdate(float dt, Ref<GameWorld>& world)
+	void EditorRender::OnUpdate(float dt, Ref<GameWorld>& world, bool usable)
 	{
 
-		mCamera.OnUpdate(dt);
+		mCamera.OnUpdate(dt, usable);
 
 		RenderCommand::SetClearColor(gClearColor);
 		RenderCommand::Clear();

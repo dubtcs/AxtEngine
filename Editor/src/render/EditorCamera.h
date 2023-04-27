@@ -14,7 +14,7 @@ namespace axt
 	{
 	public:
 		EditorCamera(float fieldOfView = 90.f);
-		void OnUpdate(float dt);
+		void OnUpdate(float dt, bool usable);
 		bool OnEvent(Event& ev);
 	public:
 		const glm::vec3& GetLookVector() const;

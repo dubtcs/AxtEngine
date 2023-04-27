@@ -30,9 +30,9 @@ namespace axt
 		BuildMatrices();
 	}
 
-	void EditorCamera::OnUpdate(float dt)
+	void EditorCamera::OnUpdate(float dt, bool usable)
 	{
-		if (input::IsMouseButtonPressed(Key::MouseRight))
+		if (input::IsMouseButtonPressed(Key::MouseRight) && usable)
 		{
 			glm::vec2 mouseCurrentPosition{ input::GetMousePosition() };
 			glm::vec2 mouseDelta{ 0.f };

@@ -14,7 +14,7 @@ namespace axt
 	{
 	public:
 		EditorRender(float fieldOfView = 90);
-		void OnUpdate(float dt, Ref<GameWorld>& world);
+		void OnUpdate(float dt, Ref<GameWorld>& world, bool cameraUsable);
 		bool OnEvent(Event& ev);
 		void Init(float aspectRatio);
 		EditorCamera GetCamera() const { return mCamera; }

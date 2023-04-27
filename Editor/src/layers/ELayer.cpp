@@ -19,6 +19,8 @@
 #include <ImGuizmo.h>
 #include <glm/gtc/type_ptr.hpp>
 
+#include <GLFW/glfw3.h>
+
 static int gFps{ 0 };
 static bool gDrawBulk{ true };
 static float gTexRotate{ 0.f };
@@ -48,6 +50,24 @@ namespace axt
 
 		mFrameBuffer = FrameBuffer::Create(DATA);
 
+
+		// ImGuizmo Styling
+		ImGuizmo::Style& style{ ImGuizmo::GetStyle() };
+
+		style.Colors[ImGuizmo::DIRECTION_X] = ImVec4{ 1.000f, 0.419f, 0.419f, 1.f };
+		style.Colors[ImGuizmo::DIRECTION_Y] = ImVec4{ 0.113f, 0.819f, 0.631f, 1.f };
+		style.Colors[ImGuizmo::DIRECTION_Z] = ImVec4{ 0.372f, 0.152f, 0.803f, 1.f };
+
+		style.Colors[ImGuizmo::PLANE_X] = ImVec4{ 1.000f, 0.419f, 0.419f, 1.f };
+		style.Colors[ImGuizmo::PLANE_Y] = ImVec4{ 0.113f, 0.819f, 0.631f, 1.f };
+		style.Colors[ImGuizmo::PLANE_Z] = ImVec4{ 0.372f, 0.152f, 0.803f, 1.f };
+
+		style.Colors[ImGuizmo::SELECTION] = ImVec4{ 0.784f, 0.839f, 0.898f, 1.f };
+
+		style.ScaleLineThickness = 5.f;
+		style.TranslationLineThickness = 5.f;
+		style.RotationLineThickness = 5.f;
+
 		WindowResizeEvent spoof{ 1920, 1080 };
 		mEditorRenderSystem.OnEvent(spoof);
 	}
@@ -67,6 +87,7 @@ namespace axt
 		EventHandler handler{ ev };
 		handler.Fire<KeyPressedEvent>(AXT_BIND_EVENT(ELayer::OnKeyPressed));
 		handler.Fire<MouseButtonPressed>(AXT_BIND_EVENT(ELayer::OnMouseButtonPressed));
+		handler.Fire<MouseButtonReleased>(AXT_BIND_EVENT(ELayer::OnMouseButtonReleased));
 	}
 
 	void ELayer::OnUpdate(float dt)
@@ -79,7 +100,7 @@ namespace axt
 
 		gFps = (static_cast<int>(60.f / dt));
 
-		mEditorRenderSystem.OnUpdate(dt, mWorld);
+		mEditorRenderSystem.OnUpdate(dt, mWorld, mCursorLocked);
 
 		mFrameBuffer->Unbind();
 	}
@@ -146,7 +167,16 @@ namespace axt
 				}
 				break;
 			}
+			case(Key::Delete):
+			{
+				if (mSelectedEntity)
+				{
+					mWorld->DestroyEntity(mSelectedEntity);
+					mSelectedEntity = necs::nil;
+				}
+			}
 		}
+
 		return false;
 	}
 
@@ -154,9 +184,30 @@ namespace axt
 	{
 		if (e.GetButton() == Key::Mouse1)
 		{
-			if (!ImGuizmo::IsOver())
+			if (!ImGuizmo::IsOver() && mHoveringViewport)
 			{
 				mSelectedEntity = mHoveredEntity;
+			}
+		}
+		else if (e.GetButton() == Key::Mouse2)
+		{
+			if (mHoveringViewport && !ImGuizmo::IsUsing())
+			{
+				glfwSetInputMode((GLFWwindow*)(App::GetApp().GetWindow().GetNativeWindow()), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+				mCursorLocked = true;
+			}
+		}
+		return false;
+	}
+
+	bool ELayer::OnMouseButtonReleased(MouseButtonReleased& e)
+	{
+		if (e.GetButton() == Key::Mouse2)
+		{
+			if (mCursorLocked)
+			{
+				glfwSetInputMode((GLFWwindow*)(App::GetApp().GetWindow().GetNativeWindow()), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+				mCursorLocked = false;
 			}
 		}
 		return false;
@@ -216,8 +267,6 @@ namespace axt
 		ImGuiIO& fIO{ ImGui::GetIO() };
 
 		// using imgui dockspace
-
-#if 1
 
 		static bool sDockspace{ true };
 		static bool sFullscreenPersistent{ true };
@@ -286,10 +335,7 @@ namespace axt
 			ImGui::EndMenuBar();
 		}
 
-#endif
-
 		// end dockspace
-
 
 		{
 
@@ -324,7 +370,8 @@ namespace axt
 
 			// also viewport position
 			ImVec2 mouseDelta{ mousePosition.x - windowPosition.x, mousePosition.y - windowPosition.y };
-			if (mouseDelta.x > 0 && mouseDelta.x <= windowSize.x && mouseDelta.y > 0 && mouseDelta.y <= windowSize.y)
+			mHoveringViewport = mouseDelta.x > 0 && mouseDelta.x <= windowSize.x && mouseDelta.y > 0 && mouseDelta.y <= windowSize.y;
+			if (mHoveringViewport)
 			{
 				mFrameBuffer->Bind();
 				// flippedY is needed because the texture is flipped
@@ -415,6 +462,7 @@ namespace axt
 			ImGui::Text(" - Right click any empty area inside the Scene View window to open a context menu.");
 			ImGui::Text(" - Right click an entity in the Scene View window to open a context menu");
 			ImGui::Text(" - Ctrl + (1 - 3) : Switch gizmo transform mode between translation, rotation, and scale.");
+			ImGui::Text(" - Delete : Destroy the currently selected entity.");
 
 			ImGui::Separator();
 			ImGui::PushFont(fIO.Fonts->Fonts[1]);
@@ -425,17 +473,6 @@ namespace axt
 			ImGui::Text(" \t- Q/E for vertical camera movement.");
 			ImGui::Text(" - Hold left control to enable snapping.");
 
-			ImGui::End();
-		}
-
-		{
-			ImGui::Begin("Whats New");
-			float width{ ImGui::GetContentRegionAvail().x };
-			ImGui::PushTextWrapPos(width);
-			ImGui::PushFont(fIO.Fonts->Fonts[1]);
-			ImGui::Text("APR 21 2023");
-			ImGui::PopFont();
-			ImGui::Text(" - Help and changelog windows added\n - Gizmos added for entity transform");
 			ImGui::End();
 		}
 

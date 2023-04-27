@@ -197,6 +197,7 @@ workspace "AxtEngine"
             "%{_includeDirs.necs}",
             "%{_includeDirs.yaml}",
             "%{_includeDirs.imguizmo}",
+            "%{_includeDirs.glfw}",
 
         }
 
