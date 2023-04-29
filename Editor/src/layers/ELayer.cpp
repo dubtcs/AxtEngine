@@ -39,7 +39,9 @@ namespace axt
 	void ELayer::OnAttach()
 	{
 		AXT_PROFILE_FUNCTION();
+
 		Render2D::Init();
+
 		mTexture = Texture2D::Create("textures/si.png");
 
 		FrameBufferData DATA{

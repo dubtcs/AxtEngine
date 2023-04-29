@@ -4,6 +4,7 @@
 #include <axt/core/Log.h>
 #include <axt/render/RenderCommand.h>
 #include <axt/render/Render2D.h>
+#include <axt/render/Render3D.h>
 
 #include <axt/world/GameWorld.h>
 #include <axt/world/components/all.h>

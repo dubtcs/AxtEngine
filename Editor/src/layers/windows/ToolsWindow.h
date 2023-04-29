@@ -2,6 +2,8 @@
 
 #include <axt/Core.h>
 
+#include <axt/world/GameWorld.h>
+
 namespace axt
 {
 
@@ -9,7 +11,7 @@ namespace axt
 	{
 	public:
 		ToolsWindow() = default;
-		void OnImGuiRender();
+		void OnImGuiRender(Ref<GameWorld>& world);
 	};
 
 }

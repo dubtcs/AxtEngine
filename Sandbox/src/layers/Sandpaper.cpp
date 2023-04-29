@@ -89,7 +89,7 @@ void Sandpaper::OnUpdate(float dt) {
 	axt::RenderCommand::SetClearColor(myClearColor);
 	axt::RenderCommand::Clear();
 
-	axt::Render3D::SceneStart(myCameraController.GetCamera());
+	//axt::Render3D::SceneStart(myCameraController.GetCamera());
 
 	glm::mat4 squareTransform{ glm::translate(glm::mat4{1.f}, mySquarePosition) };
 
@@ -99,11 +99,11 @@ void Sandpaper::OnUpdate(float dt) {
 	axt::Render3D::Submit(mySquareVertexArray, currentShader, squareTransform); //glm::translate(glm::mat4{ 1.f }, mySquarePosition));
 
 	myShaderLib.Get("TexturedShader")->Bind();
-	axt::Render3D::Submit(mySquareVertexArray, myTextureShader);
+	//axt::Render3D::Submit(mySquareVertexArray, myTextureShader);
 	myTransparentText->Bind();
-	axt::Render3D::Submit(mySquareVertexArray, myTextureShader);
+	//axt::Render3D::Submit(mySquareVertexArray, myTextureShader);
 
-	axt::Render3D::SceneEnd();
+	//axt::Render3D::SceneEnd();
 }
 
 void Sandpaper::OnEvent(axt::Event& event) {
