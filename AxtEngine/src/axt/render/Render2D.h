@@ -49,6 +49,7 @@ namespace axt
 		static void Stage();
 
 		static void DrawQuad(const QuadProperties&& props);
+		static void DrawCube(const QuadProperties&& props);
 
 		static RenderStats GetStats();
 

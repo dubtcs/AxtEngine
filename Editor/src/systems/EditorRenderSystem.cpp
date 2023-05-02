@@ -38,7 +38,8 @@ namespace axt
 			{
 				Transform& t{ world->GetComponent<Transform>(id) };
 				Sprite& s{ world->GetComponent<Sprite>(id) };
-				Render2D::DrawQuad(Render2D::QuadProperties{ .position{t.Position}, .size{t.Scale}, .color{s.Color}, .EntityId{id} });
+				//Render2D::DrawQuad(Render2D::QuadProperties{ .position{t.Position - 5.f}, .size{t.Scale}, .color{s.Color}, .EntityId{id} });
+				Render2D::DrawCube(Render2D::QuadProperties{ .position{t.Position}, .size{t.Scale}, .color{s.Color}, .EntityId{id} });
 			}
 		}
 
