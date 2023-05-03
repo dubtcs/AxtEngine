@@ -17,6 +17,7 @@ namespace axt {
 		virtual void Unbind() const override;
 		virtual void AddVertexBuffer(const Ref<VertexBuffer>& vertexBuffer) override;
 		virtual void AddIndexBuffer(const Ref<IndexBuffer>& indexBuffer) override;
+		virtual void ToggleVertexBuffer(const Ref<VertexBuffer>& buffer) override;
 		virtual const std::vector<Ref<VertexBuffer>>& GetVertexBuffers() const override { return vertexBuffers; }
 		virtual const Ref<IndexBuffer>& GetIndexBuffer() const override { return indexBuffer; }
 	private:

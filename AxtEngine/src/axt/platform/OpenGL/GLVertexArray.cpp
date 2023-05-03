@@ -60,11 +60,17 @@ namespace axt {
 	{
 		AXT_PROFILE_FUNCTION();
 
+		ToggleVertexBuffer(vertexBuffer);
+		this->vertexBuffers.push_back(vertexBuffer);
+	}
+
+	void GLVertexArray::ToggleVertexBuffer(const Ref<VertexBuffer>& buffer)
+	{
 		glBindVertexArray(id);
-		vertexBuffer->Bind();
+		buffer->Bind();
 		uint32_t index{ 0 };
-		const BufferLayout& layout{ vertexBuffer->GetLayout() };
-		for (const BufferItem& item : layout) 
+		const BufferLayout& layout{ buffer->GetLayout() };
+		for (const BufferItem& item : layout)
 		{
 			glEnableVertexAttribArray(index);
 
@@ -79,7 +85,6 @@ namespace axt {
 			}
 			index++;
 		}
-		this->vertexBuffers.push_back(vertexBuffer);
 	}
 
 	void GLVertexArray::AddIndexBuffer(const Ref<IndexBuffer>& indexBuffer) 
