@@ -135,8 +135,8 @@ namespace axt
 		gData->mCubeVertexBuffer->SetLayout(lBufferLayout);
 		gData->mVertexArray->AddVertexBuffer(gData->mCubeVertexBuffer);
 
-		gData->mQuadStart = new QuadVert[MAX_QUADS * 4]; // forgot to multiply this by 4 lol
-		gData->mCubeStart = new QuadVert[MAX_CUBES * 8];
+		gData->mQuadStart = new QuadVert[MAX_QUAD_VERTICES]; // forgot to multiply this by 4 lol
+		gData->mCubeStart = new QuadVert[MAX_CUBE_VERTICES];
 
 		Unique<uint32_t[]> fIndexData{ NewUnique<uint32_t[]>(MAX_QUAD_INDICES) };
 		uint32_t fIndexOffset{ 0 };
@@ -218,7 +218,8 @@ namespace axt
 			indexData[i + 34] = fIndexOffset + 3;
 			indexData[i + 35] = fIndexOffset + 7;
 
-			fIndexOffset += 36;
+			fIndexOffset += 8; //  Fixed drawing only 1 cube
+			// lmfao I had this set to 36
 		}
 
 		gData->mCubeIBuffer = IndexBuffer::Create(indexData, MAX_CUBE_INDICES);
