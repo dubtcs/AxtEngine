@@ -8,10 +8,10 @@ Progress screenshots can be found in the [media folder.](https://github.com/dubt
 
 <details>
 <summary>Screenshot</summary>
-![Latest Screenshot](https://raw.githubusercontent.com/dubtcs/AxtEngine/main/media/Screenshot%202023-04-22.png)
+![Latest Screenshot](https://github.com/dubtcs/AxtEngine/blob/main/media/Screenshot%202023-05-09.png?raw=true)
 </details>
 
-## Getting Started
+## Download + Build
 
 Visual Studio 2022 is recommended, as that's the IDE I use to make it in. Premake is used to generate project files.
 
@@ -26,7 +26,7 @@ AxtEngine is being created as an excersise in graphics programming and game engi
 
 ### Current Features 
    - [Custom ECS](https://github.com/dubtcs/nECS)
-   - 2D Rendering
+   - 3D + 2D Rendering
    - Scene Graph / Game World instancing
       - Separates runtime and editor views
    - Project saving/loading
