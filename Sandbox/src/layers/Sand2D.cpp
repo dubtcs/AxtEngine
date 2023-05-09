@@ -44,9 +44,9 @@ void Sand2D::OnUpdate(float dt) {
 
 	axt::Render2D::SceneStart(mCameraController.GetCamera());
 
-	axt::Render2D::DrawQuad(axt::Render2D::QuadProperties{ .position{0.f,0.f,-0.5f}, .size{50.f, 50.f}, .color{0.1f, 0.1f, 0.1f, 1.f}, .texName{"Check"}, .textureTiling{50.f}});
+	//axt::Render2D::DrawQuad(axt::Render2D::QuadProperties{ .position{0.f,0.f,-0.5f}, .size{50.f, 50.f}, .color{0.1f, 0.1f, 0.1f, 1.f}, .texName{"Check"}, .textureTiling{50.f}});
 
-#if 1 // bulk testing
+#if 0 // bulk testing
 	if (gDrawBulk) {
 		for (float x{ -5 }; x < 5; x += 0.5f) {
 			for (float y{ -5 }; y < 5; y += 0.5f) {
@@ -56,9 +56,9 @@ void Sand2D::OnUpdate(float dt) {
 	}
 #endif
 
-	axt::Render2D::DrawQuad(axt::Render2D::QuadProperties{ .position{obj1.position}, .size{obj1.size}, .color{obj1.color}, .rotation{obj1.rotation} });
-	axt::Render2D::DrawQuad(axt::Render2D::QuadProperties{ .position{obj2.position}, .size{obj2.size}, .color{obj2.color}, .texName{"Bruh"}, .rotation{obj2.rotation} });
-	axt::Render2D::DrawQuad(axt::Render2D::QuadProperties{ .position{-2.25f, 0.f, 0.f}, .size{obj2.size}, .color{obj2.color}, .texName{"Check"}, .rotation{gTexRotate} });
+	//axt::Render2D::DrawQuad(axt::Render2D::QuadProperties{ .position{obj1.position}, .size{obj1.size}, .color{obj1.color}, .rotation{obj1.rotation} });
+	//axt::Render2D::DrawQuad(axt::Render2D::QuadProperties{ .position{obj2.position}, .size{obj2.size}, .color{obj2.color}, .texName{"Bruh"}, .rotation{obj2.rotation} });
+	//axt::Render2D::DrawQuad(axt::Render2D::QuadProperties{ .position{-2.25f, 0.f, 0.f}, .size{obj2.size}, .color{obj2.color}, .texName{"Check"}, .rotation{gTexRotate} });
 
 	axt::Render2D::SceneEnd();
 

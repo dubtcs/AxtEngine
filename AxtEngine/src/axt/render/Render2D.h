@@ -26,11 +26,11 @@ namespace axt
 		};
 		struct AXT_API QuadProperties 
 		{
-			glm::vec3 position{ 1.f };
-			glm::vec2 size{ 1.f };
+			glm::vec3 position{ 0.f };
+			glm::vec3 rotation{ 0.f };
+			glm::vec3 size{ 1.f };
 			glm::vec4 color{ 1.f };
 			std::string texName{ "White" };
-			float rotation{ 0.f };
 			float textureTiling{ 1.f };
 
 			// only really used in editor

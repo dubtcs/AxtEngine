@@ -488,10 +488,14 @@ namespace axt
 
 		// model space transform
 		const glm::mat4 fIdMat{ 1.f };
-		const glm::mat4 fModelTransform {
+		const glm::mat4 fModelTransform{
 			glm::translate(fIdMat, props.position) * // can trim the rotation from this if it's not rotated
 			//glm::rotate(fIdMat, props.rotation, glm::vec3{0.f, 0.f, 1.f}) *
-			glm::scale(fIdMat, glm::vec3{props.size.x, props.size.y, 1.f})
+			glm::rotate(fIdMat, glm::radians(props.rotation.x), glm::vec3{1.f,0.f,0.f}) *
+			glm::rotate(fIdMat, glm::radians(props.rotation.y), glm::vec3{0.f,1.f,0.f})*
+			glm::rotate(fIdMat, glm::radians(props.rotation.z), glm::vec3{0.f,0.f,1.f})*
+
+			glm::scale(fIdMat, glm::vec3{props.size.x, props.size.y, props.size.z })
 		};
 		for (const glm::vec4& fCurrentPosition : gCubePositions)
 		{

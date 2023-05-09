@@ -36,18 +36,18 @@ namespace axt
 		float mAspectRatio;
 		bool mStart{ true };
 
-		float mSensitivity{ 1.f };
-		float mMovementSpeed{ 1.f };
+		float mSensitivity{ 0.25f };
+		float mMovementSpeed{ 3.f };
 
 		float mZoom{ 1.f };
 		float mFOV{ 90.f };
-		glm::vec3 mPosition{ 0.f, 0.f, 1.f };
+		glm::vec3 mPosition{ 2.f, 2.f, 2.f };
 		glm::vec3 mDirection;
 		glm::vec3 mScale{ 1.f };
 		glm::vec2 mMousePosition;
 
-		float mYaw{ -90.f };
-		float mPitch{ 0.f };
+		float mYaw{ -135.f };
+		float mPitch{ -45.f };
 
 		glm::mat4 mView;
 		glm::mat4 mProjection;
