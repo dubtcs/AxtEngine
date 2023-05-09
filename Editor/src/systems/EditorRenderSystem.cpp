@@ -43,7 +43,8 @@ namespace axt
 			}
 		}
 
-		Render2D::DrawCube(Render2D::QuadProperties{ .rotation{-90.f, 0.f, 0.f}, .size{10.f, 10.f, 0.f}, .color{0.2f, 0.2f, 0.2f, 1.f} });
+		//Render2D::DrawQuad(Render2D::QuadProperties{ .rotation{-90.f, 0.f, 0.f}, .size{10.f, 10.f, 0.f}, .color{0.2f, 0.2f, 0.2f, 1.f}, .texName{"Check"}, .textureTiling{ 25.f } });
+		Render2D::DrawCube(Render2D::QuadProperties{ .position{0.f, 5.f, 0.f}, .rotation{0.f, 0.f, 0.f}, .size{1.f, 1.f, 1.f}, .color{0.2f, 0.2f, 0.2f, 1.f}, .texName{"Bruh"}, .textureTiling{2.f} });
 
 		Render2D::SceneEnd();
 

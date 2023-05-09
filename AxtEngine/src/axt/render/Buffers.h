@@ -4,7 +4,8 @@
 
 namespace axt {
 
-	enum class ShaderDataType {
+	enum class ShaderDataType 
+	{
 		None = 0, 
 		Float, Float2, Float3, Float4, 
 		Mat3, Mat4,
@@ -13,31 +14,34 @@ namespace axt {
 		Bool
 	};
 
-	static uint32_t GetDataTypeSize(ShaderDataType type) {
-		switch (type) {
-		case(ShaderDataType::Float):return 4;
-		case(ShaderDataType::Float2):return 8;
-		case(ShaderDataType::Float3):return 12;
-		case(ShaderDataType::Float4):return 16;
+	static uint32_t GetDataTypeSize(ShaderDataType type) 
+	{
+		switch (type) 
+		{
+			case(ShaderDataType::Float):return 4;
+			case(ShaderDataType::Float2):return 8;
+			case(ShaderDataType::Float3):return 12;
+			case(ShaderDataType::Float4):return 16;
 
-		case(ShaderDataType::Mat3):return 36;
-		case(ShaderDataType::Mat4):return 64;
+			case(ShaderDataType::Mat3):return 36;
+			case(ShaderDataType::Mat4):return 64;
 
-		case(ShaderDataType::Int):return 4;
-		case(ShaderDataType::Int2):return 8;
-		case(ShaderDataType::Int3):return 12;
-		case(ShaderDataType::Int4):return 16;
+			case(ShaderDataType::Int):return 4;
+			case(ShaderDataType::Int2):return 8;
+			case(ShaderDataType::Int3):return 12;
+			case(ShaderDataType::Int4):return 16;
 
-		case(ShaderDataType::UInt):return 4;
+			case(ShaderDataType::UInt):return 4;
 
-		case(ShaderDataType::Bool):return 1;
+			case(ShaderDataType::Bool):return 1;
 		}
 
 		AXT_CORE_ASSERT(false, "No ShaderDataType found");
 		return 0;
 	}
 
-	struct AXT_API BufferItem {
+	struct AXT_API BufferItem 
+	{
 		std::string name;
 		ShaderDataType type;
 		uint32_t size;
@@ -47,7 +51,8 @@ namespace axt {
 		uint32_t GetItemCount() const;
 	};
 
-	class AXT_API BufferLayout {
+	class AXT_API BufferLayout 
+	{
 	public:
 		BufferLayout(const std::initializer_list<BufferItem>& newItems) : items{ newItems } { CalculateStride(); };
 	public:
@@ -65,7 +70,8 @@ namespace axt {
 		uint32_t itemStride{ 0 };
 	};
 
-	class AXT_API VertexBuffer {
+	class AXT_API VertexBuffer 
+	{
 	public:
 		virtual ~VertexBuffer() {};
 		static Ref<VertexBuffer> Create(uint32_t size);
@@ -78,7 +84,8 @@ namespace axt {
 		virtual void SubmitData(const void* data, uint32_t size) const = 0;
 	};
 
-	class AXT_API IndexBuffer {
+	class AXT_API IndexBuffer 
+	{
 	public:
 		virtual ~IndexBuffer() {};
 		static Ref<IndexBuffer> Create(uint32_t* indices, uint32_t size);

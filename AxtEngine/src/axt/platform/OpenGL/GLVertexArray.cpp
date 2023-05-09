@@ -75,7 +75,7 @@ namespace axt {
 			glEnableVertexAttribArray(index);
 
 			// tech debt uh oh
-			if (item.type == ShaderDataType::UInt)
+			if (item.type == ShaderDataType::UInt || item.type == ShaderDataType::Int)
 			{
 				glVertexAttribIPointer(index, item.GetItemCount(), ShaderTypeToGLType(item.type), layout.GetStride(), (const void*)item.offset);
 			}

@@ -3,14 +3,14 @@
     layout (location = 0) in vec3 inPos;
     layout (location = 1) in vec4 inColor;
     layout (location = 2) in vec2 inTexPos;
-    layout (location = 3) in float inTexIndex;
+    layout (location = 3) in int inTexIndex;
     layout (location = 4) in uint inEntityId;
 
     uniform mat4 uViewProjection;
 
     out vec2 fTexPos;
     out vec4 fColor;
-    out float fTexIndex;
+    flat out int fTexIndex;
     flat out uint fEntityId;
 
     void main(){
@@ -29,14 +29,14 @@
 
     in vec2 fTexPos;
     in vec4 fColor;
-    in float fTexIndex;
+    in flat int fTexIndex;
     in flat uint fEntityId;
 
     layout (location = 0) out vec4 outColor;
     layout (location = 1) out uint outEntity;
 
     void main() {
-        outColor = texture(uTextures[int(fTexIndex)], fTexPos) * fColor;
+        outColor = texture(uTextures[fTexIndex], fTexPos) * fColor;
         outEntity = fEntityId;
     }
 #endif

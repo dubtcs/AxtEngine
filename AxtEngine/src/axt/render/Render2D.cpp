@@ -20,8 +20,8 @@ static constexpr uint32_t MAX_CUBE_INDICES{ MAX_CUBES * 36 };
 
 /*
 TODO:
-Fix batch rendering.. again.
-This doesn't really need a view matrix, I think. Can just use object position and camera position offsets to adjust viewspace.
+Switch QuadVert textIndex to uint32_t
+Make unique vertices for each face in cube to prevent texture stretching
 */
 
 namespace axt 
@@ -32,7 +32,7 @@ namespace axt
 		glm::vec3 position;
 		glm::vec4 color;
 		glm::vec2 textureCoordinate;
-		float textureId = 0;
+		int32_t textureId{ 0 };
 		uint32_t entityId{ necs::nil };
 	};
 
@@ -124,7 +124,7 @@ namespace axt
 			{axt::ShaderDataType::Float3, "inPos"},
 			{axt::ShaderDataType::Float4, "inColor"},
 			{axt::ShaderDataType::Float2, "inTexPos"},
-			{axt::ShaderDataType::Float, "inTexId"},
+			{axt::ShaderDataType::Int, "inTexIndex"},
 
 			{axt::ShaderDataType::UInt, "inEntityId"}
 		};
@@ -227,7 +227,7 @@ namespace axt
 
 		delete[] indexData;
 
-		gData->mShader = axt::Shader::Create("Shader1", "shaders/aio2_vp.glsl", axt::ShaderType::Vertex | axt::ShaderType::Pixel);
+		gData->mShader = axt::Shader::Create("Shader1", "shaders/aio3_vp.glsl", axt::ShaderType::Vertex | axt::ShaderType::Pixel);
 
 		// creating a white texture
 		gData->mWhiteTexture = Texture2D::Create(1, 1);
@@ -238,7 +238,7 @@ namespace axt
 		gData->mTextureLibrary.Add("White", gData->mWhiteTexture);
 		Ref<Texture2D> fBruh{ Texture2D::Create("textures/si.png") };
 		gData->mTextureLibrary.Add("Bruh", fBruh);
-		Ref<Texture2D> fCheck{ Texture2D::Create("textures/bruh.png") };
+		Ref<Texture2D> fCheck{ Texture2D::Create("textures/bruh2.png") };
 		gData->mTextureLibrary.Add("Check", fCheck);
 	}
 
@@ -353,6 +353,7 @@ namespace axt
 		// loop through textures, bind them to their slot (0-31)
 		for (uint32_t i{ 0 }; i < gData->mTexturesUsed; i++) 
 		{
+			AXT_TRACE("Texture {0}", i);
 			gData->mTextureArray[i]->Bind(i);
 		}
 
@@ -429,6 +430,11 @@ namespace axt
 		const glm::mat4 fModelTransform{
 			glm::translate(fIdMat, fQuad.position) * // can trim the rotation from this if it's not rotated
 			//glm::rotate(fIdMat, fQuad.rotation, glm::vec3{0.f,0.f,1.f}) *
+
+			glm::rotate(fIdMat, glm::radians(fQuad.rotation.x), glm::vec3{1.f, 0.f, 0.f})*
+			glm::rotate(fIdMat, glm::radians(fQuad.rotation.y), glm::vec3{0.f, 1.f, 0.f})*
+			glm::rotate(fIdMat, glm::radians(fQuad.rotation.z), glm::vec3{0.f, 0.f, 1.f})*
+
 			glm::scale(fIdMat, glm::vec3{fQuad.size.x, fQuad.size.y, 1.f})
 		};
 
@@ -462,47 +468,42 @@ namespace axt
 			StageForOverflow();
 		}
 
-		float fTexId{ 0 };
+		int32_t textureIndex{ 0 };
 		if (gData->mTextureLibrary.Contains(props.texName))
 		{
-			bool fTexFound{ false };
-			const Ref<Texture>& fTextureRequest{ gData->mTextureLibrary.Get(props.texName) };
-			// check if the texture is in the used textures array
-			for (uint32_t i{ 0 }; i < gData->mTexturesUsed; i++)
+			bool found{ false };
+			const Ref<Texture2D>& textureRequest{ gData->mTextureLibrary.Get(props.texName) };
+			for (textureIndex; textureIndex < gData->mTexturesUsed; textureIndex++)
 			{
-				if (gData->mTextureArray[i].get() == fTextureRequest.get())
+				if (gData->mTextureArray[textureIndex].get() == textureRequest.get())
 				{
-					fTexId = static_cast<float>(i);
-					fTexFound = true;
+					found = true;
 					break;
 				}
 			}
-			// requested texture exists but isn't loaded
-			if (!fTexFound)
+			if (!found)
 			{
-				gData->mTextureArray[gData->mTexturesUsed] = gData->mTextureLibrary.Get(props.texName);
-				fTexId = static_cast<float>(gData->mTexturesUsed++);
+				gData->mTextureArray[gData->mTexturesUsed++] = gData->mTextureLibrary.Get(props.texName);
 			}
 		}
-		// if the texture doesn't exits it just uses index 0 - the white texture
 
 		// model space transform
-		const glm::mat4 fIdMat{ 1.f };
-		const glm::mat4 fModelTransform{
-			glm::translate(fIdMat, props.position) * // can trim the rotation from this if it's not rotated
-			//glm::rotate(fIdMat, props.rotation, glm::vec3{0.f, 0.f, 1.f}) *
-			glm::rotate(fIdMat, glm::radians(props.rotation.x), glm::vec3{1.f,0.f,0.f}) *
-			glm::rotate(fIdMat, glm::radians(props.rotation.y), glm::vec3{0.f,1.f,0.f})*
-			glm::rotate(fIdMat, glm::radians(props.rotation.z), glm::vec3{0.f,0.f,1.f})*
+		const glm::mat4 ones{ 1.f };
+		const glm::mat4 modelTransform{
+			glm::translate(ones, props.position) * // can trim the rotation from this if it's not rotated
+			
+			glm::rotate(ones, glm::radians(props.rotation.x), glm::vec3{1.f, 0.f, 0.f}) *
+			glm::rotate(ones, glm::radians(props.rotation.y), glm::vec3{0.f, 1.f, 0.f}) *
+			glm::rotate(ones, glm::radians(props.rotation.z), glm::vec3{0.f, 0.f, 1.f}) *
 
-			glm::scale(fIdMat, glm::vec3{props.size.x, props.size.y, props.size.z })
+			glm::scale(ones, glm::vec3{props.size.x, props.size.y, props.size.z })
 		};
 		for (const glm::vec4& fCurrentPosition : gCubePositions)
 		{
-			gData->mCubeCurrent->position = fModelTransform * fCurrentPosition;;
+			gData->mCubeCurrent->position = modelTransform * fCurrentPosition;
 			gData->mCubeCurrent->color = props.color;
 			gData->mCubeCurrent->textureCoordinate = { (fCurrentPosition.x + 0.5f) * props.textureTiling, (fCurrentPosition.y + 0.5f) * props.textureTiling };
-			gData->mCubeCurrent->textureId = fTexId;
+			gData->mCubeCurrent->textureId = static_cast<float>(textureIndex);
 
 			// EDITOR SHADER ONLY
 			// REMOVE WHEN BETTER MOUSE SELECTION IS ADDED
