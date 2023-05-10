@@ -1,0 +1,63 @@
+Scene: SCENE_NAME
+WorldRoot: 2982217233059990613
+Entities:
+  - Entity: 17648569143354732990
+    Description:
+      Name: StarterCamera
+    Camera:
+      AspectRatio: 1.77777779
+      Zoom: 1
+    Transform:
+      Position: [0, 0, 0]
+      Rotation: [0, 0, 0]
+    GraphData:
+      ID: 17648569143354732990
+      Parent: 2982217233059990613
+  - Entity: 8426200944083121726
+    Description:
+      Name: StarterCube
+    Transform:
+      Position: [2.30828857, 1.17882991, 0]
+      Rotation: [0, -0, 0]
+    Sprite:
+      Color: [0.100000001, 0.699999988, 0.699999988, 1]
+      Size: [1, 1]
+    GraphData:
+      ID: 8426200944083121726
+      Parent: 2982217233059990613
+  - Entity: 2514523752275228558
+    Description:
+      Name: Entity-Cube
+    Transform:
+      Position: [-1.04097819, 0, 2.97896862]
+      Rotation: [0, -0, 0]
+    Mesh:
+      Color: [0.540540576, 0.219138071, 0.219138071, 1]
+      Size: [1, 1, 1]
+    GraphData:
+      ID: 2514523752275228558
+      Parent: 2982217233059990613
+  - Entity: 14572559814142540405
+    Description:
+      Name: Entity-Plane
+    Transform:
+      Position: [-5.96321297, 1.43873346, -6.50427485]
+      Rotation: [0, -0, 0]
+    Sprite:
+      Color: [0.5, 0.5, 0.5, 1]
+      Size: [1, 1]
+    GraphData:
+      ID: 14572559814142540405
+      Parent: 2982217233059990613
+  - Entity: 9941312977368228592
+    Description:
+      Name: Entity-Cube
+    Transform:
+      Position: [-5.4374032, 0, 0.21916008]
+      Rotation: [0, -0, 0]
+    Mesh:
+      Color: [0.327865332, 0.868725896, 0.15764524, 1]
+      Size: [1, 1, 1]
+    GraphData:
+      ID: 9941312977368228592
+      Parent: 2982217233059990613

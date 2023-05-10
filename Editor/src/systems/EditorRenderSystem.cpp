@@ -35,16 +35,24 @@ namespace axt
 		Render2D::SceneStart(mCamera.GetViewProjectionMatrix());
 
 		{
-			SceneView<Sprite, Transform> view{ world->GetScene() };
-			for (Entity id : view)
+			SceneView<Sprite, Transform> view2D{ world->GetScene() };
+			for (Entity id : view2D)
 			{
 				Transform& t{ world->GetComponent<Transform>(id) };
 				Sprite& s{ world->GetComponent<Sprite>(id) };
-				//Render2D::DrawQuad(Render2D::QuadProperties{ .position{t.Position}, .size{t.Scale}, .color{s.Color}, .EntityId{id} });
-				Render2D::DrawCube(Render2D::QuadProperties{ .position{t.Position}, .size{t.Scale}, .color{s.Color}, .EntityId{id} });
+				Render2D::DrawQuad(Render2D::QuadProperties{ .position{t.Position}, .size{t.Scale}, .color{s.Color}, .EntityId{id} });
+			}
+
+			SceneView<Mesh, Transform> view3D{ world->GetScene() };
+			for (Entity id : view3D)
+			{
+				Transform& t{ world->GetComponent<Transform>(id) };
+				Mesh& m{ world->GetComponent<Mesh>(id) };
+				Render2D::DrawCube(Render2D::QuadProperties{ .position{t.Position}, .size{t.Scale}, .color{m.Color}, .EntityId{id} });
 			}
 		}
 
+		// editor grid floor
 		Render2D::DrawCube(Render2D::QuadProperties{ .rotation{ 90.f, 0.f, 0.f }, .size{ gGridSize, gGridSize, 0.f }, .color{ 0.5f, 0.5f, 0.5f, 1.f }, .texName{ "Check" }, .textureTiling{ gGridSize } });
 
 		Render2D::SceneEnd();

@@ -5,6 +5,8 @@
 #include "axt/world/components/all.h"
 #include <yaml-cpp/yaml.h>
 
+#include <glm/gtx/string_cast.hpp>
+
 #define CMP_HEADER(x) out << YAML::Key << x << YAML::Value; out << YAML::BeginMap
 #define CMP_FOOTER(...) out << YAML::EndMap
 
@@ -12,6 +14,7 @@ inline static constexpr const char* gDescriptionCmpKey{ "Description" };
 inline static constexpr const char* gCameraCmpKey{ "Camera" };
 inline static constexpr const char* gTransformCmpKey{ "Transform" };
 inline static constexpr const char* gSpriteCmpKey{ "Sprite" };
+inline static constexpr const char* gMeshCmpKey{ "Mesh" };
 inline static constexpr const char* gGraphCmpKey{ "GraphData" };
 
 namespace axt::serial
@@ -77,6 +80,7 @@ namespace axt::serial
 			Transform& t{ gWorld->GetComponent<Transform>(entity) };
 			out << YAML::Key << "Position" << YAML::Value << t.Position;
 			out << YAML::Key << "Rotation" << YAML::Value << t.Rotation;
+			out << YAML::Key << "Scale" << YAML::Value << t.Scale;
 
 			CMP_FOOTER();
 		}
@@ -87,7 +91,16 @@ namespace axt::serial
 
 			Sprite& s{ gWorld->GetComponent<Sprite>(entity) };
 			out << YAML::Key << "Color" << YAML::Value << s.Color;
-			out << YAML::Key << "Size" << YAML::Value << s.Size;
+
+			CMP_FOOTER();
+		}
+
+		if (gWorld->HasComponent<Mesh>(entity))
+		{
+			CMP_HEADER(gMeshCmpKey);
+
+			Mesh& m{ gWorld->GetComponent<Mesh>(entity) };
+			out << YAML::Key << "Color" << YAML::Value << m.Color;
 
 			CMP_FOOTER();
 		}
@@ -192,11 +205,18 @@ namespace axt::serial
 		if (spr)
 		{
 			Sprite& s{ world->Attach<Sprite>(entity) };
-			YAML::Node size{ spr["Size"] };
-			s.Size = { size[0].as<float>(), size[1].as<float>() };
 
 			YAML::Node color{ spr["Color"] };
 			s.Color = { color[0].as<float>(), color[1].as<float>(), color[2].as<float>(), color[3].as<float>() };
+		}
+
+		YAML::Node mesh{ info[gMeshCmpKey] };
+		if (mesh)
+		{
+			Mesh& m{ world->Attach<Mesh>(entity) };
+
+			YAML::Node color{ mesh["Color"] };
+			m.Color = { color[0].as<float>(), color[1].as<float>(), color[2].as<float>(), color[3].as<float>() };
 		}
 
 		YAML::Node trans{ info[gTransformCmpKey] };
@@ -209,6 +229,9 @@ namespace axt::serial
 
 			YAML::Node rotation{ trans["Rotation"] };
 			t.Rotation = { rotation[0].as<float>(), rotation[1].as<float>(), rotation[2].as<float>() };
+
+			YAML::Node scale{ trans["Scale"] };
+			t.Scale = { scale[0].as<float>(), scale[1].as<float>(), scale[2].as<float>() };
 		}
 
 		YAML::Node cam{ info[gCameraCmpKey] };

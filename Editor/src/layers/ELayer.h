@@ -4,6 +4,7 @@
 
 #include "windows/SceneWindow.h"
 #include "windows/PropertiesWindow.h"
+#include "windows/ToolsWindow.h"
 
 #include "../systems/EditorRenderSystem.h"
 
@@ -70,6 +71,8 @@ namespace axt
 
 		SceneOverviewWindow mSceneOverview{};
 		PropertiesWindow mPropertiesWindow{};
+		ToolsWindow mToolsWindow{};
+
 		necs::Entity mSelectedEntity{ necs::nil };
 		necs::Entity mHoveredEntity{ necs::nil };
 

@@ -19,6 +19,8 @@ namespace axt
 	void DrawVec2Edit(const std::string& title, glm::vec2& vector);
 	void DrawVec2Edit(const std::string& title, glm::vec3& vector);
 	void DrawVec3Edit(const std::string& title, glm::vec3& vector);
+	void DrawVec4Edit(const std::string& title, glm::vec4& vector);
+	void DrawTitle(const std::string& title);
 
 	void PropertiesWindow::OnImGuiRender(Ref<GameWorld>& world, const Entity& id)
 	{
@@ -29,9 +31,11 @@ namespace axt
 
 		if (id != necs::nil)
 		{
+			ImGuiIO& io{ ImGui::GetIO() };
 			if (world->HasComponent<Description>(id))
 			{
-				ImGui::Text("Description");
+				DrawTitle("Description");
+
 				ImGui::Text("Name: ");
 				Description& d{ world->GetComponent<Description>(id) };
 				char buffer[256];
@@ -47,34 +51,46 @@ namespace axt
 
 			if (world->HasComponent<Transform>(id))
 			{
-				ImGui::Text("Transform");
+				DrawTitle("Transform");
+
+				ImGui::SameLine();
+				ImGui::Button("Remove");
+
 				Transform& t{ world->GetComponent<Transform>(id) };
 				DrawVec3Edit("Position", t.Position);
 				DrawVec3Edit("Rotation", t.Rotation);
-				DrawVec2Edit("Scale", t.Scale);
+				DrawVec3Edit("Scale", t.Scale);
 				ImGui::Separator();
 			}
 
 			if (world->HasComponent<Sprite>(id))
 			{
-				ImGui::Text("Sprite");
+				DrawTitle("Sprite");
+
 				Sprite& sp{ world->GetComponent<Sprite>(id) };
-				ImGui::Text("Color");
-				ImGui::SameLine();
-				ImGui::ColorEdit4("##Color", glm::value_ptr(sp.Color), 0.1f);
-				//DrawVec2Edit("Size", sp.Size);
+				DrawVec4Edit("Color", sp.Color);
+				ImGui::Separator();
+			}
+			if (world->HasComponent<Mesh>(id))
+			{
+				DrawTitle("Mesh");
+
+				Mesh& sp{ world->GetComponent<Mesh>(id) };
+
+				ImGui::Text("Mesh Path:");
+				DrawVec4Edit("Color", sp.Color);
 				ImGui::Separator();
 			}
 
 			if (world->HasComponent<Camera>(id))
 			{
-				ImGui::Text("Camera");
+				DrawTitle("Camera");
+
 				Camera& cam{ world->GetComponent<Camera>(id) };
 				ImGui::Text("Aspect Ratio: %f", cam.AspectRatio);
 				ImGui::Text("Zoom");
 				ImGui::SameLine();
 				ImGui::DragFloat("##Zoom", &cam.Zoom, 0.1f, 0.25f, 25.f);
-				//ImGui::RadioButton("Projection", &cam.Perspective);
 				ImGui::Separator();
 			}
 
@@ -82,6 +98,14 @@ namespace axt
 
 		ImGui::End();
 		ImGui::PopStyleVar();
+	}
+
+	void DrawTitle(const std::string& title)
+	{
+		ImGuiIO& io{ ImGui::GetIO() };
+		ImGui::PushFont(io.Fonts->Fonts[1]);
+		ImGui::Text(title.c_str());
+		ImGui::PopFont();
 	}
 
 	void DrawVec2Edit(const std::string& title, glm::vec2& vector)
@@ -223,6 +247,78 @@ namespace axt
 		ImGui::SameLine();
 		ImGui::PopStyleColor();
 		ImGui::InputFloat("##Z", &vector.z);
+
+		ImGui::PopStyleVar();
+		ImGui::EndTable();
+
+	}
+
+	void DrawVec4Edit(const std::string& title, glm::vec4& vector)
+	{
+		ImGuiIO& io{ ImGui::GetIO() };
+		ImFont*& bold{ io.Fonts->Fonts[1] };
+
+		ImGuiTableFlags flags{ ImGuiTableFlags_NoBordersInBody | ImGuiTableFlags_NoPadInnerX };
+
+		ImGui::BeginTable(title.c_str(), 6, flags);
+
+		ImGui::TableNextRow();
+		ImGui::TableSetColumnIndex(0);
+		ImGui::Text(title.c_str());
+
+		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{ 0.f,0.f });
+
+		ImGui::TableSetColumnIndex(1);
+		ImGui::PushStyleColor(ImGuiCol_Button, gSalmon);
+		ImGui::PushFont(bold);
+		if (ImGui::Button("R"))
+		{
+			vector.x = 0.f;
+		}
+		ImGui::PopFont();
+		ImGui::SameLine();
+		ImGui::PopStyleColor();
+		ImGui::InputFloat("##R", &vector.x);
+
+		ImGui::TableSetColumnIndex(2);
+		ImGui::PushStyleColor(ImGuiCol_Button, gGreen);
+		ImGui::PushFont(bold);
+		if (ImGui::Button("G"))
+		{
+			vector.y = 0.f;
+		}
+		ImGui::PopFont();
+		ImGui::SameLine();
+		ImGui::PopStyleColor();
+		ImGui::InputFloat("##G", &vector.y);
+
+		ImGui::TableSetColumnIndex(3);
+		ImGui::PushStyleColor(ImGuiCol_Button, gPurple);
+		ImGui::PushFont(bold);
+		if (ImGui::Button("B"))
+		{
+			vector.z = 0.f;
+		}
+		ImGui::PopFont();
+		ImGui::SameLine();
+		ImGui::PopStyleColor();
+		ImGui::InputFloat("##B", &vector.z);
+
+		ImGui::TableSetColumnIndex(4);
+		ImGui::PushStyleColor(ImGuiCol_Button, gPurple);
+		ImGui::PushFont(bold);
+		if (ImGui::Button("A"))
+		{
+			vector.w = 0.f;
+		}
+		ImGui::PopFont();
+		ImGui::SameLine();
+		ImGui::PopStyleColor();
+		ImGui::InputFloat("##A", &vector.w);
+
+		ImGui::TableSetColumnIndex(5);
+		std::string format{ std::format("##%s", title) };
+		ImGui::ColorEdit4(format.c_str(), glm::value_ptr(vector), ImGuiColorEditFlags_NoInputs);
 
 		ImGui::PopStyleVar();
 		ImGui::EndTable();

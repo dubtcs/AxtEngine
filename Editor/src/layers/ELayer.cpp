@@ -390,6 +390,7 @@ namespace axt
 
 			mSelectedEntity = mSceneOverview.OnImGuiRender(mWorld, mSelectedEntity);
 			mPropertiesWindow.OnImGuiRender(mWorld, mSelectedEntity);
+			mToolsWindow.OnImGuiRender(mWorld);
 
 			// Guizmo, move this to a separate window class at some point
 			// necs uses nil as 0, so we can just check the value

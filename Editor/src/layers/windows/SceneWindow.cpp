@@ -18,12 +18,20 @@ namespace axt
 		world->Attach<Sprite>(newEntity);
 	}
 
+	static void AddPlaneEntity(const Ref<GameWorld>& world)
+	{
+		Entity newEntity{ world->CreateEntity() };
+		world->Attach<Description>(newEntity, { "Entity-Plane" });
+		world->Attach<Transform>(newEntity);
+		world->Attach<Sprite>(newEntity);
+	}
+
 	static void AddCubeEntity(const Ref<GameWorld>& world)
 	{
 		Entity newEntity{ world->CreateEntity() };
-		world->Attach<Description>(newEntity, { "Entity" });
+		world->Attach<Description>(newEntity, { "Entity-Cube" });
 		world->Attach<Transform>(newEntity);
-		world->Attach<Sprite>(newEntity);
+		world->Attach<Mesh>(newEntity);
 	}
 
 	Entity SceneOverviewWindow::OnImGuiRender(Ref<GameWorld>& world, const Entity& override)
@@ -34,7 +42,12 @@ namespace axt
 
 		if (ImGui::BeginPopupContextWindow(0, ImGuiPopupFlags_NoOpenOverItems | ImGuiPopupFlags_MouseButtonRight))
 		{
-			if (ImGui::MenuItem("Add Entity"))
+			if (ImGui::MenuItem("Add Plane"))
+			{
+				AddPlaneEntity(world);
+				ImGui::CloseCurrentPopup();
+			}
+			if (ImGui::MenuItem("Add Cube"))
 			{
 				AddCubeEntity(world);
 				ImGui::CloseCurrentPopup();

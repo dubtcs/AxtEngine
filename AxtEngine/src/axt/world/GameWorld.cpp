@@ -41,7 +41,7 @@ namespace axt
 		Entity cube{ CreateEntity() };
 		Attach<Sprite>(cube, { { 0.1f, 0.7f, 0.7f, 1.f } });
 		Attach<Transform>(cube);
-		Attach<Description>(cube, { "StarterCube" });
+		Attach<Description>(cube, { "StarterEntity" });
 	}
 
 	GameWorld::GameWorld(const axt::UUID& worldRootID) :
