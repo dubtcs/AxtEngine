@@ -1,65 +1,64 @@
 Scene: SCENE_NAME
-WorldRoot: 6033677677161242508
+WorldRoot: 13235009337179660784
 Entities:
-  - Entity: 2596642020014877697
+  - Entity: 9301652065216274017
     Description:
       Name: StarterCamera
     Camera:
-      AspectRatio: 1.35562015
-      Zoom: 2.29999995
+      AspectRatio: 1.77777779
+      Zoom: 1
     Transform:
-      Position: [1.44902956, 1.11934519, 0]
+      Position: [0, 0, 0]
       Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
     GraphData:
-      ID: 2596642020014877697
-      Parent: 6033677677161242508
-  - Entity: 9109813784293851313
+      ID: 9301652065216274017
+      Parent: 13235009337179660784
+  - Entity: 4655210131691622277
     Description:
-      Name: BottomLeft
+      Name: StarterEntity
     Transform:
-      Position: [-1, 0, 0]
-      Rotation: [0, 0, 0]
+      Position: [2.03198671, 1.34664798, 0]
+      Rotation: [0, -0, 0]
+      Scale: [1, 1, 1]
     Sprite:
       Color: [0.100000001, 0.699999988, 0.699999988, 1]
-      Size: [1, 1]
     GraphData:
-      ID: 9109813784293851313
-      Parent: 6033677677161242508
-      Children:
-        - Entity: 8096062113019374597
-          Description:
-            Name: TopRight
-          Transform:
-            Position: [1, 1, 0]
-            Rotation: [0, 0, 0]
-          Sprite:
-            Color: [1, 0.513513505, 0.513513505, 1]
-            Size: [1, 1]
-          GraphData:
-            ID: 8096062113019374597
-            Parent: 9109813784293851313
-            Children:
-              - Entity: 10678800266439156290
-                Description:
-                  Name: BottomRight
-                Transform:
-                  Position: [1.10000002, -1, 0]
-                  Rotation: [0, 0, 0]
-                Sprite:
-                  Color: [0.631372571, 0.631372571, 0.631372571, 1]
-                  Size: [1, 1]
-                GraphData:
-                  ID: 10678800266439156290
-                  Parent: 8096062113019374597
-  - Entity: 3846017767484965821
+      ID: 4655210131691622277
+      Parent: 13235009337179660784
+  - Entity: 431278053539862738
     Description:
-      Name: TopLeft
+      Name: Entity-Cube
     Transform:
-      Position: [-1.25, 1.46599996, 0]
-      Rotation: [0, 0, 0]
-    Sprite:
-      Color: [0.331837624, 0.818532825, 0.339354157, 1]
-      Size: [1, 1]
+      Position: [-1.20631564, -2.57606316, 1.28807592]
+      Rotation: [0, -0, 0]
+      Scale: [6.48245573, 1, 5.23432732]
+    Mesh:
+      Color: [0.961389959, 0.319225997, 0.319225997, 1]
     GraphData:
-      ID: 3846017767484965821
-      Parent: 6033677677161242508
+      ID: 431278053539862738
+      Parent: 13235009337179660784
+  - Entity: 16475867744177211209
+    Description:
+      Name: Entity-Plane
+    Transform:
+      Position: [0, 5.54532433, 0]
+      Rotation: [0, -0, 0]
+      Scale: [6.78475761, 1.78670037, 2.27897954]
+    Sprite:
+      Color: [0, 0.250965238, 0.213175088, 1]
+    GraphData:
+      ID: 16475867744177211209
+      Parent: 13235009337179660784
+  - Entity: 17434517085796008364
+    Description:
+      Name: Entity-Cube
+    Transform:
+      Position: [2.08586407, 3.08168006, -9.3511095]
+      Rotation: [0, -0, 0]
+      Scale: [4.22676802, 6.87278318, 3.63768864]
+    Mesh:
+      Color: [0.5, 0.5, 0.5, 1]
+    GraphData:
+      ID: 17434517085796008364
+      Parent: 13235009337179660784
