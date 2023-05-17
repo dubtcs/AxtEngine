@@ -25,8 +25,6 @@ static int gFps{ 0 };
 static bool gDrawBulk{ true };
 static float gTexRotate{ 0.f };
 
-//static std::vector<axt::ecs::EntityID> gEntityIds;
-
 namespace axt
 {
 

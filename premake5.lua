@@ -21,6 +21,7 @@ workspace "AxtEngine"
     _includeDirs.necs = "AxtEngine/vendor/necs3/necs"
     _includeDirs.yaml = "AxtEngine/vendor/yaml/include"
     _includeDirs.imguizmo = "AxtEngine/vendor/ImGuizmo"
+    _includeDirs.gltf = "AxtEngine/vendor/gltf"
 
     group "Vendors"
         include "AxtEngine/vendor/glfw2"
@@ -53,6 +54,10 @@ workspace "AxtEngine"
         
             "%{prj.name}/vendor/ImGuizmo/*.cpp",
             "%{prj.name}/vendor/ImGuizmo/*.h",
+
+            "%{prj.name}/vendor/gltf/*.cpp",
+            "%{prj.name}/vendor/gltf/*.hpp",
+            "%{prj.name}/vendor/gltf/*.h",
         }
 
         defines {
@@ -75,6 +80,7 @@ workspace "AxtEngine"
             "%{_includeDirs.necs}",
             "%{_includeDirs.yaml}",
             "%{_includeDirs.imguizmo}",
+            "%{_includeDirs.gltf}",
         }
         
         links {
@@ -198,6 +204,7 @@ workspace "AxtEngine"
             "%{_includeDirs.yaml}",
             "%{_includeDirs.imguizmo}",
             "%{_includeDirs.glfw}",
+            "%{_includeDirs.gltf}",
 
         }
 

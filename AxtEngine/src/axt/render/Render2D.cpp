@@ -462,7 +462,6 @@ namespace axt
 		// loop through textures, bind them to their slot (0-31)
 		for (uint32_t i{ 0 }; i < gData->mTexturesUsed; i++) 
 		{
-			AXT_TRACE("Texture {0}", i);
 			gData->mTextureArray[i]->Bind(i);
 		}
 
