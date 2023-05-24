@@ -12,6 +12,8 @@
 #include <axt/world/components/Camera.h>
 #include <axt/world/components/Heirarchy.h>
 
+#include <axt/world/assets/Model.h>
+
 #include <axt/serial/Serial.h>
 #include <axt/serial/Explorer.h>
 
@@ -31,6 +33,8 @@ namespace axt
 	ELayer::ELayer() :
 		mWorld{ NewRef<GameWorld>() }
 	{
+
+		axt::Model m{ "assets/models/cone.gltf" };
 
 	}
 

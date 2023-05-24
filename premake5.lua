@@ -55,9 +55,11 @@ workspace "AxtEngine"
             "%{prj.name}/vendor/ImGuizmo/*.cpp",
             "%{prj.name}/vendor/ImGuizmo/*.h",
 
-            "%{prj.name}/vendor/gltf/*.cpp",
-            "%{prj.name}/vendor/gltf/*.hpp",
-            "%{prj.name}/vendor/gltf/*.h",
+            "%{prj.name}/vendor/gltf/gltf/json.hpp",
+            "%{prj.name}/vendor/gltf/gltf/stb_image.h",
+            "%{prj.name}/vendor/gltf/gltf/stb_image_write.h",
+            "%{prj.name}/vendor/gltf/gltf/tiny_gltf.h",
+            "%{prj.name}/vendor/gltf/gltf/gltf.cpp"
         }
 
         defines {
@@ -118,64 +120,7 @@ workspace "AxtEngine"
             defines {"AXT_DIST"}
             runtime "Release"
             optimize "On"
-
-    -- SANDBOX
-    project "Sandbox"
-        location "Sandbox"
-        kind "ConsoleApp"
-        language "C++"
-        cppdialect "C++20"
-        staticruntime "on"
-
-        targetdir ("bin/"..output.."/%{prj.name}")
-        objdir ("bin-int/"..output.."/%{prj.name}")
-
-        files {
-            "%{prj.name}/src/**.h",
-            "%{prj.name}/src/**.cpp",
-            -- "AxtEngine/vendor/glm/glm/**.hpp",
-            -- "AxtEngine/vendor/glm/glm/**.inl",
-            --"%{_includeDirs.imgui}",
-
-        }
-
-        includedirs {
-            "AxtEngine/vendor/spdlog/include",
-            "AxtEngine/src",
-            "%{_includeDirs.glm}",
-            "%{_includeDirs.imgui}",
-            "%{_includeDirs.glad}",
-            "%{_includeDirs.necs}",
-            "%{_includeDirs.yaml}",
-
-        }
-
-        links {
-            "AxtEngine"
-        }
-
-        filter "system:windows"
-            systemversion "latest"
-
-            defines {
-                --"AXT_PLATFORM_WINDOWS";
-            }
-
-        filter "configurations:Debug"
-            defines "AXT_DEBUG"
-            runtime "Debug"
-            symbols "On"
-
-        filter "configurations:Release"
-            defines "AXT_RELEASE"
-            runtime "Release"
-            optimize "On"
-
-        filter "configurations:Dist"
-            defines "AXT_DIST"
-            runtime "Release"
-            optimize "On"
-    -- SANDBOX
+    -- END ENGINE
 
     -- EDITOR
     project "Editor"

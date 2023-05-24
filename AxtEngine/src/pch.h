@@ -1,5 +1,8 @@
 #pragma once
 
+// disable min and max macros
+#define NOMINMAX
+
 #ifdef _WIN32
 #include <Windows.h>
 #endif
