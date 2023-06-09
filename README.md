@@ -34,3 +34,5 @@ AxtEngine is being created as an excersise in graphics programming and game engi
 ### Long term goals
    - 2D Physics
    - 3D Rendering
+   - WPF Editor
+   - CMake Support

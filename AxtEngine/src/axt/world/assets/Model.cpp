@@ -2,11 +2,30 @@
 
 #include "Model.h"
 
+#include <axt/render/Buffers.h>
+
 #include <gltf/tiny_gltf.h>
 #include <glad/glad.h>
 
+static const axt::BufferLayout GVertexBufferLayout{
+	{axt::ShaderDataType::Float3, "inPos"},
+	{axt::ShaderDataType::Float4, "inColor"},
+	{axt::ShaderDataType::Float2, "inTexPos"},
+};
+
 namespace axt
 {
+
+	static int32_t GetAttributeIndex(const std::string& attributeName)
+	{
+		if (attributeName == "POSITION")
+			return 0;
+		else if (attributeName == "NORMAL")
+			return 1;
+		else if (attributeName == "TEXCOORD_0")
+			return 2;
+		return -1;
+	}
 
 	Model::Model(const std::string& filepath)
 	{
@@ -31,11 +50,14 @@ namespace axt
 	void Model::RegisterModel()
 	{
 		mVertexArray = VertexArray::Create();
+		mVertexBuffers.resize(mModel.bufferViews.size());
+
 		const tinygltf::Scene& scene{ mModel.scenes[mModel.defaultScene] };
 		for (const int32_t& i : scene.nodes)
 		{
 			RegisterNode(mModel.nodes[i]);
 		}
+		AXT_TRACE("Total BufferViews: {0}", mModel.bufferViews.size());
 	}
 
 	void Model::RegisterNode(tinygltf::Node& node)
@@ -52,7 +74,46 @@ namespace axt
 
 	void Model::RegisterMesh(tinygltf::Mesh& mesh)
 	{
-		
+		AXT_INFO(mesh.name);
+
+		for (tinygltf::BufferView& view : mModel.bufferViews)
+		{
+			const tinygltf::Buffer& buffer{ mModel.buffers[view.buffer] };
+			Ref<VertexBuffer> vBuffer{ VertexBuffer::Create(view.byteLength) };
+			vBuffer->SetLayout(GVertexBufferLayout);
+			AXT_TRACE("VBuffer bytelength: {0}", view.byteLength);
+			mVertexBuffers.at(view.buffer) = vBuffer;
+			
+			// need to add glTarget as a parameter
+			vBuffer->SubmitData(&buffer.data.at(0) + view.byteOffset, view.byteLength);
+			mVertexBuffers.push_back(vBuffer);
+		}
+
+		/*for (int32_t i{ 0 }; i < mModel.bufferViews.size(); i++)
+		{
+			tinygltf::BufferView& view{ mModel.bufferViews[i] };
+
+		}*/
+
+		//AXT_TRACE(mesh.primitives.size());
+
+		for (tinygltf::Primitive& primitive : mesh.primitives)
+		{
+			tinygltf::Accessor& indexAccessor{ mModel.accessors[primitive.indices] };
+			for (auto& attribute : primitive.attributes)
+			{
+				tinygltf::Accessor& accessor{ mModel.accessors[attribute.second] };
+				int32_t stride{ accessor.ByteStride(mModel.bufferViews[accessor.bufferView]) };
+				//AXT_TRACE("BufferView (index, bytelength): ({0}, {1})", accessor.bufferView, mModel.bufferViews[accessor.bufferView].byteLength);
+
+				int32_t attributeIndex{ GetAttributeIndex(attribute.first) };
+				
+				AXT_TRACE("Attribute Info:\n\tComponent Type: {0}", accessor.componentType);
+
+				BufferItem item{ ShaderDataType::Float, attribute.first, accessor.normalized };
+
+			}
+		}
 	}
 
 }

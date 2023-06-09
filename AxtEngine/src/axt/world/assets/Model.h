@@ -17,7 +17,7 @@ namespace axt
 	{
 	public:
 		Model(const std::string& filepath);
-		using BufferPair = std::pair<Ref<VertexBuffer>, Ref<IndexBuffer>>;
+		//using BufferPair = std::pair<Ref<VertexBuffer>, Ref<IndexBuffer>>;
 	protected:
 		void RegisterModel();
 		void RegisterNode(tinygltf::Node& node);
@@ -25,7 +25,7 @@ namespace axt
 
 		tinygltf::Model mModel;
 		Ref<VertexArray> mVertexArray;
-		std::vector<BufferPair> mBuffers;
+		std::vector<Ref<VertexBuffer>> mVertexBuffers;
 	};
 
 }

@@ -22,6 +22,7 @@ workspace "AxtEngine"
     _includeDirs.yaml = "AxtEngine/vendor/yaml/include"
     _includeDirs.imguizmo = "AxtEngine/vendor/ImGuizmo"
     _includeDirs.gltf = "AxtEngine/vendor/gltf"
+    --_includeDirs.assimp = "AxtEngine/vendor/assimp"
 
     group "Vendors"
         include "AxtEngine/vendor/glfw2"
@@ -29,6 +30,7 @@ workspace "AxtEngine"
         include "AxtEngine/vendor/imgui"
         include "AxtEngine/vendor/necs3"
         include "AxtEngine/vendor/yaml"
+        --include "AxtEngine/vendor/assimp"
     group ""
 
     project "AxtEngine"
@@ -83,6 +85,7 @@ workspace "AxtEngine"
             "%{_includeDirs.yaml}",
             "%{_includeDirs.imguizmo}",
             "%{_includeDirs.gltf}",
+            --"%{_includeDirs.assimp}",
         }
         
         links {
@@ -91,7 +94,8 @@ workspace "AxtEngine"
             "imgui",
             "necs",
             "opengl32.lib",
-            "yaml"
+            "yaml",
+            --"assimp",
         }
 
         filter "files:AxtEngine/vendor/ImGuizmo/*.cpp"
@@ -150,7 +154,8 @@ workspace "AxtEngine"
             "%{_includeDirs.imguizmo}",
             "%{_includeDirs.glfw}",
             "%{_includeDirs.gltf}",
-
+            --"%{_includeDirs.assimp}",
+            
         }
 
         links {

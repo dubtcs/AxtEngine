@@ -34,7 +34,7 @@ namespace axt
 		mWorld{ NewRef<GameWorld>() }
 	{
 
-		axt::Model m{ "assets/models/cone.gltf" };
+		axt::Model m{ "assets/models/multipleObjects.gltf" };
 
 	}
 
