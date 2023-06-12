@@ -35,7 +35,7 @@ namespace axt
 	{
 
 		axt::Model m{ "assets/models/multipleObjects.gltf" };
-
+		AXT_TRACE("E");
 	}
 
 	void ELayer::OnAttach()

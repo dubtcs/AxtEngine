@@ -4,6 +4,8 @@
 
 #include <axt/render/Buffers.h>
 
+#include <axt/render/Texture.h>
+
 #include <gltf/tiny_gltf.h>
 #include <glad/glad.h>
 
@@ -76,26 +78,26 @@ namespace axt
 	{
 		AXT_INFO(mesh.name);
 
+		const BufferLayout layout{
+			{ShaderDataType::Float3, "V_POSITION"}, // GLTF Vector3
+			{ShaderDataType::Float3, "V_NORMAL" },
+			{ShaderDataType::Float2, "V_TEX_COORD"}
+		};
+
 		for (tinygltf::BufferView& view : mModel.bufferViews)
 		{
 			const tinygltf::Buffer& buffer{ mModel.buffers[view.buffer] };
 			Ref<VertexBuffer> vBuffer{ VertexBuffer::Create(view.byteLength) };
-			vBuffer->SetLayout(GVertexBufferLayout);
+			//vBuffer->SetLayout(GVertexBufferLayout);
+
 			AXT_TRACE("VBuffer bytelength: {0}", view.byteLength);
 			mVertexBuffers.at(view.buffer) = vBuffer;
 			
 			// need to add glTarget as a parameter
+			vBuffer->SetLayout(layout);
 			vBuffer->SubmitData(&buffer.data.at(0) + view.byteOffset, view.byteLength);
 			mVertexBuffers.push_back(vBuffer);
 		}
-
-		/*for (int32_t i{ 0 }; i < mModel.bufferViews.size(); i++)
-		{
-			tinygltf::BufferView& view{ mModel.bufferViews[i] };
-
-		}*/
-
-		//AXT_TRACE(mesh.primitives.size());
 
 		for (tinygltf::Primitive& primitive : mesh.primitives)
 		{
@@ -104,14 +106,22 @@ namespace axt
 			{
 				tinygltf::Accessor& accessor{ mModel.accessors[attribute.second] };
 				int32_t stride{ accessor.ByteStride(mModel.bufferViews[accessor.bufferView]) };
-				//AXT_TRACE("BufferView (index, bytelength): ({0}, {1})", accessor.bufferView, mModel.bufferViews[accessor.bufferView].byteLength);
+				AXT_TRACE("BufferView (index, bytelength): ({0}, {1})", accessor.bufferView, mModel.bufferViews[accessor.bufferView].byteLength);
 
 				int32_t attributeIndex{ GetAttributeIndex(attribute.first) };
+				//mVertexBuffers.at(accessor.bufferView)->SetNormalized(accessor.normalized);
 				
-				AXT_TRACE("Attribute Info:\n\tComponent Type: {0}", accessor.componentType);
+				// This might not be needed with the preset buffer layout?
+			}
+		}
 
-				BufferItem item{ ShaderDataType::Float, attribute.first, accessor.normalized };
-
+		if (mModel.textures.size() > 0)
+		{
+			tinygltf::Texture& texture{ mModel.textures[0] };
+			if (texture.source > -1)
+			{
+				// TODO: Make texture expandable
+				//Texture2D engineTexture{Texture2D::Create()}
 			}
 		}
 	}

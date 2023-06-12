@@ -48,6 +48,7 @@ namespace axt {
 		uint32_t offset;
 		bool normalized;
 		BufferItem(ShaderDataType t, const std::string& n, bool norm = false) : name{ n }, type{ t }, size{ GetDataTypeSize(t) }, offset{ 0 }, normalized{ norm } {}
+		//BufferItem(GLenum type, const std::string& name, bool normalizaed = false) : name{name}
 		uint32_t GetItemCount() const;
 	};
 
