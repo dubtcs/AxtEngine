@@ -12,10 +12,10 @@ namespace axt{
 		virtual void Bind() const override;
 		virtual void Unbind() const override;
 		virtual void SetLayout(const BufferLayout& newLayout) override { layout = newLayout; }
-		virtual const BufferLayout& GetLayout() const override { return layout; };
-		virtual void SubmitData(const void* data, uint32_t size) const override;
+		virtual BufferLayout& GetLayout() override { return layout; };
+		virtual void SubmitData(const void* data, uint32_t size, uint32_t offset = 0) const override;
 	private:
-		unsigned int id;
+		uint32_t id;
 		BufferLayout layout{};
 	};
 

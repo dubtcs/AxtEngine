@@ -34,9 +34,9 @@ namespace axt {
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}
 
-	void OGLVertexBuffer::SubmitData(const void* data, uint32_t size) const {
+	void OGLVertexBuffer::SubmitData(const void* data, uint32_t size, uint32_t offset) const {
 		glBindBuffer(GL_ARRAY_BUFFER, id);
-		glBufferSubData(GL_ARRAY_BUFFER, 0, size, data);
+		glBufferSubData(GL_ARRAY_BUFFER, offset, size, data);
 	}
 
 	/****************/

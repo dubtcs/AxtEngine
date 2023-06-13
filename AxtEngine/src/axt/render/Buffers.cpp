@@ -36,12 +36,30 @@ namespace axt {
 	{
 		int currentOffset{ 0 };
 		itemStride = 0;
-		for (BufferItem& currentItem : items) 
+		for (BufferItem& currentItem : mItems) 
 		{
 			currentItem.offset = currentOffset;
 			uint32_t& size{ currentItem.size };
 			itemStride += size;
 			currentOffset += size;
+		}
+	}
+
+	void BufferLayout::AddItem(const BufferItem& item, int32_t position)
+	{
+		if (position >= 0)
+		{
+			int32_t adjustedPosition{ position + 1 };
+			if (mItems.size() <= adjustedPosition)
+			{
+				mItems.resize(adjustedPosition);
+				// Might check for ::reserve() performance
+			}
+			mItems.at(position) = item;
+		}
+		else
+		{
+			mItems.push_back(item);
 		}
 	}
 

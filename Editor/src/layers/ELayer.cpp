@@ -12,7 +12,8 @@
 #include <axt/world/components/Camera.h>
 #include <axt/world/components/Heirarchy.h>
 
-#include <axt/world/assets/Model.h>
+//#include <axt/world/assets/Model.h>
+#include <axt/world/assets/WorldModel.h>
 
 #include <axt/serial/Serial.h>
 #include <axt/serial/Explorer.h>
