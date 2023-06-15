@@ -8,9 +8,11 @@
 
 namespace axt {
 
-	uint32_t BufferItem::GetItemCount() const 
+	//BufferItem(ShaderDataType t, const std::string& n, bool norm = false, uint32_t count = 0) : name{ n }, type{ t }, size{ GetDataTypeSize(t) }, offset{ 0 }, normalized{ norm }, count{ count } {}
+
+	uint32_t GetRawItemCount(ShaderDataType t)
 	{
-		switch (type) 
+		switch (t)
 		{
 			case (ShaderDataType::Float): return 1;
 			case(ShaderDataType::Float2): return 2;
@@ -30,6 +32,32 @@ namespace axt {
 		}
 		AXT_CORE_ASSERT(false, "No ShaderDataType found.");
 		return 0;
+	}
+
+	BufferItem::BufferItem(ShaderDataType t, const std::string& n, bool norm, uint32_t c, uint32_t off) :
+		type{ t },
+		name{ n },
+		normalized{ norm },
+		offset{ off },
+		count{ c }
+	{
+		size = count * GetDataTypeSize(t);
+	}
+
+	BufferItem::BufferItem(ShaderDataType t, const std::string& n, bool norm) :
+		name{ n },
+		type{ t },
+		size{ GetDataTypeSize(t) },
+		offset{ 0 },
+		normalized{ false },
+		count{ GetRawItemCount(t) }
+	{
+		
+	}
+
+	uint32_t BufferItem::GetItemCount() const 
+	{
+		return count;
 	}
 
 	void BufferLayout::CalculateStride() 

@@ -46,10 +46,11 @@ namespace axt {
 		ShaderDataType type;
 		uint32_t size;
 		uint32_t offset;
+		uint32_t count;
 		bool normalized;
 		BufferItem() : type{ ShaderDataType::None } {} // This set to none should cause errors
-		BufferItem(ShaderDataType t, const std::string& n, bool norm = false) : name{ n }, type{ t }, size{ GetDataTypeSize(t) }, offset{ 0 }, normalized{ norm } {}
-		//BufferItem(GLenum type, const std::string& name, bool normalizaed = false) : name{name}
+		BufferItem(ShaderDataType t, const std::string& n, bool norm = false);// : name{ n }, type{ t }, size{ GetDataTypeSize(t) }, offset{ 0 }, normalized{ norm } {}
+		BufferItem(ShaderDataType GLType, const std::string& name, bool norm, uint32_t count, uint32_t offset);
 		uint32_t GetItemCount() const;
 	};
 

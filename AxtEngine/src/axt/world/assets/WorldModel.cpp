@@ -2,100 +2,78 @@
 
 #include "WorldModel.h"
 
+#include <glad/glad.h>
+
 namespace axt
 {
-	using attribute_info = std::pair<int32_t, ShaderDataType>;
-	attribute_info GetAttributeIndex(const std::string& attributeName)
+
+	ShaderDataType GLTypeToShaderDataType(const uint32_t& gl)
 	{
-		if (attributeName == "POSITION")
-			return { 0, ShaderDataType::Float3 };
-		else if (attributeName == "NORMAL")
-			return { 1, ShaderDataType::Float3 };
-		else if (attributeName == "TEXCOORD_0")
-			return { 2, ShaderDataType::Float2 };
-		return { -1, ShaderDataType::None };
+		if (gl == GL_FLOAT)
+			return ShaderDataType::Float;
+		else if (gl == GL_INT)
+			return ShaderDataType::Int;
+		else if (gl == GL_UNSIGNED_INT)
+			return ShaderDataType::UInt;
+		else if (gl == GL_BOOL)
+			return ShaderDataType::Bool;
+		return ShaderDataType::None;
 	}
-
-	// Mesh
-
-	Mesh::Mesh(tinygltf::Model& model, tinygltf::Mesh& mesh)
-	{
-		AXT_INFO("Creating Mesh");
-		// Creating buffers
-		for (tinygltf::BufferView& bufferView : model.bufferViews)
-		{
-			const tinygltf::Buffer& buffer{ model.buffers[bufferView.buffer] };
-			//AXT_TRACE("Buffer Size: {0} || View Offset: {1} || View Size: {2}", buffer.data.size(), bufferView.byteOffset, bufferView.byteLength);
-			Ref<VertexBuffer> vBuffer{ VertexBuffer::Create(bufferView.byteLength) };
-			vBuffer->SubmitData(&(buffer.data.at(0)) + bufferView.byteOffset, bufferView.byteLength);
-			mVertexBuffers.push_back(vBuffer);
-		}
-
-		for (tinygltf::Primitive& primitive : mesh.primitives)
-		{
-			tinygltf::Accessor& indexAccessor{ model.accessors[primitive.indices] };
-			for (auto& attribute : primitive.attributes)
-			{
-				tinygltf::Accessor& accessor{ model.accessors[attribute.second] };
-				Ref<VertexBuffer> vBuffer{ mVertexBuffers[accessor.bufferView] };
-
-				vBuffer->Bind();
-				attribute_info info{ GetAttributeIndex(attribute.first) };
-				vBuffer->GetLayout().AddItem({ info.second, "V_POSITION", accessor.normalized }, info.first);
-			}
-		}
-		AXT_TRACE("!");
-	}
-
-	// Model
 
 	Model::Model(const std::string& filepath)
 	{
 		tinygltf::TinyGLTF loader;
-		std::string messageError;
-		std::string messageWarning;
+		std::string msgError;
+		std::string msgWarning;
+		loader.LoadASCIIFromFile(&mModel, &msgError, &msgWarning, filepath);
+		AXT_INFO("Loading model <{0}>", filepath);
+		if (msgWarning.size() || msgError.size())
+		{
+			AXT_WARN("\tWarnings: {0}\n\tErrors: {1}", (msgWarning.size() ? msgWarning : "NONE"), (msgError.size() ? msgError : "NONE"));
+		}
 
-		bool pass{ loader.LoadASCIIFromFile(&mModel, &messageWarning, &messageWarning, filepath) };
-		messageError = (messageError.empty() ? "NONE" : messageError);
-		messageWarning = (messageWarning.empty() ? "NONE" : messageWarning);
-		if (pass)
-		{
-			AXT_INFO("Model [{0}] loaded.\n\tWarnings: {1}\n\tErrors: {2}", filepath, messageWarning, messageError);
-		}
-		else
-		{
-			AXT_WARN("Model [{0}] NOT loaded.\n\tWarnings: {1}\n\tErrors: {2}", filepath, messageWarning, messageError);
-		}
 		Init();
-		AXT_TRACE("Model Loaded");
 	}
 
 	void Model::Init()
 	{
-		mVertexArray = VertexArray::Create();
-		mVertexArray->Bind();
-		const tinygltf::Scene& scene{ mModel.scenes[mModel.defaultScene] };
-		for (const int32_t& i : scene.nodes)
+		// Create Buffers
+		for (tinygltf::BufferView& view : mModel.bufferViews)
 		{
-			CreateNode(mModel.nodes[i]);
+			const tinygltf::Buffer& buffer{ mModel.buffers[view.buffer] };
+			Ref<VertexBuffer> vBuffer{ VertexBuffer::Create(view.byteLength) };
+			vBuffer->SubmitData(&buffer.data.at(0) + view.byteOffset, view.byteLength);
+			mVertexBuffers.push_back(vBuffer);
+		}
+
+		for (const tinygltf::Mesh& mesh : mModel.meshes)
+		{
+			ProcessMesh(mesh);
 		}
 	}
 
-	void Model::CreateNode(tinygltf::Node& node)
+	void Model::ProcessNode(const tinygltf::Node& node)
 	{
-		if (node.mesh >= 0)
-		{
-			CreateMesh(mModel.meshes[node.mesh]);
-		}
-		for (int32_t& i : node.children)
-		{
-			CreateNode(mModel.nodes[i]);
-		}
+		
 	}
 
-	void Model::CreateMesh(tinygltf::Mesh& mesh)
+	void Model::ProcessMesh(const tinygltf::Mesh& mesh)
 	{
-		mMeshes.push_back({ mModel, mesh });
+		for (const tinygltf::Primitive& primitive : mesh.primitives)
+		{
+			for (const auto& attribute : primitive.attributes)
+			{
+				const tinygltf::Accessor& accessor{ mModel.accessors[attribute.second] };
+				const Ref<VertexBuffer>& vBuffer{ mVertexBuffers.at(accessor.bufferView) };
+				int32_t count{ accessor.type == TINYGLTF_TYPE_SCALAR ? 1 : accessor.type };
+				BufferItem item{ GLTypeToShaderDataType(accessor.componentType), "ITEM_NAME", accessor.normalized, static_cast<uint32_t>(count), static_cast<uint32_t>(accessor.byteOffset) };
+				vBuffer->Bind();
+				vBuffer->SetLayout({ item });
+
+				// DAMN
+				// This might not be useful. Accessors might have different contexts to the same buffer, so setting the layout here might be overriding others that don't use the same layout
+			}
+		}
 	}
 
 }
