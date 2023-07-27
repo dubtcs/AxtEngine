@@ -6,10 +6,7 @@ A simple 3D scene editor. It allows you to place and edit cubes and planes.
 
 Progress screenshots can be found in the [media folder.](https://github.com/dubtcs/AxtEngine/tree/main/media)
 
-<details>
-<summary>Screenshot</summary>
-![Latest Screenshot](media/Screenshot%202023-05-10.png)
-</details>
+![screenshot](media/latest051020.png)
 
 ## Download + Build
 
