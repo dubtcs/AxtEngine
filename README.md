@@ -1,14 +1,14 @@
-# Axt Engine
+# Axt Editor
 
-Axt Engine = Abstract Engine. It's the best I could come up with.
+Axt Editor = Abstract Editor. It's the best I could come up with.
 
-An in development game engine/rendering platform for Windows.
+A simple 3D scene editor. It allows you to place and edit cubes and planes.
 
 Progress screenshots can be found in the [media folder.](https://github.com/dubtcs/AxtEngine/tree/main/media)
 
 <details>
 <summary>Screenshot</summary>
-![Latest Screenshot](https://github.com/dubtcs/AxtEngine/blob/main/media/Screenshot%202023-05-09.png?raw=true)
+![Latest Screenshot](media/Screenshot%202023-05-10.png)
 </details>
 
 ## Download + Build
@@ -28,11 +28,7 @@ AxtEngine is being created as an excersise in graphics programming and game engi
    - [Custom ECS](https://github.com/dubtcs/nECS)
    - 3D + 2D Rendering
    - Scene Graph / Game World instancing
-      - Separates runtime and editor views
    - Project saving/loading
 
-### Long term goals
-   - 2D Physics
-   - 3D Rendering
-   - WPF Editor
-   - CMake Support
+### Future Development
+   - Further development of the rendering engine has been moved to [Next Engine](https://github.com/dubtcs/Next)
